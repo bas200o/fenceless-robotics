@@ -1,0 +1,6 @@
+# ninja log v5
+0	2271	1637765483150032727	CMakeFiles/fenceless-robot.dir/src/main.cpp.o	28c92d3b9253fa4b
+0	551	1637765118566620116	CMakeFiles/fenceless-robot.dir/main.cpp.o	fd6a35c3a6256234
+555	705	1637765118716622871	fenceless-robot	f6ee4adade665f96
+1	1922	1637765550671290359	CMakeFiles/fenceless-robot.dir/src/main.cpp.o	81abf362b756d8a9
+1923	2130	1637765550877960878	fenceless-robot	f1ea43f4179d5f21
