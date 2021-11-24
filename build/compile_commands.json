@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/bas/Documents/git/fenceless-robotics/build",
-  "command": "/usr/bin/c++ -g -std=gnu++11 -o CMakeFiles/fenceless-robot.dir/src/main.cpp.o -c /home/bas/Documents/git/fenceless-robotics/src/main.cpp",
-  "file": "/home/bas/Documents/git/fenceless-robotics/src/main.cpp"
-}
-]
