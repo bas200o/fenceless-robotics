@@ -7,6 +7,7 @@ enable_testing()
 find_package(realsense2 REQUIRED)
 find_package( PCL 1.2 REQUIRED )
 find_package (Python2 COMPONENTS Interpreter Development)
+find_package (Threads)
 
 # [C/C++]>[General]>[Additional Include Directories]
 include_directories( ${PCL_INCLUDE_DIRS} )
@@ -21,7 +22,7 @@ add_definitions( -DPCL_NO_PRECOMPILE )
 link_directories( ${PCL_LIBRARY_DIRS} )
 
 # Enable C++11
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 add_executable(fenceless-robot src/main.cpp)
