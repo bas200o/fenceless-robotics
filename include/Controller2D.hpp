@@ -7,10 +7,4 @@ public:
     ~Controller2D();
 };
 
-Controller2D::Controller2D(/* args */)
-{
-}
 
-Controller2D::~Controller2D()
-{
-}
