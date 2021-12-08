@@ -1,54 +1,91 @@
-#include <iostream>
-#include <thread>
+#include "pcl/common/common_headers.h"
+#include "pcl/io/obj_io.h"
+#include "pcl/io/pcd_io.h"
+#include "pcl/io/vtk_lib_io.h"
+#include "pcl/visualization/pcl_visualizer.h"
 
-#include <pcl/io/pcd_io.h>
-#include <pcl/point_types.h>
-#include <pcl/visualization/cloud_viewer.h>
-#include <pcl/common/angles.h> // for pcl::deg2rad
-#include <pcl/features/normal_3d.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/visualization/pcl_visualizer.h>
-#include <pcl/console/parse.h>
 
-using namespace std::chrono_literals;
-
-pcl::visualization::PCLVisualizer::Ptr simpleVis (pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloud)
-{
-  // --------------------------------------------
-  // -----Open 3D viewer and add point cloud-----
-  // --------------------------------------------
-  pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
-  viewer->setBackgroundColor (0, 0, 0);
-  viewer->addPointCloud<pcl::PointXYZ> (cloud, "sample cloud");
-  viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "sample cloud");
-  viewer->addCoordinateSystem (1.0);
-  viewer->initCameraParameters ();
-  return (viewer);
-}
-
-int main (int argc, char** argv)
+int main()
 {
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
-  
-  // Fill in the cloud data
-  cloud->width=5;
-  cloud->height=1;
-  cloud->is_dense = false;
-  cloud->points.resize(cloud->width * cloud->height);
-
-  for (size_t i = 0; i < cloud->points.size(); ++i)
+    if (pcl::io::loadPCDFile("test_pcd.pcd", *cloud) == -1) //* load the file
   {
-    cloud->points[i].x = 1024 * rand() / (RAND_MAX + 1.0f);
-    cloud->points[i].y = 1024 * rand() / (RAND_MAX + 1.0f);
-    cloud->points[i].z = 1024 * rand() / (RAND_MAX + 1.0f);
+    PCL_ERROR ("Couldn't read file test_pcd.pcd \n");
+    return (-1);
   }
+ 
+    // If you dont have a test pcd file use this to generate one.
+  // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+  // cloud->width=10;
+  // cloud->height=2;
+  // cloud->is_dense = false;
+  // cloud->points.resize(cloud->width * cloud->height);
 
-   pcl::visualization::CloudViewer viewer ("Simple Cloud Viewer");
-   viewer.showCloud(cloud, "cloud");
-   while (!viewer.wasStopped())
-   {
-   }
-    return 0;
+  // for (size_t i = 0; i < cloud->points.size(); ++i)
+  // {
+  //   cloud->points[i].x = 1024 * rand() / (RAND_MAX + 1.0f);
+  //   cloud->points[i].y = 1024 * rand() / (RAND_MAX + 1.0f);
+  //   cloud->points[i].z = 1024 * rand() / (RAND_MAX + 1.0f);
+  // }
+
+  pcl::visualization::PCLVisualizer viewer;
+  viewer.addPointCloud(cloud);
+  viewer.spin();
+  
+  return 0;
+}
+
+// #include <iostream>
+// #include <thread>
+
+// #include <pcl/io/pcd_io.h>
+// #include <pcl/point_types.h>
+// #include <pcl/visualization/cloud_viewer.h>
+// #include <pcl/common/angles.h> // for pcl::deg2rad
+// #include <pcl/features/normal_3d.h>
+// #include <pcl/io/pcd_io.h>
+// #include <pcl/visualization/pcl_visualizer.h>
+// #include <pcl/console/parse.h>
+
+// using namespace std::chrono_literals;
+
+// pcl::visualization::PCLVisualizer::Ptr simpleVis (pcl::PointCloud<pcl::PointXYZ>::ConstPtr cloud)
+// {
+//   // --------------------------------------------
+//   // -----Open 3D viewer and add point cloud-----
+//   // --------------------------------------------
+//   pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
+//   viewer->setBackgroundColor (0, 0, 0);
+//   viewer->addPointCloud<pcl::PointXYZ> (cloud, "sample cloud");
+//   viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "sample cloud");
+//   viewer->addCoordinateSystem (1.0);
+//   viewer->initCameraParameters ();
+//   return (viewer);
+// }
+
+// int main (int argc, char** argv)
+// {
+//   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+  
+//   // Fill in the cloud data
+//   cloud->width=5;
+//   cloud->height=1;
+//   cloud->is_dense = false;
+//   cloud->points.resize(cloud->width * cloud->height);
+
+//   for (size_t i = 0; i < cloud->points.size(); ++i)
+//   {
+//     cloud->points[i].x = 1024 * rand() / (RAND_MAX + 1.0f);
+//     cloud->points[i].y = 1024 * rand() / (RAND_MAX + 1.0f);
+//     cloud->points[i].z = 1024 * rand() / (RAND_MAX + 1.0f);
+//   }
+
+//    pcl::visualization::CloudViewer viewer ("Simple Cloud Viewer");
+//    viewer.showCloud(cloud, "cloud");
+//    while (!viewer.wasStopped())
+//    {
+//    }
+//     return 0;
 
 //   pcl::visualization::PCLVisualizer::Ptr viewer;
 //   viewer = simpleVis(cloud);
@@ -59,8 +96,8 @@ int main (int argc, char** argv)
 //     std::this_thread::sleep_for(100ms);
 //   }
 
-  return (0);
-}
+//   return (0);
+// }
 
 // // License: Apache 2.0. See LICENSE file in root directory.
 // // Copyright(c) 2015-2017 Intel Corporation. All Rights Reserved.
