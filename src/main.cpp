@@ -13,86 +13,82 @@ using namespace pclHelperFunctions;
 int main()
 {
   pclHelper helper;
- 
-    // If you dont have a test pcd file use this to generate one.
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = helper.generatePCL();
 
-   helper.showPCL(cloud);
+  // If you dont have a test pcd file use this to generate one.
+  pcl::PointCloud<pcl::PointXYZ>::Ptr thing = helper.generatePCL();
 
+  // helper.showPCL(cloud);
 
+  pcl::visualization::PCLVisualizer viewer;
 
-//       // Declare pointcloud object, for calculating pointclouds and texture mappings
-//     rs2::pointcloud pc;
-//     // We want the points object to be persistent so we can display the last cloud when a frame drops
-//     rs2::points points;
+  viewer.addPointCloud(thing);
+  // viewer.spin();
 
-//     // Declare RealSense pipeline, encapsulating the actual device and sensors
-//     rs2::context ctx;
-//     rs2::pipeline pipe;
-//     // Start streaming with default recommended configuration
-//     pipe.start();
+  // Declare pointcloud object, for calculating pointclouds and texture mappings
+  rs2::pointcloud pc;
+  // We want the points object to be persistent so we can display the last cloud when a frame drops
+  rs2::points points;
 
+  // Declare RealSense pipeline, encapsulating the actual device and sensors
+  rs2::context ctx;
+  rs2::pipeline pipe;
+  // Start streaming with default recommended configuration
+  pipe.start();
 
-//         // Wait for the next set of frames from the camera
-//         auto frames = pipe.wait_for_frames();
+  // while (true)
+  // {
+  // Wait for the next set of frames from the camera
+  auto frames = pipe.wait_for_frames();
+  auto color = frames.get_color_frame();
+  // For cameras that don't have RGB sensor, we'll map the pointcloud to infrared instead of color
+  if (!color)
+    color = frames.get_infrared_frame();
+  // Tell pointcloud object to map to this color frame
+  pc.map_to(color);
 
-//         auto color = frames.get_color_frame();
+  auto depth = frames.get_depth_frame();
 
-//         // For cameras that don't have RGB sensor, we'll map the pointcloud to infrared instead of color
-//         if (!color)
-//             color = frames.get_infrared_frame();
+  // Generate the pointcloud and texture mappings
+  points = pc.calculate(depth);
 
-//         // Tell pointcloud object to map to this color frame
-//         pc.map_to(color);
+  auto vertices = points.get_vertices();
 
-//         auto depth = frames.get_depth_frame();
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
 
-//         // Generate the pointcloud and texture mappings
-//         points = pc.calculate(depth);
+  float usable_points[points.size()][3];
+  int usable_point_count = 0;
 
-//         auto vertices = points.get_vertices();
+  for (size_t i = 0; i < points.size(); i++)
+  {
+    if (vertices[i].x != 0 || vertices[i].y != 0 || vertices[i].z != 0)
+    {
+      usable_points[usable_point_count][0] = vertices[i].x;
+      usable_points[usable_point_count][1] = vertices[i].y;
+      usable_points[usable_point_count][2] = vertices[i].z;
+      usable_point_count++;
+    }
+  }
 
-//         std::cout << "hello from librealsense - " << RS2_API_VERSION_STR << std::endl;
-//         std::cout << "You have " << ctx.query_devices().size() << " RealSense devices connected" << std::endl;
+  // Filters
+  usable_point_count++;
+  cloud->width = usable_point_count;
+  ;
+  cloud->height = 1;
+  cloud->is_dense = false;
+  cloud->points.resize(usable_point_count);
 
-//         // for (size_t i = 0; i < points.size(); i++) {
-//         //     std::cerr << "      " << vertices[i].x << " " << vertices[i].y << " " << vertices[i].z << std::endl;
-//         // }
+  for (size_t i = 0; i < usable_point_count; i++)
+  {
+    cloud->points[i].x = usable_points[i][0];
+    cloud->points[i].y = usable_points[i][1];
+    cloud->points[i].z = usable_points[i][2];
+  }
 
-//         pcl::PointCloud<pcl::PointXYZ> cloud;
+  viewer.updatePointCloud(cloud);
+  viewer.spin();
 
-//         std::cout << points.size() << std::endl;
+  // }
 
-//         float usable_points[points.size()][3];
-//         int usable_point_count = 0;
-
-//         for (size_t i = 0; i < points.size(); i++) {
-//         if (vertices[i].x != 0 || vertices[i].y != 0 || vertices[i].z != 0) {
-//             usable_points[usable_point_count][0] = vertices[i].x;
-//             usable_points[usable_point_count][1] = vertices[i].y;
-//             usable_points[usable_point_count][2] = vertices[i].z;
-//             usable_point_count++;
-//         }
-//     }
-
-// //Filters 
-//     usable_point_count++;
-//     cloud.width = usable_point_count;;
-//     cloud.height = 1;
-//     cloud.is_dense = false;
-//     cloud.points.resize(usable_point_count);
-
-//     for (size_t i = 0; i < usable_point_count; i++) {
-//         cloud.points[i].x = usable_points[i][0];
-//         cloud.points[i].y = usable_points[i][1];
-//         cloud.points[i].z = usable_points[i][2];
-//     }
-
-
-//     pcl::io::savePCDFileASCII("test_pcd.pcd", cloud);
-//     std::cerr << "Saved " << cloud.points.size() << " data points to test_pcd.pcd." << std::endl;
-   
-  
   return 0;
 }
 
@@ -113,14 +109,8 @@ int main()
 // int main()
 // {
 
-
-
-
 //     return 0;
 // }
-
-
-
 
 // #include <librealsense2/rs.hpp>
 // #include <librealsense2/hpp/rs_internal.hpp>
@@ -141,7 +131,6 @@ int main()
 // #include <pcl/visualization/pcl_visualizer.h> << std::endl;
 //     std::cout << "You have " << ctx.query_devices().size() << " RealSense devices connected" << std::endl;
 
-
 // rs2::pipeline pipe;
 // rs2::pipeline_profile selection = pipe.start();
 // auto depth_stream = selection.get_stream(RS2_STREAM_DEPTH);
@@ -152,13 +141,9 @@ int main()
 // float target[3];
 // rs2_transform_point_to_point(target, &e, origin);
 
-
 //     pcl::PointCloud<pcl::PointXYZRGB> cloud;
 
 //     //fill coud with data,
-
-    
-
 
 //     cloud.width = 100;
 //     cloud.height = 1;
@@ -174,7 +159,6 @@ int main()
 //         cloud.points[i].b = 255 * rand() / (RAND_MAX + 1.0f);
 //     }
 
-
 //     pcl::io::savePCDFileASCII("test_pcd.pcd", cloud);
 //     std::cerr << "Saved " << cloud.points.size() << " data points to test_pcd.pcd." << std::endl;
 
@@ -184,8 +168,6 @@ int main()
 
 //     // pcl::PointCloud<pcl::PointXYZRGB>::Ptr hey (&cloud);
 
-    
-    
 //   // pcl::io::loadPCDFile("./test_pcd.pcd", *hey);
 //   //... populate cloud
 
@@ -204,17 +186,14 @@ int main()
 //   return 0;
 // }
 
-
-
-
 // // #include <pcl/visualization/cloud_viewer.h>
 // // #include <iostream>
 // // #include <pcl/io/io.h>
 // // #include <pcl/io/pcd_io.h>
-    
+
 // // int user_data;
-    
-// // void 
+
+// // void
 // // viewerOneOff (pcl::visualization::PCLVisualizer& viewer)
 // // {
 // //     viewer.setBackgroundColor (1.0, 0.5, 1.0);
@@ -224,10 +203,10 @@ int main()
 // //     o.z = 0;
 // //     viewer.addSphere (o, 0.25, "sphere", 0);
 // //     std::cout << "i only run once" << std::endl;
-    
+
 // // }
-    
-// // void 
+
+// // void
 // // viewerPsycho (pcl::visualization::PCLVisualizer& viewer)
 // // {
 // //     static unsigned count = 0;
@@ -235,12 +214,12 @@ int main()
 // //     ss << "Once per viewer loop: " << count++;
 // //     viewer.removeShape ("text", 0);
 // //     viewer.addText (ss.str(), 200, 300, "text", 0);
-    
+
 // //     //FIXME: possible race condition here:
 // //     user_data++;
 // // }
-    
-// // int 
+
+// // int
 // // main ()
 // // {
 // //     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -253,18 +232,18 @@ int main()
 
 // //     // pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGBA>);
 // //     // pcl::io::loadPCDFile ("test_pcd.pcd", *cloud);
-    
+
 // //     pcl::visualization::CloudViewer viewer("Cloud Viewer");
-    
+
 // //     //blocks until the cloud is actually rendered
 // //     viewer.showCloud(cloud);
-    
+
 // //     //use the following functions to get access to the underlying more advanced/powerful
 // //     //PCLVisualizer
-    
+
 // //     //This will only get called once
 // //     viewer.runOnVisualizationThreadOnce (viewerOneOff);
-    
+
 // //     //This will get called once per visualization iteration
 // //     viewer.runOnVisualizationThread (viewerPsycho);
 // //     while (!viewer.wasStopped ())
@@ -280,8 +259,6 @@ int main()
 // // #include <iostream>
 // // #include <pcl/io/pcd_io.h>
 // // #include <pcl/point_types.h>
-
-
 
 // // int
 // // main (int argc, char** argv)
@@ -302,8 +279,5 @@ int main()
 // //               << " "    << cloud->points[i].y
 // //               << " "    << cloud->points[i].z << std::endl;
 
-
-
-
 // //   return (0);
-// // }   
+// // }
