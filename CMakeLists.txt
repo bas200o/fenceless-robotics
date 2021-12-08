@@ -25,7 +25,8 @@ link_directories( ${PCL_LIBRARY_DIRS} )
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
-add_executable(fenceless-robot src/main.cpp)
+file(GLOB_RECURSE SRC_FILES src/*.cpp)
+add_executable(fenceless-robot ${SRC_FILES})
 
 target_link_libraries(${PROJECT_NAME} ${realsense2_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES})
