@@ -1,0 +1,67 @@
+[
+{
+  "directory": "/home/fence/git/fenceless-robotics/build",
+  "command": "/usr/bin/c++ -DDISABLE_PCAP -DPCL_NO_PRECOMPILE -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dkiss_fft_scalar=double -Dqh_QHpointer -isystem /usr/include/pcl-1.12 -isystem /usr/include/eigen3 -isystem /usr/include/vtk -isystem /usr/include/freetype2 -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtOpenGL -g -pthread -fopenmp -fPIC -std=gnu++17 -o CMakeFiles/fenceless-robot.dir/src/CameraConnector.cpp.o -c /home/fence/git/fenceless-robotics/src/CameraConnector.cpp",
+  "file": "/home/fence/git/fenceless-robotics/src/CameraConnector.cpp"
+},
+{
+  "directory": "/home/fence/git/fenceless-robotics/build",
+  "command": "/usr/bin/c++ -DDISABLE_PCAP -DPCL_NO_PRECOMPILE -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dkiss_fft_scalar=double -Dqh_QHpointer -isystem /usr/include/pcl-1.12 -isystem /usr/include/eigen3 -isystem /usr/include/vtk -isystem /usr/include/freetype2 -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtOpenGL -g -pthread -fopenmp -fPIC -std=gnu++17 -o CMakeFiles/fenceless-robot.dir/src/CameraHandler.cpp.o -c /home/fence/git/fenceless-robotics/src/CameraHandler.cpp",
+  "file": "/home/fence/git/fenceless-robotics/src/CameraHandler.cpp"
+},
+{
+  "directory": "/home/fence/git/fenceless-robotics/build",
+  "command": "/usr/bin/c++ -DDISABLE_PCAP -DPCL_NO_PRECOMPILE -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dkiss_fft_scalar=double -Dqh_QHpointer -isystem /usr/include/pcl-1.12 -isystem /usr/include/eigen3 -isystem /usr/include/vtk -isystem /usr/include/freetype2 -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtOpenGL -g -pthread -fopenmp -fPIC -std=gnu++17 -o CMakeFiles/fenceless-robot.dir/src/Controller2D.cpp.o -c /home/fence/git/fenceless-robotics/src/Controller2D.cpp",
+  "file": "/home/fence/git/fenceless-robotics/src/Controller2D.cpp"
+},
+{
+  "directory": "/home/fence/git/fenceless-robotics/build",
+  "command": "/usr/bin/c++ -DDISABLE_PCAP -DPCL_NO_PRECOMPILE -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dkiss_fft_scalar=double -Dqh_QHpointer -isystem /usr/include/pcl-1.12 -isystem /usr/include/eigen3 -isystem /usr/include/vtk -isystem /usr/include/freetype2 -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtOpenGL -g -pthread -fopenmp -fPIC -std=gnu++17 -o CMakeFiles/fenceless-robot.dir/src/Controller3D.cpp.o -c /home/fence/git/fenceless-robotics/src/Controller3D.cpp",
+  "file": "/home/fence/git/fenceless-robotics/src/Controller3D.cpp"
+},
+{
+  "directory": "/home/fence/git/fenceless-robotics/build",
+  "command": "/usr/bin/c++ -DDISABLE_PCAP -DPCL_NO_PRECOMPILE -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dkiss_fft_scalar=double -Dqh_QHpointer -isystem /usr/include/pcl-1.12 -isystem /usr/include/eigen3 -isystem /usr/include/vtk -isystem /usr/include/freetype2 -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtOpenGL -g -pthread -fopenmp -fPIC -std=gnu++17 -o CMakeFiles/fenceless-robot.dir/src/DataManager.cpp.o -c /home/fence/git/fenceless-robotics/src/DataManager.cpp",
+  "file": "/home/fence/git/fenceless-robotics/src/DataManager.cpp"
+},
+{
+  "directory": "/home/fence/git/fenceless-robotics/build",
+  "command": "/usr/bin/c++ -DDISABLE_PCAP -DPCL_NO_PRECOMPILE -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dkiss_fft_scalar=double -Dqh_QHpointer -isystem /usr/include/pcl-1.12 -isystem /usr/include/eigen3 -isystem /usr/include/vtk -isystem /usr/include/freetype2 -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtOpenGL -g -pthread -fopenmp -fPIC -std=gnu++17 -o CMakeFiles/fenceless-robot.dir/src/FoundObject.cpp.o -c /home/fence/git/fenceless-robotics/src/FoundObject.cpp",
+  "file": "/home/fence/git/fenceless-robotics/src/FoundObject.cpp"
+},
+{
+  "directory": "/home/fence/git/fenceless-robotics/build",
+  "command": "/usr/bin/c++ -DDISABLE_PCAP -DPCL_NO_PRECOMPILE -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dkiss_fft_scalar=double -Dqh_QHpointer -isystem /usr/include/pcl-1.12 -isystem /usr/include/eigen3 -isystem /usr/include/vtk -isystem /usr/include/freetype2 -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtOpenGL -g -pthread -fopenmp -fPIC -std=gnu++17 -o CMakeFiles/fenceless-robot.dir/src/GUIApplication.cpp.o -c /home/fence/git/fenceless-robotics/src/GUIApplication.cpp",
+  "file": "/home/fence/git/fenceless-robotics/src/GUIApplication.cpp"
+},
+{
+  "directory": "/home/fence/git/fenceless-robotics/build",
+  "command": "/usr/bin/c++ -DDISABLE_PCAP -DPCL_NO_PRECOMPILE -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dkiss_fft_scalar=double -Dqh_QHpointer -isystem /usr/include/pcl-1.12 -isystem /usr/include/eigen3 -isystem /usr/include/vtk -isystem /usr/include/freetype2 -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtOpenGL -g -pthread -fopenmp -fPIC -std=gnu++17 -o CMakeFiles/fenceless-robot.dir/src/Information2D.cpp.o -c /home/fence/git/fenceless-robotics/src/Information2D.cpp",
+  "file": "/home/fence/git/fenceless-robotics/src/Information2D.cpp"
+},
+{
+  "directory": "/home/fence/git/fenceless-robotics/build",
+  "command": "/usr/bin/c++ -DDISABLE_PCAP -DPCL_NO_PRECOMPILE -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dkiss_fft_scalar=double -Dqh_QHpointer -isystem /usr/include/pcl-1.12 -isystem /usr/include/eigen3 -isystem /usr/include/vtk -isystem /usr/include/freetype2 -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtOpenGL -g -pthread -fopenmp -fPIC -std=gnu++17 -o CMakeFiles/fenceless-robot.dir/src/Information3D.cpp.o -c /home/fence/git/fenceless-robotics/src/Information3D.cpp",
+  "file": "/home/fence/git/fenceless-robotics/src/Information3D.cpp"
+},
+{
+  "directory": "/home/fence/git/fenceless-robotics/build",
+  "command": "/usr/bin/c++ -DDISABLE_PCAP -DPCL_NO_PRECOMPILE -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dkiss_fft_scalar=double -Dqh_QHpointer -isystem /usr/include/pcl-1.12 -isystem /usr/include/eigen3 -isystem /usr/include/vtk -isystem /usr/include/freetype2 -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtOpenGL -g -pthread -fopenmp -fPIC -std=gnu++17 -o CMakeFiles/fenceless-robot.dir/src/RSCameraHandler.cpp.o -c /home/fence/git/fenceless-robotics/src/RSCameraHandler.cpp",
+  "file": "/home/fence/git/fenceless-robotics/src/RSCameraHandler.cpp"
+},
+{
+  "directory": "/home/fence/git/fenceless-robotics/build",
+  "command": "/usr/bin/c++ -DDISABLE_PCAP -DPCL_NO_PRECOMPILE -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dkiss_fft_scalar=double -Dqh_QHpointer -isystem /usr/include/pcl-1.12 -isystem /usr/include/eigen3 -isystem /usr/include/vtk -isystem /usr/include/freetype2 -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtOpenGL -g -pthread -fopenmp -fPIC -std=gnu++17 -o CMakeFiles/fenceless-robot.dir/src/RobotController.cpp.o -c /home/fence/git/fenceless-robotics/src/RobotController.cpp",
+  "file": "/home/fence/git/fenceless-robotics/src/RobotController.cpp"
+},
+{
+  "directory": "/home/fence/git/fenceless-robotics/build",
+  "command": "/usr/bin/c++ -DDISABLE_PCAP -DPCL_NO_PRECOMPILE -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dkiss_fft_scalar=double -Dqh_QHpointer -isystem /usr/include/pcl-1.12 -isystem /usr/include/eigen3 -isystem /usr/include/vtk -isystem /usr/include/freetype2 -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtOpenGL -g -pthread -fopenmp -fPIC -std=gnu++17 -o CMakeFiles/fenceless-robot.dir/src/ZedCameraHandler.cpp.o -c /home/fence/git/fenceless-robotics/src/ZedCameraHandler.cpp",
+  "file": "/home/fence/git/fenceless-robotics/src/ZedCameraHandler.cpp"
+},
+{
+  "directory": "/home/fence/git/fenceless-robotics/build",
+  "command": "/usr/bin/c++ -DDISABLE_PCAP -DPCL_NO_PRECOMPILE -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dkiss_fft_scalar=double -Dqh_QHpointer -isystem /usr/include/pcl-1.12 -isystem /usr/include/eigen3 -isystem /usr/include/vtk -isystem /usr/include/freetype2 -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtOpenGL -g -pthread -fopenmp -fPIC -std=gnu++17 -o CMakeFiles/fenceless-robot.dir/src/main.cpp.o -c /home/fence/git/fenceless-robotics/src/main.cpp",
+  "file": "/home/fence/git/fenceless-robotics/src/main.cpp"
+}
+]
