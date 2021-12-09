@@ -19,9 +19,24 @@ int main()
 
   // helper.showPCL(cloud);
 
-  pcl::visualization::PCLVisualizer viewer;
 
-  viewer.addPointCloud(thing);
+
+boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
+
+viewer->initCameraParameters();
+
+
+  viewer->addPointCloud(thing, "cloud");
+
+
+  while (!viewer->wasStopped())
+  {
+    
+    viewer->updatePointCloud(helper.generatePCL(), "cloud");
+    viewer->spinOnce(2000, true);
+  }
+    
+  std::cout << "Hey" << std::endl;
   // viewer.spin();
 
   // Declare pointcloud object, for calculating pointclouds and texture mappings
@@ -84,8 +99,8 @@ int main()
     cloud->points[i].z = usable_points[i][2];
   }
 
-  viewer.updatePointCloud(cloud);
-  viewer.spin();
+  viewer->updatePointCloud(cloud);
+  // viewer.spinOnce(200);
 
   // }
 
