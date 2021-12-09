@@ -1,3 +1,4 @@
+#pragma once
 #include "../include/Information3D.hpp"
 #include "../include/CameraConnector.hpp"
 

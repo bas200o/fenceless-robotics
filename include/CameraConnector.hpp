@@ -1,20 +1,13 @@
+#pragma once
 #include "../include/CameraHandler.hpp"
-class CameraConnector
-{
-private:
-    CameraConnector(/* args */);
-    ~CameraConnector();
-    CameraConnector(CameraConnector const&);
-    void operator = (CameraConnector const&);
-    CameraHandler* connectedCams[2];
 
+class CameraConnector {
 public:
-    static CameraConnector& GetInstance();
-    
-    void operator-(CameraConnector const&) = delete;
-    void connectCameras(int number, int type);
-
-    
+   static CameraConnector* getInstance();
+   void connectCameras(int number, int type);
+private:
+   CameraConnector();
+   ~CameraConnector();
+   static CameraConnector* pSingleton;		// CameraConnector instance
+   CameraHandler* connectedCams[2];
 };
-
-

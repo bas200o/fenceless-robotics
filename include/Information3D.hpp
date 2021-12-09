@@ -1,3 +1,4 @@
+#pragma once
 #include "../include/FoundObject.hpp"
 
 class Information3D
