@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/fence/git/fenceless-robotics-linux-PCL/build",
+  "command": "/usr/bin/c++ -DDISABLE_PCAP -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -Dkiss_fft_scalar=double -Dqh_QHpointer -isystem /usr/include/pcl-1.12 -isystem /usr/include/eigen3 -isystem /usr/include/vtk -isystem /usr/include/freetype2 -isystem /usr/include/qt -isystem /usr/include/qt/QtWidgets -isystem /usr/include/qt/QtGui -isystem /usr/include/qt/QtCore -isystem /usr/lib/qt/mkspecs/linux-g++ -isystem /usr/include/qt/QtOpenGL -g -pthread -fopenmp -fPIC -std=gnu++14 -o CMakeFiles/fenceless-robot.dir/src/main.cpp.o -c /home/fence/git/fenceless-robotics-linux-PCL/src/main.cpp",
+  "file": "/home/fence/git/fenceless-robotics-linux-PCL/src/main.cpp"
+}
+]
