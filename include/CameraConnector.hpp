@@ -1,5 +1,12 @@
 #pragma once
 #include "../include/CameraHandler.hpp"
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
+#include <pcl/visualization/cloud_viewer.h>
+#include <opencv2/core.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
+#include <cstdlib>
 
 class CameraConnector {
 public:
@@ -9,5 +16,7 @@ private:
    CameraConnector();
    ~CameraConnector();
    static CameraConnector* pSingleton;		// CameraConnector instance
-   CameraHandler* connectedCams[2];
+   std::vector<CameraHandler> connectedCams;
+   std::vector<cv::Mat> retrieveImages();
+   std::vector<pcl::PointCloud<pcl::PointXYZRGB>> retrievePointClouds();
 };

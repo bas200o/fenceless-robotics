@@ -37,5 +37,26 @@ void CameraConnector::connectCameras(int number, int type){
         break;
     }
 }
-//CameraConnector::CameraConnector(CameraConnector const&) = delete;
+
+std::vector<cv::Mat> CameraConnector::retrieveImages(){
+    int s = sizeof(connectedCams);
+    std::vector<cv::Mat> images;
+    for(int i = 0; i<s ; i++){
+        //image->add image form camera push back
+    }
+    return images;
+}
+
+std::vector<pcl::PointCloud<pcl::PointXYZRGB>> CameraConnector::retrievePointClouds(){
+    int s = sizeof(connectedCams);
+    std::vector<pcl::PointCloud<pcl::PointXYZRGB>> pointclouds;
+    for(int i = 0; i<s ; i++){
+        //pointcloud->add Pointcloud from camera push back
+    }
+        return pointclouds;
+
+}
+
+
+
 
