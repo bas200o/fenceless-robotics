@@ -1,3 +1,4 @@
+/*Class used for the GUI*/
 class GUIApplication
 {
 private:

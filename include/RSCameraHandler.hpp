@@ -1,3 +1,4 @@
+/*Class that uses interface cameraHandler to create PCL and image data from realsense*/
 #include "../include/CameraHandler.hpp"
 #include <librealsense2/rs.hpp>
 #include <librealsense2/hpp/rs_internal.hpp>

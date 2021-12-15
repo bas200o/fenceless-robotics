@@ -1,3 +1,6 @@
+/*Class used for all 3D vision and makes objects with information
+get the images from the CameraConnector*/
+
 #include "../include/Information3D.hpp"
 #include "../include/CameraConnector.hpp"
 

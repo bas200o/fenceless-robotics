@@ -1,3 +1,5 @@
+/*Class used to connect camera handlers and keep track of them*/
+#pragma once
 #include "../include/CameraHandler.hpp"
 class CameraConnector
 {
