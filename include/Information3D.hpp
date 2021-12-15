@@ -1,5 +1,9 @@
 #pragma once
 #include "../include/FoundObject.hpp"
+#include <vector>
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
+#include <pcl/visualization/cloud_viewer.h>
 
 class Information3D
 {
