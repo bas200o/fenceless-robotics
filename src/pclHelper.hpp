@@ -11,6 +11,7 @@ namespace pclHelperFunctions {
             pcl::PointCloud<pcl::PointXYZ>::Ptr generatePCL();
 
             pcl::PointCloud<pcl::PointXYZ>::Ptr loadPCL(std::string file_path);
+            void savePCL(std::string file_path, pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
 
             pcl::PointCloud<pcl::PointXYZ>::Ptr combinePointClouds(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud1, pcl::PointCloud<pcl::PointXYZ>::Ptr cloud2);
             

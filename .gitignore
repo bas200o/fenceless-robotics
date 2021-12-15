@@ -1,6 +1,9 @@
 # Cmake build files
 build/
 
+# Local pcl files
+pcd_files/
+
 # Prerequisites
 *.d
 

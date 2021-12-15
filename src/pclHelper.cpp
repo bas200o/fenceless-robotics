@@ -12,9 +12,16 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr pclHelper::loadPCL(std::string file_path) {
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
   if (pcl::io::loadPCDFile(file_path, *cloud) == -1) //* load the file
   {
-    PCL_ERROR ("Couldn't read file test_pcd.pcd \n");
+    PCL_ERROR ("Couldn't read file .pcd \n");
   }
   return cloud;
+}
+
+void pclHelper::savePCL(std::string file_path, pcl::PointCloud<pcl::PointXYZ>::Ptr cloud) {
+  if (pcl::io::savePCDFileASCII(file_path, *cloud) == -1) 
+  {
+    PCL_ERROR ("Couldn't save file .pcd \n");
+  }
 }
 
 pcl::PointCloud<pcl::PointXYZ>::Ptr pclHelper::generatePCL() {
