@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/fence/git/fenceless-robotics-linux-PCL
+CMAKE_SOURCE_DIR = /home/fence/git/fenceless-robotics
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/fence/git/fenceless-robotics-linux-PCL/build
+CMAKE_BINARY_DIR = /home/fence/git/fenceless-robotics/build
 
 # Utility rule file for ContinuousSubmit.
 
@@ -82,6 +82,6 @@ CMakeFiles/ContinuousSubmit.dir/clean:
 .PHONY : CMakeFiles/ContinuousSubmit.dir/clean
 
 CMakeFiles/ContinuousSubmit.dir/depend:
-	cd /home/fence/git/fenceless-robotics-linux-PCL/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/fence/git/fenceless-robotics-linux-PCL /home/fence/git/fenceless-robotics-linux-PCL /home/fence/git/fenceless-robotics-linux-PCL/build /home/fence/git/fenceless-robotics-linux-PCL/build /home/fence/git/fenceless-robotics-linux-PCL/build/CMakeFiles/ContinuousSubmit.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/fence/git/fenceless-robotics/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/fence/git/fenceless-robotics /home/fence/git/fenceless-robotics /home/fence/git/fenceless-robotics/build /home/fence/git/fenceless-robotics/build /home/fence/git/fenceless-robotics/build/CMakeFiles/ContinuousSubmit.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ContinuousSubmit.dir/depend
 

@@ -291,7 +291,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "fenceless-robot::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-fenceless-robot-Debug-986d2548bcfc9397a3b1.json",
+					"jsonFile" : "target-fenceless-robot-Debug-57f4759f9c3f074ea99f.json",
 					"name" : "fenceless-robot",
 					"projectIndex" : 0
 				}
@@ -301,8 +301,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/fence/git/fenceless-robotics-linux-PCL/build",
-		"source" : "/home/fence/git/fenceless-robotics-linux-PCL"
+		"build" : "/home/fence/git/fenceless-robotics/build",
+		"source" : "/home/fence/git/fenceless-robotics"
 	},
 	"version" : 
 	{

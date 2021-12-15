@@ -1,4 +1,4 @@
-# Install script for directory: /home/fence/git/fenceless-robotics-linux-PCL
+# Install script for directory: /home/fence/git/fenceless-robotics
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/fence/git/fenceless-robotics-linux-PCL/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/fence/git/fenceless-robotics/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

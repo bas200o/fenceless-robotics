@@ -323,7 +323,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/fence/git/fenceless-robotics-linux-PCL/build"
+			"value" : "/home/fence/git/fenceless-robotics/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -555,10 +555,10 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
+					"value" : "C compiler"
 				}
 			],
-			"type" : "FILEPATH",
+			"type" : "STRING",
 			"value" : "/usr/bin/x86_64-pc-linux-gnu-gcc-11.1.0"
 		},
 		{
@@ -947,7 +947,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/fence/git/fenceless-robotics-linux-PCL"
+			"value" : "/home/fence/git/fenceless-robotics"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -2743,11 +2743,11 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "(This variable does not exist and should not be used)"
+					"value" : "Path to a program."
 				}
 			],
-			"type" : "UNINITIALIZED",
-			"value" : ""
+			"type" : "FILEPATH",
+			"value" : "/usr/bin/git"
 		},
 		{
 			"name" : "GLEW_INCLUDE_DIR",
@@ -3027,7 +3027,7 @@
 				}
 			],
 			"type" : "STRING",
-			"value" : "12"
+			"value" : "6"
 		},
 		{
 			"name" : "MPIEXEC_NUMPROC_FLAG",
@@ -9375,7 +9375,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/fence/git/fenceless-robotics-linux-PCL/build"
+			"value" : "/home/fence/git/fenceless-robotics/build"
 		},
 		{
 			"name" : "fenceless-robot_IS_TOP_LEVEL",
@@ -9399,7 +9399,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/fence/git/fenceless-robotics-linux-PCL"
+			"value" : "/home/fence/git/fenceless-robotics"
 		},
 		{
 			"name" : "flann_DIR",
