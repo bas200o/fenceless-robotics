@@ -52,6 +52,7 @@ void cloudViewer(void);
 string cloudFile; // .pcd file name
 string prevCloudFile; // .pcd file name (Old cloud)
 int i = 1; // Index for incremental file name
+boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("Captured Frame")); //pcl visualisers
 
 //======================================================
 // RGB Texture
@@ -195,10 +196,6 @@ int main() try
 
     // Loop and take frame captures upon user input
     while(captureLoop == true) {
-
-        // Set loop flag based on user input
-        captureLoop = userInput(); 
-        if (captureLoop == false) { break; }
         
 
          // Wait for frames from the camera to settle
@@ -235,12 +232,35 @@ int main() try
         // Write PC to .pcd File Format
         //==============================
         // Take Cloud Data and write to .PCD File Format
-        cout << "Generating PCD Point Cloud File... " << endl;
+        // cout << "Generating PCD Point Cloud File... " << endl;
         pcl::io::savePCDFileASCII(cloudFile, *cloud); // Input cloud to be saved to .pcd
         cout << cloudFile << " successfully generated. " << endl; 
         
         //Load generated PCD file for viewing
-        Load_PCDFile();
+        if (i == 1) {
+            string openFileName;
+
+            // Generate object to store cloud in .pcd file
+            pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudView (new pcl::PointCloud<pcl::PointXYZRGB>);
+            
+            openFileName = "Captured_Frame" + to_string(i) + ".pcd";
+            pcl::io::loadPCDFile (openFileName, *cloudView);
+
+            viewer->setBackgroundColor (0, 0, 0); 
+            // Add generated point cloud and identify with string "Cloud"
+            viewer->addPointCloud<pcl::PointXYZRGB> (cloudView, "Cloud");
+            // Default size for rendered points
+            viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Cloud");
+            // Viewer Properties
+            viewer->initCameraParameters();  // Camera Parameters for ease of viewing
+
+            
+        } else {
+            Load_PCDFile();
+        }
+
+        viewer->spinOnce(200);
+        
         i++; // Increment File Name
     }//End-while
    
@@ -270,26 +290,9 @@ void Load_PCDFile(void)
     openFileName = "Captured_Frame" + to_string(i) + ".pcd";
     pcl::io::loadPCDFile (openFileName, *cloudView); // Load .pcd File
     
-    //==========================
-    // Pointcloud Visualization
-    //==========================
-    // Create viewer object titled "Captured Frame"
-    boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("Captured Frame"));
+    viewer->updatePointCloud<pcl::PointXYZRGB> (cloudView, "Cloud");
 
-    // Set background of viewer to black
-    viewer->setBackgroundColor (0, 0, 0); 
-    // Add generated point cloud and identify with string "Cloud"
-    viewer->addPointCloud<pcl::PointXYZRGB> (cloudView, "Cloud");
-    // Default size for rendered points
     viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Cloud");
-    // Viewer Properties
-    viewer->initCameraParameters();  // Camera Parameters for ease of viewing
-
-    cout << endl;
-    cout << "Press [Q] in viewer to continue. " << endl;
-    
-    viewer->spin(); // Allow user to rotate point cloud and view it
-
     // Note: No method to close PC visualizer, pressing Q to continue software flow only solution.
    
     
