@@ -1,4 +1,6 @@
 /*Class used for the GUI*/
+#pragma once
+
 class GUIApplication
 {
 private:

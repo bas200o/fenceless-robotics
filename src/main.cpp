@@ -6,7 +6,7 @@
 #include <pcl/point_types.h>
 #include <pcl/visualization/cloud_viewer.h>
 
-int main()
+int mainOld()
 {
     rs2::context ctx;
 

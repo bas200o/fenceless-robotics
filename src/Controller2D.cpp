@@ -2,6 +2,7 @@
 
 Controller2D::Controller2D(/* args */)
 {
+    CameraConnector *camCon = camCon->getInstance();
 }
 
 Controller2D::~Controller2D()
