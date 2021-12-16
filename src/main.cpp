@@ -37,6 +37,7 @@
 #include <pcl/visualization/cloud_viewer.h>
 
 using namespace std;
+using namespace std::chrono;
 
 typedef pcl::PointXYZRGB RGB_Cloud;
 typedef pcl::PointCloud<RGB_Cloud> point_cloud;
@@ -153,7 +154,7 @@ int main() try
     // Object Declaration
     //====================
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr newCloud (new pcl::PointCloud<pcl::PointXYZRGB>);
-    boost::shared_ptr<pcl::visualization::PCLVisualizer> openCloud;
+    // boost::shared_ptr<pcl::visualization::PCLVisualizer> openCloud;
 
     // Declare pointcloud object, for calculating pointclouds and texture mappings
     rs2::pointcloud pc;
@@ -196,10 +197,10 @@ int main() try
 
     // Loop and take frame captures upon user input
     while(captureLoop == true) {
-        
+        auto start = high_resolution_clock::now();
 
          // Wait for frames from the camera to settle
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 1; i++) {
             auto frames = pipe.wait_for_frames(); //Drop several frames for auto-exposure
         }
 
@@ -226,14 +227,14 @@ int main() try
         Cloud_Filter.setFilterLimits (0.0, 1.0);      // Set accepted interval values
         Cloud_Filter.filter (*newCloud);              // Filtered Cloud Outputted
         
-        cloudFile = "Captured_Frame" + to_string(i) + ".pcd";
+        cloudFile = "Captured_Frame.pcd";
         
         //==============================
         // Write PC to .pcd File Format
         //==============================
         // Take Cloud Data and write to .PCD File Format
         // cout << "Generating PCD Point Cloud File... " << endl;
-        pcl::io::savePCDFileASCII(cloudFile, *cloud); // Input cloud to be saved to .pcd
+        // pcl::io::savePCDFileASCII(cloudFile, *cloud); // Input cloud to be saved to .pcd
         cout << cloudFile << " successfully generated. " << endl; 
         
         //Load generated PCD file for viewing
@@ -241,27 +242,33 @@ int main() try
             string openFileName;
 
             // Generate object to store cloud in .pcd file
-            pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudView (new pcl::PointCloud<pcl::PointXYZRGB>);
+            // pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudView (new pcl::PointCloud<pcl::PointXYZRGB>);
             
-            openFileName = "Captured_Frame" + to_string(i) + ".pcd";
-            pcl::io::loadPCDFile (openFileName, *cloudView);
+            // openFileName = "Captured_Frame.pcd";
+            // pcl::io::loadPCDFile (openFileName, *cloudView);
 
-            viewer->setBackgroundColor (0, 0, 0); 
-            // Add generated point cloud and identify with string "Cloud"
-            viewer->addPointCloud<pcl::PointXYZRGB> (cloudView, "Cloud");
-            // Default size for rendered points
-            viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Cloud");
-            // Viewer Properties
-            viewer->initCameraParameters();  // Camera Parameters for ease of viewing
+            // viewer->setBackgroundColor (0, 0, 0); 
+            // // Add generated point cloud and identify with string "Cloud"
+            // viewer->addPointCloud<pcl::PointXYZRGB> (cloudView, "Cloud");
+            // // Default size for rendered points
+            // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Cloud");
+            // // Viewer Properties
+            // viewer->initCameraParameters();  // Camera Parameters for ease of viewing
 
             
         } else {
-            Load_PCDFile();
+            // Load_PCDFile();
         }
 
-        viewer->spinOnce(200);
+        // viewer->spinOnce(200);
         
         i++; // Increment File Name
+        auto stop = high_resolution_clock::now();
+
+        auto duration = duration_cast<microseconds>(stop - start);
+  
+        cout << "Time taken by function: "
+         << duration.count() << " microseconds" << endl;
     }//End-while
    
    
@@ -287,7 +294,7 @@ void Load_PCDFile(void)
     // Generate object to store cloud in .pcd file
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudView (new pcl::PointCloud<pcl::PointXYZRGB>);
     
-    openFileName = "Captured_Frame" + to_string(i) + ".pcd";
+    openFileName = "Captured_Frame.pcd";
     pcl::io::loadPCDFile (openFileName, *cloudView); // Load .pcd File
     
     viewer->updatePointCloud<pcl::PointXYZRGB> (cloudView, "Cloud");
