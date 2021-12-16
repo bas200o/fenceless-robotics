@@ -16,7 +16,7 @@
  ***********************************************************/
 
 #include <iostream>
-#include <algorithm> 
+#include <algorithm>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread/thread.hpp>
 #include <string>
@@ -41,7 +41,6 @@ using namespace std;
 typedef pcl::PointXYZRGB RGB_Cloud;
 typedef pcl::PointCloud<RGB_Cloud> point_cloud;
 typedef point_cloud::Ptr cloud_pointer;
-typedef point_cloud::Ptr prevCloud;
 
 // Prototypes
 void Load_PCDFile(void);
@@ -49,15 +48,15 @@ bool userInput(void);
 void cloudViewer(void);
 
 // Global Variables
-string cloudFile; // .pcd file name
-string prevCloudFile; // .pcd file name (Old cloud)
-int i = 1; // Index for incremental file name
-boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualization::PCLVisualizer ("Captured Frame")); //pcl visualisers
+string cloudFile;                                                                                                     // .pcd file name
+string prevCloudFile;                                                                                                 // .pcd file name (Old cloud)
+int i = 1;                                                                                                            // Index for incremental file name
+boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer(new pcl::visualization::PCLVisualizer("Captured Frame")); //pcl visualisers
 
 //======================================================
 // RGB Texture
 // - Function is utilized to extract the RGB data from
-// a single point return R, G, and B values. 
+// a single point return R, G, and B values.
 // Normals are stored as RGB components and
 // correspond to the specific depth (XYZ) coordinate.
 // By taking these normals and converting them to
@@ -67,19 +66,19 @@ boost::shared_ptr<pcl::visualization::PCLVisualizer> viewer (new pcl::visualizat
 std::tuple<int, int, int> RGB_Texture(rs2::video_frame texture, rs2::texture_coordinate Texture_XY)
 {
     // Get Width and Height coordinates of texture
-    int width  = texture.get_width();  // Frame width in pixels
+    int width = texture.get_width();   // Frame width in pixels
     int height = texture.get_height(); // Frame height in pixels
-    
+
     // Normals to Texture Coordinates conversion
-    int x_value = min(max(int(Texture_XY.u * width  + .5f), 0), width - 1);
+    int x_value = min(max(int(Texture_XY.u * width + .5f), 0), width - 1);
     int y_value = min(max(int(Texture_XY.v * height + .5f), 0), height - 1);
 
     int bytes = x_value * texture.get_bytes_per_pixel();   // Get # of bytes per pixel
     int strides = y_value * texture.get_stride_in_bytes(); // Get line width in bytes
-    int Text_Index =  (bytes + strides);
+    int Text_Index = (bytes + strides);
 
-    const auto New_Texture = reinterpret_cast<const uint8_t*>(texture.get_data());
-    
+    const auto New_Texture = reinterpret_cast<const uint8_t *>(texture.get_data());
+
     // RGB components to save in tuple
     int NT1 = New_Texture[Text_Index];
     int NT2 = New_Texture[Text_Index + 1];
@@ -93,8 +92,9 @@ std::tuple<int, int, int> RGB_Texture(rs2::video_frame texture, rs2::texture_coo
 // - Function is utilized to fill a point cloud
 //  object with depth and RGB data from a single
 //  frame captured using the Realsense.
-//=================================================== 
-cloud_pointer PCL_Conversion(const rs2::points& points, const rs2::video_frame& color){
+//===================================================
+cloud_pointer PCL_Conversion(const rs2::points &points, const rs2::video_frame &color)
+{
 
     // Object Declaration (Point Cloud)
     cloud_pointer cloud(new point_cloud);
@@ -107,11 +107,11 @@ cloud_pointer PCL_Conversion(const rs2::points& points, const rs2::video_frame& 
     //================================
     // Convert data captured from Realsense camera to Point Cloud
     auto sp = points.get_profile().as<rs2::video_stream_profile>();
-    
-    cloud->width  = static_cast<uint32_t>( sp.width()  );   
-    cloud->height = static_cast<uint32_t>( sp.height() );
+
+    cloud->width = static_cast<uint32_t>(sp.width());
+    cloud->height = static_cast<uint32_t>(sp.height());
     cloud->is_dense = false;
-    cloud->points.resize( points.size() );
+    cloud->points.resize(points.size());
 
     auto Texture_Coord = points.get_texture_coordinates();
     auto Vertex = points.get_vertices();
@@ -119,7 +119,7 @@ cloud_pointer PCL_Conversion(const rs2::points& points, const rs2::video_frame& 
     // Iterating through all points and setting XYZ coordinates
     // and RGB values
     for (int i = 0; i < points.size(); i++)
-    {   
+    {
         //===================================
         // Mapping Depth Coordinates
         // - Depth data stored as XYZ values
@@ -135,29 +135,29 @@ cloud_pointer PCL_Conversion(const rs2::points& points, const rs2::video_frame& 
         cloud->points[i].r = get<2>(RGB_Color); // Reference tuple<2>
         cloud->points[i].g = get<1>(RGB_Color); // Reference tuple<1>
         cloud->points[i].b = get<0>(RGB_Color); // Reference tuple<0>
-
     }
-    
-   return cloud; // PCL RGB Point Cloud generated
+
+    return cloud; // PCL RGB Point Cloud generated
 }
 
-int main() try 
+int main()
+try
 {
 
     //======================
     // Variable Declaration
     //======================
     bool captureLoop = true; // Loop control for generating point clouds
-   
+
     //====================
     // Object Declaration
     //====================
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr newCloud (new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr newCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
     boost::shared_ptr<pcl::visualization::PCLVisualizer> openCloud;
 
     // Declare pointcloud object, for calculating pointclouds and texture mappings
     rs2::pointcloud pc;
-    
+
     // Declare RealSense pipeline, encapsulating the actual device and sensors
     rs2::pipeline pipe;
 
@@ -170,8 +170,8 @@ int main() try
     cfg.enable_stream(RS2_STREAM_COLOR);
     cfg.enable_stream(RS2_STREAM_INFRARED);
     cfg.enable_stream(RS2_STREAM_DEPTH);
-    
-    rs2::pipeline_profile selection = pipe.start(cfg); 
+
+    rs2::pipeline_profile selection = pipe.start(cfg);
 
     rs2::device selected_device = selection.get_device();
     auto depth_sensor = selected_device.first<rs2::depth_sensor>();
@@ -192,18 +192,12 @@ int main() try
         depth_sensor.set_option(RS2_OPTION_LASER_POWER, 0.f); // Disable laser
     }
 
-    // Begin Stream with default configs
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr prevCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
 
     // Loop and take frame captures upon user input
-    while(captureLoop == true) {
-        
-
-         // Wait for frames from the camera to settle
-        for (int i = 0; i < 30; i++) {
-            auto frames = pipe.wait_for_frames(); //Drop several frames for auto-exposure
-        }
-
-        // Capture a single frame and obtain depth + RGB values from it    
+    while (captureLoop == true)
+    {
+        // Capture a single frame and obtain depth + RGB values from it
         auto frames = pipe.wait_for_frames();
         auto depth = frames.get_depth_frame();
         auto RGB = frames.get_color_frame();
@@ -216,125 +210,142 @@ int main() try
 
         // Convert generated Point Cloud to PCL Formatting
         cloud_pointer cloud = PCL_Conversion(points, RGB);
-        
-        //========================================
-        // Filter PointCloud (PassThrough Method)
-        //========================================
-        pcl::PassThrough<pcl::PointXYZRGB> Cloud_Filter; // Create the filtering object
-        Cloud_Filter.setInputCloud (cloud);           // Input generated cloud to filter
-        Cloud_Filter.setFilterFieldName ("z");        // Set field name to Z-coordinate
-        Cloud_Filter.setFilterLimits (0.0, 1.0);      // Set accepted interval values
-        Cloud_Filter.filter (*newCloud);              // Filtered Cloud Outputted
-        
-        cloudFile = "Captured_Frame" + to_string(i) + ".pcd";
-        
+
+        //***************************************
+        // Merge pointclouds
+        //***************************************
+        // cloudFile = "Captured_Frame" + to_string(i) + ".pcd";
+
+        // pcl::PointCloud<pcl::PointXYZRGB>::Ptr prevCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+        // string fName = "Captured_Frame" + to_string(i - 1) + ".pcd";
+        // pcl::io::loadPCDFile(fName, *prevCloud);
+
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr tempCloud(cloud);
+
+        *tempCloud += *prevCloud;
+
         //==============================
         // Write PC to .pcd File Format
         //==============================
         // Take Cloud Data and write to .PCD File Format
+
         // cout << "Generating PCD Point Cloud File... " << endl;
-        pcl::io::savePCDFileASCII(cloudFile, *cloud); // Input cloud to be saved to .pcd
-        cout << cloudFile << " successfully generated. " << endl; 
-        
+        // pcl::io::savePCDFileASCII(cloudFile, *cloud); // Input cloud to be saved to .pcd
+        // cout << cloudFile << " successfully generated. " << endl;
+
         //Load generated PCD file for viewing
-        if (i == 1) {
-            string openFileName;
+        if (i == 1)
+        {
+            // string openFileName;
 
-            // Generate object to store cloud in .pcd file
-            pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudView (new pcl::PointCloud<pcl::PointXYZRGB>);
-            
-            openFileName = "Captured_Frame" + to_string(i) + ".pcd";
-            pcl::io::loadPCDFile (openFileName, *cloudView);
+            // // Generate object to store cloud in .pcd file
+            // pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudView(new pcl::PointCloud<pcl::PointXYZRGB>);
+            // openFileName = "Captured_Frame" + to_string(i) + ".pcd";
+            // pcl::io::loadPCDFile(openFileName, *cloudView);
 
-            viewer->setBackgroundColor (0, 0, 0); 
+            viewer->setBackgroundColor(0, 0, 0);
             // Add generated point cloud and identify with string "Cloud"
-            viewer->addPointCloud<pcl::PointXYZRGB> (cloudView, "Cloud");
+            viewer->addPointCloud<pcl::PointXYZRGB>(tempCloud, "Cloud");
             // Default size for rendered points
-            viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Cloud");
+            viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Cloud");
             // Viewer Properties
-            viewer->initCameraParameters();  // Camera Parameters for ease of viewing
-
-            
-        } else {
-            Load_PCDFile();
+            viewer->initCameraParameters(); // Camera Parameters for ease of viewing
+        }
+        else
+        {
+            viewer->updatePointCloud<pcl::PointXYZRGB>(tempCloud, "Cloud");
         }
 
         viewer->spinOnce(200);
-        
+
+        if (i > 3)
+        {
+
+            pcl::io::savePCDFileASCII("test.pcd", *tempCloud);
+            pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudView(new pcl::PointCloud<pcl::PointXYZRGB>);
+            pcl::io::loadPCDFile("test.pcd", *cloudView);
+            viewer->updatePointCloud<pcl::PointXYZRGB>(cloudView, "Cloud");
+
+            viewer->spin();
+        }
+
+        *prevCloud = *tempCloud;
+
         i++; // Increment File Name
-    }//End-while
-   
-   
-    cout << "Exiting Program... " << endl; 
+    }        //End-while
+
+    cout << "Exiting Program... " << endl;
     return EXIT_SUCCESS;
 }
-catch (const rs2::error & e)
+catch (const rs2::error &e)
 {
     std::cerr << "RealSense error calling " << e.get_failed_function() << "(" << e.get_failed_args() << "):\n    " << e.what() << std::endl;
     return EXIT_FAILURE;
 }
-catch (const std::exception & e)
+catch (const std::exception &e)
 {
     std::cerr << e.what() << std::endl;
     return EXIT_FAILURE;
 }
-
 
 void Load_PCDFile(void)
 {
     string openFileName;
 
     // Generate object to store cloud in .pcd file
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudView (new pcl::PointCloud<pcl::PointXYZRGB>);
-    
-    openFileName = "Captured_Frame" + to_string(i) + ".pcd";
-    pcl::io::loadPCDFile (openFileName, *cloudView); // Load .pcd File
-    
-    viewer->updatePointCloud<pcl::PointXYZRGB> (cloudView, "Cloud");
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudView(new pcl::PointCloud<pcl::PointXYZRGB>);
 
-    viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Cloud");
+    openFileName = "Captured_Frame" + to_string(i) + ".pcd";
+    pcl::io::loadPCDFile(openFileName, *cloudView); // Load .pcd File
+
+    viewer->updatePointCloud<pcl::PointXYZRGB>(cloudView, "Cloud");
+
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Cloud");
     // Note: No method to close PC visualizer, pressing Q to continue software flow only solution.
-   
-    
 }
 //========================================
 // userInput
-// - Prompts user for a char to 
+// - Prompts user for a char to
 // test for decision making.
 // [y|Y] - Capture frame and save as .pcd
 // [n|N] - Exit program
 //========================================
-bool userInput(void){
+bool userInput(void)
+{
 
     bool setLoopFlag;
     bool inputCheck = false;
     char takeFrame; // Utilize to trigger frame capture from key press ('t')
-    do {
+    do
+    {
 
         // Prompt User to execute frame capture algorithm
         cout << endl;
-        cout << "Generate a Point Cloud? [y/n] "; 
+        cout << "Generate a Point Cloud? [y/n] ";
         cin >> takeFrame;
         cout << endl;
         // Condition [Y] - Capture frame, store in PCL object and display
-        if (takeFrame == 'y' || takeFrame == 'Y') {
+        if (takeFrame == 'y' || takeFrame == 'Y')
+        {
             setLoopFlag = true;
             inputCheck = true;
             takeFrame = 0;
         }
         // Condition [N] - Exit Loop and close program
-        else if (takeFrame == 'n' || takeFrame == 'N') {
+        else if (takeFrame == 'n' || takeFrame == 'N')
+        {
             setLoopFlag = false;
             inputCheck = true;
             takeFrame = 0;
         }
         // Invalid Input, prompt user again.
-        else {
+        else
+        {
             inputCheck = false;
             cout << "Invalid Input." << endl;
             takeFrame = 0;
         }
-    } while(inputCheck == false);
+    } while (inputCheck == false);
 
-    return setLoopFlag; 
+    return setLoopFlag;
 }
