@@ -9,6 +9,7 @@ find_package( PCL 1.2 REQUIRED )
 find_package (Python2 COMPONENTS Interpreter Development)
 find_package (Threads)
 find_package(OpenCV REQUIRED)
+find_package ( Qt5 COMPONENTS Widgets REQUIRED )
 
 # [C/C++]>[General]>[Additional Include Directories]
 include_directories( ${PCL_INCLUDE_DIRS} )
@@ -32,6 +33,7 @@ add_executable(fenceless-robot ${SRC_FILES})
 target_link_libraries(${PROJECT_NAME} ${realsense2_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} )
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
