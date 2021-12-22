@@ -6,6 +6,7 @@
 #include <QGridLayout>
 #include <QTableView>
 #include <QTableWidget>
+#include <QGraphicsView>
 
 struct vec3 {
     int x;
@@ -25,7 +26,7 @@ struct VisualObject {
 class GUIApplication : public QWidget
 {
     private:
-        QWidget *pan_view2d;
+        QGraphicsView *pan_view2d;
         QWidget *pan_view3d;
         QWidget *pan_statistics;
         QTableWidget *pan_table;
@@ -52,5 +53,3 @@ class GUIApplication : public QWidget
         void destroyObject(int id);
 
 };
-
-
