@@ -21,6 +21,7 @@ public:
     void FindObjects();
     pcl::PointCloud<pcl::PointXYZRGB> GetPointCloud();
     void InsertObject(pcl::PointCloud<pcl::PointXYZRGB> segment);
+    std::vector<FoundObject> getObjects();
 };
 
 

@@ -24,3 +24,7 @@ void Information3D::InsertObject(pcl::PointCloud<pcl::PointXYZRGB> segment){
     
     return;
 }
+
+std::vector<FoundObject> Information3D::getObjects(){
+    return objects;
+}

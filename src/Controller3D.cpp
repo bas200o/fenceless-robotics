@@ -31,6 +31,9 @@ void Controller3D::DetectObjects(int pCloud){
     if(pCloud >= 5){
         return;
     };
+    if(lastInfo[pCloud].getObjects().size() > 0){
+        return;
+    }
     pcl::PointCloud<pcl::PointXYZRGB> tempCloud(lastInfo[pCloud].GetPointCloud());
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_f(new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -66,47 +69,45 @@ void Controller3D::DetectObjects(int pCloud){
             break;
         }
 
-    // Extract the planar inliers from the input cloud
-    pcl::ExtractIndices<pcl::PointXYZRGB> extract;
-    extract.setInputCloud(cloud_filtered);
-    extract.setIndices(inliers);
-    extract.setNegative(false);
+        // Extract the planar inliers from the input cloud
+        pcl::ExtractIndices<pcl::PointXYZRGB> extract;
+        extract.setInputCloud(cloud_filtered);
+        extract.setIndices(inliers);
+        extract.setNegative(false);
 
-    // Get the points associated with the planar surface
-    extract.filter(*cloud_plane);
-    std::cout << "PointCloud representing the planar component: " << cloud_plane->size() << " data points." << std::endl;
+        // Get the points associated with the planar surface
+        extract.filter(*cloud_plane);
 
-    // Remove the planar inliers, extract the rest
-    extract.setNegative(true);
-    extract.filter(*cloud_f);
-    *cloud_filtered = *cloud_f;
-  }
+        // Remove the planar inliers, extract the rest
+        extract.setNegative(true);
+        extract.filter(*cloud_f);
+        *cloud_filtered = *cloud_f;
+    }
   
-  // Creating the KdTree object for the search method of the extraction
-  pcl::search::KdTree<pcl::PointXYZRGB>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZRGB>);
-  tree->setInputCloud(cloud_filtered);
+    // Creating the KdTree object for the search method of the extraction
+    pcl::search::KdTree<pcl::PointXYZRGB>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZRGB>);
+    tree->setInputCloud(cloud_filtered);
 
-  std::vector<pcl::PointIndices> cluster_indices;
-  pcl::EuclideanClusterExtraction<pcl::PointXYZRGB> ec;
-  ec.setClusterTolerance(0.02); // 2cm
-  ec.setMinClusterSize(100);
-  ec.setMaxClusterSize(25000);
-  ec.setSearchMethod(tree);
-  ec.setInputCloud(cloud_filtered);
-  ec.extract(cluster_indices);
+    std::vector<pcl::PointIndices> cluster_indices;
+    pcl::EuclideanClusterExtraction<pcl::PointXYZRGB> ec;
+    ec.setClusterTolerance(0.02); // 2cm
+    ec.setMinClusterSize(100);
+    ec.setMaxClusterSize(25000);
+    ec.setSearchMethod(tree);
+    ec.setInputCloud(cloud_filtered);
+    ec.extract(cluster_indices);
 
-  int j = 0;
-  for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin(); it != cluster_indices.end(); ++it)
-  {
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_cluster(new pcl::PointCloud<pcl::PointXYZRGB>);
-    for (const auto &idx : it->indices)
-      cloud_cluster->push_back((*cloud_filtered)[idx]); //*
-    cloud_cluster->width = cloud_cluster->size();
-    cloud_cluster->height = 1;
-    cloud_cluster->is_dense = true;
-    lastInfo[pCloud].InsertObject(*cloud_cluster);
-    
-  }
+    int j = 0;
+    for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin(); it != cluster_indices.end(); ++it)
+    {
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_cluster(new pcl::PointCloud<pcl::PointXYZRGB>);
+        for (const auto &idx : it->indices)
+            cloud_cluster->push_back((*cloud_filtered)[idx]); //*
+            cloud_cluster->width = cloud_cluster->size();
+            cloud_cluster->height = 1;
+            cloud_cluster->is_dense = true;
+            lastInfo[pCloud].InsertObject(*cloud_cluster);
+    }
 }
 
 void Controller3D::RemoveBackground(int pCloud){
