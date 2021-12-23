@@ -153,7 +153,6 @@ void RSCameraHandler::runThreat(){
     pipe.start(config);
     while(true){
         grabImage();
-
         RSCameraHandler::setLatestCloud(convertToPCL());
     }
 }
@@ -182,10 +181,14 @@ void RSCameraHandler::connectCamera(){
 }
 
     pcl::PointCloud<pcl::PointXYZ> RSCameraHandler::getLatestPointCloud() {
-        // CameraHandler::latestCloud_mtx.lock();
-        
-        return CameraHandler::latestCloud;
+        CameraHandler::latestCloud_mtx.lock();
+        pcl::PointCloud<pcl::PointXYZ>::Ptr cloudCopy = pcl::PointCloud<pcl::PointXYZ>::Ptr(CameraHandler::latestCloud);
+        CameraHandler::latestCloud_mtx.unlock();
+        return cloudCopy;
     }
     pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::getLatestColloredPointCloud() {
-        return CameraHandler::latestRGBCloud;
+        CameraHandler::latestRGBCloud_mtx.lock();
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudCopy = pcl::PointCloud<pcl::PointXYZRGB>::Ptr(CameraHandler::latestRGBCloud);
+        CameraHandler::latestRGBCloud_mtx.unlock();
+        return cloudCopy;
     }
