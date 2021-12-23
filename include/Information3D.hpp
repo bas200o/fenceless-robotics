@@ -17,6 +17,10 @@ private:
 public:
     Information3D(/* args */);
     ~Information3D();
+    void AddPointClouds(std::vector<pcl::PointCloud<pcl::PointXYZRGB>> pointClouds);
+    void FindObjects();
+    pcl::PointCloud<pcl::PointXYZRGB> GetPointCloud();
+    void InsertObject(pcl::PointCloud<pcl::PointXYZRGB> segment);
 };
 
 

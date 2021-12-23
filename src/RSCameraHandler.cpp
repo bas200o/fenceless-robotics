@@ -181,14 +181,16 @@ void RSCameraHandler::connectCamera(){
 }
 
     pcl::PointCloud<pcl::PointXYZ> RSCameraHandler::getLatestPointCloud() {
+        pcl::PointCloud<pcl::PointXYZ> cloudCopy;
         CameraHandler::latestCloud_mtx.lock();
-        pcl::PointCloud<pcl::PointXYZ>::Ptr cloudCopy = pcl::PointCloud<pcl::PointXYZ>::Ptr(CameraHandler::latestCloud);
+        cloudCopy = CameraHandler::latestCloud;
         CameraHandler::latestCloud_mtx.unlock();
         return cloudCopy;
     }
     pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::getLatestColloredPointCloud() {
+        pcl::PointCloud<pcl::PointXYZRGB> cloudCopy;
         CameraHandler::latestRGBCloud_mtx.lock();
-        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudCopy = pcl::PointCloud<pcl::PointXYZRGB>::Ptr(CameraHandler::latestRGBCloud);
+        cloudCopy = CameraHandler::latestRGBCloud;
         CameraHandler::latestRGBCloud_mtx.unlock();
         return cloudCopy;
     }

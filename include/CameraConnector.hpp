@@ -13,11 +13,12 @@ class CameraConnector {
 public:
    static CameraConnector* getInstance();
    void connectCameras(int number, int type);
+   std::vector<CameraHandler> connectedCams;
+   std::vector<cv::Mat> retrieveImages();
+   std::vector<pcl::PointCloud<pcl::PointXYZRGB>> retrievePointClouds();
 private:
    CameraConnector();
    ~CameraConnector();
    static CameraConnector* pSingleton;		// CameraConnector instance
-   std::vector<CameraHandler> connectedCams;
-   std::vector<cv::Mat> retrieveImages();
-   std::vector<pcl::PointCloud<pcl::PointXYZRGB>> retrievePointClouds();
+
 };

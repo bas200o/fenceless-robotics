@@ -39,6 +39,7 @@ public:
     ~RSCameraHandler();
     pcl::PointCloud<pcl::PointXYZ> getLatestPointCloud();
     pcl::PointCloud<pcl::PointXYZRGB> getLatestColloredPointCloud();
+
 };
 
 
