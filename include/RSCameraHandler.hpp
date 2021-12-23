@@ -16,10 +16,11 @@ using namespace cv;
 class RSCameraHandler : public CameraHandler
 {
 private:
-    pcl::PointCloud<pcl::PointXYZRGB> convertToPCL(); 
+    std::tuple<pcl::PointCloud<pcl::PointXYZRGB>, pcl::PointCloud<pcl::PointXYZ>> convertBothPCL();
+    pcl::PointCloud<pcl::PointXYZRGB> convertToRGBPCL(); 
+    pcl::PointCloud<pcl::PointXYZ> convertToPCL();
     cv::Mat convertToMatrix();
 
-    void setLatestCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloud);
     void grabImage();
     void runThreat();
     void connectCamera();
@@ -28,10 +29,16 @@ private:
     rs2::frameset frames;
     rs2::config config;
 
+    rs2::points points;
+
+
+
     
 public:
     RSCameraHandler(/* args */);
     ~RSCameraHandler();
+    pcl::PointCloud<pcl::PointXYZ> getLatestPointCloud();
+    pcl::PointCloud<pcl::PointXYZRGB> getLatestColloredPointCloud();
 };
 
 

@@ -17,14 +17,22 @@ class CameraHandler{
         int cameraNumber;
         string name; 
         int port;
-        pcl::PointCloud<pcl::PointXYZRGB> latestCloud;
+
+        std::mutex latestCloud_mtx;
+        std::mutex latestRGBCloud_mtx;
+        pcl::PointCloud<pcl::PointXYZ> latestCloud;
+        pcl::PointCloud<pcl::PointXYZRGB> latestRGBCloud;
         cv::Mat latestImage;
 
+        void setLatestCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloudRGB);
+        void setLatestCloud(pcl::PointCloud<pcl::PointXYZ> pointCloud);
+        void setLatestCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloudRGB, pcl::PointCloud<pcl::PointXYZ> pointCloud);
+
     private:
-        virtual pcl::PointCloud<pcl::PointXYZRGB> convertToPCL() = 0;
+        virtual pcl::PointCloud<pcl::PointXYZ> convertToPCL() = 0;
         virtual cv::Mat convertToMatrix() = 0;
 
-        void setLatestCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloud);
+
         virtual void grabImage() = 0;
         virtual void runThreat() = 0;
         virtual void connectCamera() = 0;

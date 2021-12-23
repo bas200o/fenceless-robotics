@@ -56,7 +56,3 @@ std::vector<pcl::PointCloud<pcl::PointXYZRGB>> CameraConnector::retrievePointClo
         return pointclouds;
 
 }
-
-
-
-
