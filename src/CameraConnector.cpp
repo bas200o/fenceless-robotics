@@ -22,9 +22,10 @@ void CameraConnector::connectCameras(int number, int type){
     switch (type)
     {
     case 1:
-        //rs
+    {
+        RSCameraHandler newCamera;
         break;
-    
+    }
     case 2:
         //zed
         break;
@@ -52,6 +53,7 @@ std::vector<pcl::PointCloud<pcl::PointXYZRGB>> CameraConnector::retrievePointClo
     std::vector<pcl::PointCloud<pcl::PointXYZRGB>> pointclouds;
     for(int i = 0; i<s ; i++){
         //pointcloud->add Pointcloud from camera push back
+        connectedCams[i].getLatestPointCloud();
     }
         return pointclouds;
 

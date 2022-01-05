@@ -12,28 +12,32 @@
 using namespace std;
 using namespace cv;
 
-class CameraHandler{
-    protected: 
-        int cameraNumber;
-        string name; 
-        int port;
+class CameraHandler
+{
+protected:
+    int cameraNumber;
+    string name;
+    int port;
 
-        std::mutex latestCloud_mtx;
-        std::mutex latestRGBCloud_mtx;
-        pcl::PointCloud<pcl::PointXYZ> latestCloud;
-        pcl::PointCloud<pcl::PointXYZRGB> latestRGBCloud;
-        cv::Mat latestImage;
+    std::mutex latestCloud_mtx;
+    std::mutex latestRGBCloud_mtx;
+    pcl::PointCloud<pcl::PointXYZ> latestCloud;
+    pcl::PointCloud<pcl::PointXYZRGB> latestRGBCloud;
+    cv::Mat latestImage;
 
-        void setLatestCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloudRGB);
-        void setLatestCloud(pcl::PointCloud<pcl::PointXYZ> pointCloud);
-        void setLatestCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloudRGB, pcl::PointCloud<pcl::PointXYZ> pointCloud);
+    void setLatestCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloudRGB);
+    void setLatestCloud(pcl::PointCloud<pcl::PointXYZ> pointCloud);
+    void setLatestCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloudRGB, pcl::PointCloud<pcl::PointXYZ> pointCloud);
 
-    private:
-        virtual pcl::PointCloud<pcl::PointXYZ> convertToPCL() = 0;
-        virtual cv::Mat convertToMatrix() = 0;
+private:
+    virtual pcl::PointCloud<pcl::PointXYZ> convertToPCL() = 0;
+    virtual cv::Mat convertToMatrix() = 0;
 
+    virtual void grabImage() = 0;
+    virtual void connectCamera() = 0;
 
-        virtual void grabImage() = 0;
-        virtual void runThreat() = 0;
-        virtual void connectCamera() = 0;
+public:
+    virtual pcl::PointCloud<pcl::PointXYZ> getLatestPointCloud() = 0;
+    virtual void runThread() = 0;
+    
 };

@@ -1,6 +1,7 @@
 /*Class used to connect camera handlers and keep track of them*/
 #pragma once
 #include "../include/CameraHandler.hpp"
+#include "../include/RSCameraHandler.hpp"
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 #include <pcl/visualization/cloud_viewer.h>

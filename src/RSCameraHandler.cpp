@@ -148,7 +148,7 @@ void RSCameraHandler::grabImage(){
 
 }
 
-void RSCameraHandler::runThreat(){
+void RSCameraHandler::runThread(){
     //config.enable_device()
     pipe.start(config);
     while(true){
@@ -187,6 +187,7 @@ void RSCameraHandler::connectCamera(){
         CameraHandler::latestCloud_mtx.unlock();
         return cloudCopy;
     }
+    
     pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::getLatestColloredPointCloud() {
         pcl::PointCloud<pcl::PointXYZRGB> cloudCopy;
         CameraHandler::latestRGBCloud_mtx.lock();

@@ -22,7 +22,7 @@ private:
     cv::Mat convertToMatrix();
 
     void grabImage();
-    void runThreat();
+    void runThread();
     void connectCamera();
     rs2::context ctx;
     rs2::pipeline pipe;
