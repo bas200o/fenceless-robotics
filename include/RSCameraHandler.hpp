@@ -22,7 +22,7 @@ private:
     cv::Mat convertToMatrix();
 
     void grabImage();
-    void runThread();
+
     void connectCamera();
     rs2::context ctx;
     rs2::pipeline pipe;
@@ -38,7 +38,8 @@ public:
     RSCameraHandler(/* args */);
     ~RSCameraHandler();
     pcl::PointCloud<pcl::PointXYZ> getLatestPointCloud();
-    pcl::PointCloud<pcl::PointXYZRGB> getLatestColloredPointCloud();
+    pcl::PointCloud<pcl::PointXYZRGB> getLatestPointCloudRGB();
+    void runThread();
 
 };
 

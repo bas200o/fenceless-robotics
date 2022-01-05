@@ -188,7 +188,7 @@ void RSCameraHandler::connectCamera(){
         return cloudCopy;
     }
     
-    pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::getLatestColloredPointCloud() {
+    pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::getLatestPointCloudRGB() {
         pcl::PointCloud<pcl::PointXYZRGB> cloudCopy;
         CameraHandler::latestRGBCloud_mtx.lock();
         cloudCopy = CameraHandler::latestRGBCloud;

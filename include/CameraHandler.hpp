@@ -38,6 +38,8 @@ private:
 
 public:
     virtual pcl::PointCloud<pcl::PointXYZ> getLatestPointCloud() = 0;
+    virtual pcl::PointCloud<pcl::PointXYZRGB> getLatestPointCloudRGB() = 0;
+
     virtual void runThread() = 0;
     
 };
