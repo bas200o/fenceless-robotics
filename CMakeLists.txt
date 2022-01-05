@@ -4,11 +4,21 @@ project(fenceless-robot VERSION 0.1.0)
 include(CTest)
 enable_testing()
 
+find_package (Threads)
 find_package(realsense2 REQUIRED)
 find_package( PCL 1.2 REQUIRED )
 find_package (Python2 COMPONENTS Interpreter Development)
 find_package (Threads)
 find_package(OpenCV REQUIRED)
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
+set(CMAKE_THREAD_LIBS_INIT "-lpthread")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+set(CMAKE_HAVE_THREADS_LIBRARY 1)
+set(CMAKE_USE_WIN32_THREADS_INIT 0)
+set(CMAKE_USE_PTHREADS_INIT 1)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 # [C/C++]>[General]>[Additional Include Directories]
 include_directories( ${PCL_INCLUDE_DIRS} )

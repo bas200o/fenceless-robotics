@@ -28,12 +28,13 @@ class CameraHandler{
         void setLatestCloud(pcl::PointCloud<pcl::PointXYZ> pointCloud);
         void setLatestCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloudRGB, pcl::PointCloud<pcl::PointXYZ> pointCloud);
 
+        virtual void runThreat() = 0;
+
     private:
         virtual pcl::PointCloud<pcl::PointXYZ> convertToPCL() = 0;
         virtual cv::Mat convertToMatrix() = 0;
 
 
         virtual void grabImage() = 0;
-        virtual void runThreat() = 0;
         virtual void connectCamera() = 0;
 };

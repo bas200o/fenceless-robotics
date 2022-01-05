@@ -6,11 +6,20 @@ RSCameraHandler::RSCameraHandler(/* args */)
     config.enable_stream(RS2_STREAM_COLOR);
     config.enable_stream(RS2_STREAM_INFRARED);
     config.enable_stream(RS2_STREAM_DEPTH);
+    connectCamera();
 }
 
 RSCameraHandler::~RSCameraHandler()
 {
-    pipe.stop();
+    if (pipeRunning) {
+        pipe.stop();
+    }
+}
+
+void RSCameraHandler::setLatestCloud(pcl::PointCloud<pcl::PointXYZ> pointCloud) {
+        CameraHandler::latestCloud_mtx.lock();
+        CameraHandler::latestCloud = pointCloud;
+        CameraHandler::latestCloud_mtx.unlock();
 }
 
 cv::Mat RSCameraHandler::convertToMatrix()
@@ -148,22 +157,24 @@ void RSCameraHandler::grabImage(){
 
 }
 
-void RSCameraHandler::runThreat(){
-    //config.enable_device()
-    pipe.start(config);
-    while(true){
-        grabImage();
-        RSCameraHandler::setLatestCloud(convertToPCL());
-    }
+void RSCameraHandler::runThreat() {
+        while(true){
+            grabImage();
+            RSCameraHandler::setLatestCloud(convertToPCL());
+        }
+}
+
+void RSCameraHandler::threadRunner() {
+
 }
 
 void RSCameraHandler::connectCamera(){
     rs2::pipeline_profile selection = pipe.start(config); 
-
+    pipeRunning = true;
     rs2::device selected_device = selection.get_device();
     auto depth_sensor = selected_device.first<rs2::depth_sensor>();
 
-        if (depth_sensor.supports(RS2_OPTION_EMITTER_ENABLED))
+    if (depth_sensor.supports(RS2_OPTION_EMITTER_ENABLED))
     {
         depth_sensor.set_option(RS2_OPTION_EMITTER_ENABLED, 1.f); // Enable emitter
         pipe.wait_for_frames();
