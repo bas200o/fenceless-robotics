@@ -8,6 +8,14 @@ RSCameraHandler::RSCameraHandler(/* args */)
     config.enable_stream(RS2_STREAM_DEPTH);
 }
 
+RSCameraHandler::RSCameraHandler(int SerialNumber)
+{
+    config.enable_stream(RS2_STREAM_COLOR);
+    config.enable_stream(RS2_STREAM_INFRARED);
+    config.enable_stream(RS2_STREAM_DEPTH);
+}
+
+
 RSCameraHandler::~RSCameraHandler()
 {
     pipe.stop();
@@ -150,10 +158,12 @@ void RSCameraHandler::grabImage(){
 
 void RSCameraHandler::runThread(){
     //config.enable_device()
+    printf("yaat \n");
     pipe.start(config);
     while(true){
         grabImage();
         RSCameraHandler::setLatestCloud(convertToPCL());
+        return;
     }
 }
 

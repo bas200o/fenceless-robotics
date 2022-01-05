@@ -31,7 +31,7 @@
 #include <thread> // std::this_thread::sleep_for
 #include <chrono>
 
-int main()
+int Omain()
 {
   // Read in the cloud data
   pcl::PCDReader reader;

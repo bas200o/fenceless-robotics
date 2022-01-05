@@ -36,6 +36,7 @@ private:
     
 public:
     RSCameraHandler(/* args */);
+    RSCameraHandler(int number);
     ~RSCameraHandler();
     pcl::PointCloud<pcl::PointXYZ> getLatestPointCloud();
     pcl::PointCloud<pcl::PointXYZRGB> getLatestPointCloudRGB();
