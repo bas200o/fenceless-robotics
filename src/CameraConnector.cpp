@@ -54,9 +54,10 @@ std::vector<cv::Mat> CameraConnector::retrieveImages(){
 }
 
 std::vector<pcl::PointCloud<pcl::PointXYZRGB>> CameraConnector::retrievePointClouds(){
-    int s = sizeof(connectedCams);
+    float s = connectedCams.size();
     std::vector<pcl::PointCloud<pcl::PointXYZRGB>> pointclouds;
     for(int i = 0; i<s ; i++){
+        printf("connectedcams \n");
         //pointcloud->add Pointcloud from camera push back
         pcl::PointCloud<pcl::PointXYZRGB> temp = connectedCams[i]->getLatestPointCloudRGB();
         pointclouds.push_back(temp);

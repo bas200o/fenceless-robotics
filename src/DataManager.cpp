@@ -9,6 +9,9 @@ CameraConnector *camCon = camCon->getInstance();
 camCon->connectCameras(2, 1);
 GUIApplication gui;
 Controller3D cont3;
+cont3.CreateNewInformation();
+cont3.DetectObjects(0);
+
 Controller2D cont2;
 //while(true)
 

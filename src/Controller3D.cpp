@@ -12,22 +12,31 @@ void Controller3D::CreateNewInformation(){
     Information3D Info3D;
     Information3D temp1;
     Information3D temp2;
-
+    Information3D temp3;
+    printf("Creating first info \n");
+    //make sure the first is the newest info
     temp2 = lastInfo[0];
     lastInfo[0] = Info3D;
-    for(int i = 1; i < sizeof(lastInfo); i++){
-        if(&temp2 != NULL){
+    cout << sizeof(lastInfo)/sizeof(lastInfo[0]) << endl;
+    for(int i = 1; i < sizeof(lastInfo)/sizeof(lastInfo[0]); i++){
+        if(temp2.GetPointCloud().size() > 0){
             temp1 = lastInfo[i];
             lastInfo[i] = temp2;
             temp2 = temp1;
         }
     }
     CameraConnector *camCon = camCon->getInstance();
+    std::vector<pcl::PointCloud<pcl::PointXYZRGB> > temp = camCon->retrievePointClouds();
     lastInfo[0].AddPointClouds(camCon->retrievePointClouds());
+    printf("Created first info \n");
     return;
+    
+
 }
 
 void Controller3D::DetectObjects(int pCloud){
+    printf("Detecting \n");
+
     if(pCloud >= 5){
         return;
     };
@@ -108,6 +117,7 @@ void Controller3D::DetectObjects(int pCloud){
             cloud_cluster->is_dense = true;
             lastInfo[pCloud].InsertObject(*cloud_cluster);
     }
+    return;
 }
 
 void Controller3D::RemoveBackground(int pCloud){

@@ -162,7 +162,7 @@ void RSCameraHandler::runThread(){
     pipe.start(config);
     while(true){
         grabImage();
-        RSCameraHandler::setLatestCloud(convertToPCL());
+        RSCameraHandler::setLatestCloud(std::get<1>(convertBothPCL()));
         return;
     }
 }
@@ -203,5 +203,11 @@ void RSCameraHandler::connectCamera(){
         CameraHandler::latestRGBCloud_mtx.lock();
         cloudCopy = CameraHandler::latestRGBCloud;
         CameraHandler::latestRGBCloud_mtx.unlock();
-        return cloudCopy;
+        ///TEMP CODE
+        pcl::PCDReader reader;
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudView(new pcl::PointCloud<pcl::PointXYZRGB>);
+        reader.read("/home/bas/Documents/POINTUCLOUTU/Captured_Frame1.pcd", *cloudView);
+        pcl::PointCloud<pcl::PointXYZRGB> cloud = *cloudView;
+        ///END TEMP CODE
+        return cloud;
     }
