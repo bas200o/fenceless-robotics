@@ -1,14 +1,19 @@
 #include "../include/Controller3D.hpp"
+// pcl transformation
+#include <pcl/common/transforms.h>
+// pcl filter
+#include <pcl/filters/passthrough.h>
 
 Controller3D::Controller3D(/* args */)
 {
 }
 
-Controller3D::~Controller3D(){
-
+Controller3D::~Controller3D()
+{
 }
 
-void Controller3D::CreateNewInformation(){
+void Controller3D::CreateNewInformation()
+{
     Information3D Info3D;
     Information3D temp1;
     Information3D temp2;
@@ -17,30 +22,33 @@ void Controller3D::CreateNewInformation(){
     //make sure the first is the newest info
     temp2 = lastInfo[0];
     lastInfo[0] = Info3D;
-    cout << sizeof(lastInfo)/sizeof(lastInfo[0]) << endl;
-    for(int i = 1; i < sizeof(lastInfo)/sizeof(lastInfo[0]); i++){
-        if(temp2.GetPointCloud().size() > 0){
+    cout << sizeof(lastInfo) / sizeof(lastInfo[0]) << endl;
+    for (int i = 1; i < sizeof(lastInfo) / sizeof(lastInfo[0]); i++)
+    {
+        if (temp2.GetPointCloud().size() > 0)
+        {
             temp1 = lastInfo[i];
             lastInfo[i] = temp2;
             temp2 = temp1;
         }
     }
     CameraConnector *camCon = camCon->getInstance();
-    std::vector<pcl::PointCloud<pcl::PointXYZRGB> > temp = camCon->retrievePointClouds();
+    std::vector<pcl::PointCloud<pcl::PointXYZRGB>> temp = camCon->retrievePointClouds();
     lastInfo[0].AddPointClouds(camCon->retrievePointClouds());
     printf("Created first info \n");
     return;
-    
-
 }
 
-void Controller3D::DetectObjects(int pCloud){
+void Controller3D::DetectObjects(int pCloud)
+{
     printf("Detecting \n");
 
-    if(pCloud >= 5){
+    if (pCloud >= 5)
+    {
         return;
     };
-    if(lastInfo[pCloud].getObjects().size() > 0){
+    if (lastInfo[pCloud].getObjects().size() > 0)
+    {
         return;
     }
     pcl::PointCloud<pcl::PointXYZRGB> tempCloud(lastInfo[pCloud].GetPointCloud());
@@ -92,7 +100,7 @@ void Controller3D::DetectObjects(int pCloud){
         extract.filter(*cloud_f);
         *cloud_filtered = *cloud_f;
     }
-  
+
     // Creating the KdTree object for the search method of the extraction
     pcl::search::KdTree<pcl::PointXYZRGB>::Ptr tree(new pcl::search::KdTree<pcl::PointXYZRGB>);
     tree->setInputCloud(cloud_filtered);
@@ -112,23 +120,73 @@ void Controller3D::DetectObjects(int pCloud){
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_cluster(new pcl::PointCloud<pcl::PointXYZRGB>);
         for (const auto &idx : it->indices)
             cloud_cluster->push_back((*cloud_filtered)[idx]); //*
-            cloud_cluster->width = cloud_cluster->size();
-            cloud_cluster->height = 1;
-            cloud_cluster->is_dense = true;
-            lastInfo[pCloud].InsertObject(*cloud_cluster);
+        cloud_cluster->width = cloud_cluster->size();
+        cloud_cluster->height = 1;
+        cloud_cluster->is_dense = true;
+        lastInfo[pCloud].InsertObject(*cloud_cluster);
     }
     return;
 }
 
-void Controller3D::RemoveBackground(int pCloud){
+void Controller3D::RemoveBackground(int pCloud)
+{
     return;
 }
 
-void Controller3D::CombinePointClouds(int pCloud){
+void Controller3D::CombinePointClouds(int pCloud)
+{
     return;
 }
 
-void Controller3D::CalculateSpeed(int pCloud){
+void Controller3D::CalculateSpeed(int pCloud)
+{
     return;
 }
+
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, float x, float y, float z)
+{
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr transCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+
+    Eigen::Affine3f transformer = Eigen::Affine3f::Identity();
+
+    // Rotate the cloud with             rotation on axis
+    transformer.rotate(Eigen::AngleAxisf(x, Eigen::Vector3f::UnitX()));
+    transformer.rotate(Eigen::AngleAxisf(y, Eigen::Vector3f::UnitY()));
+    transformer.rotate(Eigen::AngleAxisf(z, Eigen::Vector3f::UnitZ()));
+    // Rotate cloud
+    pcl::transformPointCloud(*OGCloud, *transCloud, transformer);
+    return transCloud;
+}
+
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud, float x, float y, float z)
+{
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr transCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+    Eigen::Affine3f transformer = Eigen::Affine3f::Identity();
+    // Move cloud x y z
+    transformer.translation() << x, y, z;
+
+    // Rotate cloud
+    pcl::transformPointCloud(*OGcloud, *transCloud, transformer);
+    return transCloud;
+}
+
+pcl::PointCloud<pcl::PointXYZ>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
+                                              float x, float x1, float y, float y1, float z, float z1)
+{
+    pcl::PointCloud<pcl::PointXYZ>::Ptr filterCloud(new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::copyPointCloud(*OGCloud, *filterCloud);
+    pcl::PassThrough<pcl::PointXYZ> pass;
+    pass.setInputCloud(filterCloud);
+    pass.setFilterFieldName("x");
+    pass.setFilterLimits(x, x1);
+    pass.setFilterFieldName("y");
+    pass.setFilterLimits(y, y1);
+    pass.setFilterFieldName("z");
+    pass.setFilterLimits(z, z1);
+    pass.filter(*filterCloud);
+
+    return filterCloud;
+}
+
+
 //
