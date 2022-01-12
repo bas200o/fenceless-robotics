@@ -33,7 +33,6 @@ void Controller3D::CreateNewInformation()
         }
     }
     CameraConnector *camCon = camCon->getInstance();
-    std::vector<pcl::PointCloud<pcl::PointXYZRGB>> temp = camCon->retrievePointClouds();
     lastInfo[0].AddPointClouds(camCon->retrievePointClouds());
     printf("Created first info \n");
     return;
@@ -47,8 +46,7 @@ void Controller3D::DetectObjects(int pCloud)
     {
         return;
     };
-    if (lastInfo[pCloud].getObjects().size() > 0)
-    {
+    if(lastInfo[pCloud].getObjects().size() > 0){
         return;
     }
     pcl::PointCloud<pcl::PointXYZRGB> tempCloud(lastInfo[pCloud].GetPointCloud());
