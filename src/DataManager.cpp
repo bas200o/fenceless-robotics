@@ -12,7 +12,7 @@ Controller3D cont3;
 cont3.CreateNewInformation();
 cont3.DetectObjects(0);
 
-Controller2D cont2;
+//Controller2D cont2;
 //while(true)
 
 //Do 3DVision

@@ -13,6 +13,9 @@ private:
     std::tuple<float, float> size;//misschien los width height depth
     std::tuple<float, float> centerMass;
     pcl::PointCloud<pcl::PointXYZRGB> objectCloud;
+    void CalculateCenterMass();
+    void CalculateSize();
+    void CalculateLocation();
 
 public:
     FoundObject(pcl::PointCloud<pcl::PointXYZRGB> objectCloud);
