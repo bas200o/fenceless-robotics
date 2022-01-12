@@ -4,18 +4,18 @@
 #include "../include/Controller2D.hpp"
 #include "../include/CameraConnector.hpp"
 
-int main(){
-CameraConnector *camCon = camCon->getInstance();
-camCon->connectCameras(2, 1);
-GUIApplication gui;
-Controller3D cont3;
-cont3.CreateNewInformation();
-cont3.DetectObjects(0);
+int omain(){
+    CameraConnector *camCon = camCon->getInstance();
+    camCon->connectCameras(2, 1);
+    GUIApplication gui;
+    Controller3D cont3;
+    cont3.CreateNewInformation();
+    cont3.DetectObjects(0);
 
 //Controller2D cont2;
 //while(true)
 
 //Do 3DVision
-cout << "ended \n";
+    cout << "ended \n";
 return 1;
 }

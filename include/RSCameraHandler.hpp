@@ -24,9 +24,7 @@ private:
     pcl::PointCloud<pcl::PointXYZ> convertToPCL();
     cv::Mat convertToMatrix();
 
-    void grabImage();
-    void connectCamera();
-    void setLatestCloud(pcl::PointCloud<pcl::PointXYZ> pointCloud);
+   
     rs2::context ctx;
     rs2::pipeline pipe;
     rs2::frameset frames;
@@ -44,9 +42,12 @@ public:
     RSCameraHandler(int number);
     ~RSCameraHandler();
     pcl::PointCloud<pcl::PointXYZ> getLatestPointCloud();
-    pcl::PointCloud<pcl::PointXYZRGB> getLatestColloredPointCloud();
-    void runThreat();
+    pcl::PointCloud<pcl::PointXYZRGB> getLatestPointCloudRGB();
+    void runThread();
     void threadRunner();
+     void grabImage();
+    void connectCamera();
+    void setLatestCloud(pcl::PointCloud<pcl::PointXYZ> pointCloud);
 };
 
 

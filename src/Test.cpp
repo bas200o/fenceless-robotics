@@ -36,7 +36,7 @@
 RSCameraHandler camHandler;
 
 void camTask() {
-  camHandler.runThreat();
+  camHandler.runThread();
 }
 // The function we want to execute on the new thread.
 void task1(string msg)

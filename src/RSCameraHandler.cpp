@@ -221,7 +221,7 @@ void RSCameraHandler::grabImage(){
 
 }
 
-void RSCameraHandler::runThreat() {
+void RSCameraHandler::runThread() {
         while(true){
             RSCameraHandler::grabImage();
             RSCameraHandler::setLatestCloud(convertToPCL());

@@ -1,4 +1,3 @@
-/*Class used as interface for connecting the camera's*/
 
 #pragma once
 #include <iostream>
