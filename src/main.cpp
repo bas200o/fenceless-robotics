@@ -131,6 +131,51 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr PCL_Conversion(const rs2::points &points,
   return cloud; // PCL RGB Point Cloud generated
 }
 
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, float x, float y, float z)
+{
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr transCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+
+  Eigen::Affine3f transformer = Eigen::Affine3f::Identity();
+
+  // Rotate the cloud with             rotation on axis
+  transformer.rotate(Eigen::AngleAxisf(x, Eigen::Vector3f::UnitX()));
+  transformer.rotate(Eigen::AngleAxisf(y, Eigen::Vector3f::UnitY()));
+  transformer.rotate(Eigen::AngleAxisf(z, Eigen::Vector3f::UnitZ()));
+  // Rotate cloud
+  pcl::transformPointCloud(*OGCloud, *transCloud, transformer);
+  return transCloud;
+}
+
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud, float x, float y, float z)
+{
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr transCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+  Eigen::Affine3f transformer = Eigen::Affine3f::Identity();
+  // Move cloud x y z
+  transformer.translation() << x, y, z;
+
+  // Rotate cloud
+  pcl::transformPointCloud(*OGcloud, *transCloud, transformer);
+  return transCloud;
+}
+
+pcl::PointCloud<pcl::PointXYZ>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
+                                              float x, float x1, float y, float y1, float z, float z1)
+{
+  pcl::PointCloud<pcl::PointXYZ>::Ptr filterCloud(new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::copyPointCloud(*OGCloud, *filterCloud);
+  pcl::PassThrough<pcl::PointXYZ> pass;
+  pass.setInputCloud(filterCloud);
+  pass.setFilterFieldName("x");
+  pass.setFilterLimits(x, x1);
+  pass.setFilterFieldName("y");
+  pass.setFilterLimits(y, y1);
+  pass.setFilterFieldName("z");
+  pass.setFilterLimits(z, z1);
+  pass.filter(*filterCloud);
+
+  return filterCloud;
+}
+
 int main()
 try
 {
@@ -139,7 +184,7 @@ try
   //====================
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr currentFrame(new pcl::PointCloud<pcl::PointXYZRGB>);
   boost::shared_ptr<pcl::visualization::PCLVisualizer> openCloud;
-  pcl::PointCloud<pcl::PointXYZRGB>::Ptr prevFrame(new pcl::PointCloud<pcl::PointXYZRGB>);
+  //pcl::PointCloud<pcl::PointXYZRGB>::Ptr prevFrame(new pcl::PointCloud<pcl::PointXYZRGB>);
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr transCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr filterCloud(new pcl::PointCloud<pcl::PointXYZ>);
 
@@ -191,77 +236,55 @@ try
     // Convert generated Point Cloud to PCL Formatting
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud = PCL_Conversion(points, RGB);
 
-    // Merge pointclouds
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr currentFrame(cloud);
+    currentFrame = cloud;
 
-    Eigen::Affine3f transformer = Eigen::Affine3f::Identity();
-    // Move cloud x y z
-    //transformer.translation() << 0.5, 0.0, 0.0;
+    transCloud = rotatePCL(cloud, 1.0, 0.7, 0.0);
+    transCloud = movePCL(transCloud, -1.0, 0.1, 0.1);
+    filterCloud = filterPCL(transCloud, -1, 1, -1, 1, -1, 1.5);
 
-    // Rotation of the cloud
-    float theta = 0.5;
+    viewer->setBackgroundColor(0, 0, 0);
+    // Add generated point cloud and identify with string "Cloud"
+    viewer->addPointCloud<pcl::PointXYZRGB>(cloud, "Cloud");
+    // Default size for rendered points
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Cloud");
+    // Viewer Properties
+    viewer->initCameraParameters();
 
-    // Rotate the cloud with             rotation on axis
-    transformer.rotate(Eigen::AngleAxisf(theta, Eigen::Vector3f::UnitZ()));
+    viewer->updatePointCloud<pcl::PointXYZRGB>(cloud, "Cloud");
+    viewer->spinOnce(100);
 
-    // Rotate cloud
-    pcl::transformPointCloud(*currentFrame, *transCloud, transformer);
+    transViewer->setBackgroundColor(0, 0, 0);
+    // Add generated point cloud and identify with string "Cloud"
+    transViewer->addPointCloud<pcl::PointXYZRGB>(transCloud, "Cloud");
+    // Default size for rendered points
+    transViewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Cloud");
+    // Viewer Properties
+    transViewer->initCameraParameters();
+    transViewer->addCoordinateSystem();
 
-    pcl::copyPointCloud(*transCloud, *filterCloud);
+    transViewer->updatePointCloud<pcl::PointXYZRGB>(transCloud, "Cloud");
+    transViewer->spinOnce(100);
 
-    pcl::PassThrough<pcl::PointXYZ> pass;
-    pass.setInputCloud(filterCloud);
-    pass.setFilterFieldName("y");
-    pass.setFilterLimits(0.0, 1.0);
-    pass.filter(*filterCloud);
+    filterdViewer->setBackgroundColor(0, 0, 0);
+    // Add generated point cloud and identify with string "Cloud"
+    filterdViewer->addPointCloud<pcl::PointXYZ>(filterCloud, "Cloud");
+    // Default size for rendered points
+    filterdViewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Cloud");
+    // Viewer Properties
+    filterdViewer->initCameraParameters();
 
-    if (i == 1)
+    filterdViewer->updatePointCloud<pcl::PointXYZ>(filterCloud, "Cloud");
+    filterdViewer->spinOnce(100);
+
+    while(true)
     {
-      viewer->setBackgroundColor(0, 0, 0);
-      // Add generated point cloud and identify with string "Cloud"
-      viewer->addPointCloud<pcl::PointXYZRGB>(currentFrame, "Cloud");
-      // Default size for rendered points
-      viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Cloud");
-      // Viewer Properties
-      viewer->initCameraParameters();
-
-      viewer->updatePointCloud<pcl::PointXYZRGB>(currentFrame, "Cloud");
-      viewer->spinOnce(100);
-
-      transViewer->setBackgroundColor(0, 0, 0);
-      // Add generated point cloud and identify with string "Cloud"
-      transViewer->addPointCloud<pcl::PointXYZRGB>(transCloud, "Cloud");
-      // Default size for rendered points
-      transViewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Cloud");
-      // Viewer Properties
-      transViewer->initCameraParameters();
-
-      transViewer->updatePointCloud<pcl::PointXYZRGB>(transCloud, "Cloud");
-      transViewer->spinOnce(100);
-
-      filterdViewer->setBackgroundColor(0, 0, 0);
-      // Add generated point cloud and identify with string "Cloud"
-      filterdViewer->addPointCloud<pcl::PointXYZ>(filterCloud, "Cloud");
-      // Default size for rendered points
-      filterdViewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "Cloud");
-      // Viewer Properties
-      filterdViewer->initCameraParameters();
-
-      filterdViewer->updatePointCloud<pcl::PointXYZ>(filterCloud, "Cloud");
-      filterdViewer->spinOnce(100);
-    }
-
-    if (i > 1)
-    {
-      viewer->updatePointCloud<pcl::PointXYZRGB>(currentFrame, "Cloud");
+      viewer->updatePointCloud<pcl::PointXYZRGB>(cloud, "Cloud");
       viewer->spinOnce(100);
       transViewer->updatePointCloud<pcl::PointXYZRGB>(transCloud, "Cloud");
       transViewer->spinOnce(100);
       filterdViewer->updatePointCloud<pcl::PointXYZ>(filterCloud, "Cloud");
       filterdViewer->spinOnce(100);
     }
-
-    *prevFrame = *currentFrame;
   }
 
   cout << "Exiting Program... " << endl;
