@@ -33,8 +33,6 @@
 
 #include "../include/RSCameraHandler.hpp"
 
-using namespace std;
-
 RSCameraHandler camHandler;
 
 void camTask() {
@@ -43,16 +41,44 @@ void camTask() {
 // The function we want to execute on the new thread.
 void task1(string msg)
 {
-    cout << "task1 says: " << msg;
+    std::cout << "task1 says: " << msg;
 }
 
 int main()
 {
-  thread thing(camTask);
+  std::thread thing(camTask);
   
   
   std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
-  auto var = camHandler.getLatestPointCloud();
+
+  pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
+  // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
+  // cloud* = camHandler.GetLatestPointCloud();
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
+  *cloud = camHandler.getLatestPointCloud();
+
+  viewer->setBackgroundColor (0, 0, 0);
+  viewer->addPointCloud(cloud);
+  // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
+  viewer->initCameraParameters ();
+  viewer->spinOnce();
+
+    pcl::PointCloud<pcl::PointXYZ>::Ptr latestCloud(new pcl::PointCloud<pcl::PointXYZ>);
+    *latestCloud = camHandler.getLatestPointCloud();
+  while(true) {
+    pcl::PointCloud<pcl::PointXYZ>::Ptr updateCloud(new pcl::PointCloud<pcl::PointXYZ>);
+    *updateCloud = camHandler.getLatestPointCloud();
+
+     *latestCloud = *updateCloud;
+    
+    viewer->removeAllPointClouds();
+    viewer->addPointCloud(updateCloud);
+
+    // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
+
+    viewer->spinOnce(200); 
+  }
   
   thing.join();
 

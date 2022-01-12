@@ -12,6 +12,7 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 #include <boost/thread.hpp>
+#include <pcl/filters/passthrough.h>
 
 using namespace cv;
 
