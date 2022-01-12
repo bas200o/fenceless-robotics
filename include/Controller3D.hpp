@@ -27,9 +27,7 @@ public:
     void CreateNewInformation();
     void CombinePointClouds(int pCloud);
     void CalculateSpeed(int pCloud);
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
-                                                     float x, float y, float z);
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud,
-                                                   float x, float y, float z);
-    pcl::PointCloud<pcl::PointXYZ>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
-                                                  float x, float x1, float y, float y1, float z, float z1);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, float x, float y, float z);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud, float x, float y, float z);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, float x, float x1, float y, float y1, float z, float z1);
+};
