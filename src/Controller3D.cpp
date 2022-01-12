@@ -39,7 +39,7 @@ void Controller3D::DetectObjects(int pCloud){
     if(pCloud >= 5){
         return;
     };
-    if(lastInfo[pCloud].getObjects().size() > 0){
+    if(lastInfo[pCloud].getObjects().size() > pCloud){
         return;
     }
     pcl::PointCloud<pcl::PointXYZRGB> tempCloud(lastInfo[pCloud].GetPointCloud());

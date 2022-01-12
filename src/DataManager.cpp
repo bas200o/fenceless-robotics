@@ -16,4 +16,6 @@ cont3.DetectObjects(0);
 //while(true)
 
 //Do 3DVision
+cout << "ended \n";
+return 1;
 }
