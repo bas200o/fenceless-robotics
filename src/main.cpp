@@ -32,54 +32,70 @@
 #include <chrono>
 
 #include "../include/RSCameraHandler.hpp"
+#include "../include/SettingSingleton.hpp"
+#include "../include/Controller3D.hpp"
 
 RSCameraHandler camHandler;
 
-void camTask() {
+void camTask()
+{
   camHandler.runThread();
 }
 // The function we want to execute on the new thread.
 void task1(string msg)
 {
-    std::cout << "task1 says: " << msg;
+  std::cout << "task1 says: " << msg;
 }
 
 int main()
 {
+  SettingSingleton *ds = ds->getInstance();
+  struct rotationSettings rs = {1.0, 0.1, 0.5};
+  ds->setRotate(rs);
+  struct moveSettings ms = {0.0, 0.0, 0.0};
+  ds->setMove(ms);
+  struct filterSettings fs = {-1.0, -1.0, -1.0, 1.0, 1.0, 1.0};
+  ds->setFilter(fs);
+
   std::thread thing(camTask);
-  
-  
+
   std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
 
-  pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
+  pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
   // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
   // cloud* = camHandler.GetLatestPointCloud();
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
   *cloud = camHandler.getLatestPointCloud();
 
-  viewer->setBackgroundColor (0, 0, 0);
+  viewer->setBackgroundColor(0, 0, 0);
   viewer->addPointCloud(cloud);
   // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
-  viewer->initCameraParameters ();
+  viewer->initCameraParameters();
   viewer->spinOnce();
 
-    pcl::PointCloud<pcl::PointXYZ>::Ptr latestCloud(new pcl::PointCloud<pcl::PointXYZ>);
-    *latestCloud = camHandler.getLatestPointCloud();
-  while(true) {
+  pcl::PointCloud<pcl::PointXYZ>::Ptr latestCloud(new pcl::PointCloud<pcl::PointXYZ>);
+  *latestCloud = camHandler.getLatestPointCloud();
+  while (true)
+  {
+    // pcl::PointCloud<pcl::PointXYZRGB>::Ptr rgbcloud(new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::PointCloud<pcl::PointXYZ>::Ptr updateCloud(new pcl::PointCloud<pcl::PointXYZ>);
-    *updateCloud = camHandler.getLatestPointCloud();
 
-     *latestCloud = *updateCloud;
-    
+    *latestCloud = *updateCloud;
+
+     *updateCloud = camHandler.getLatestPointCloud();
+
+    //rgbcloud = Controller3D::rotatePCL(rCloud); // only works with xyzrgb clouds
+
+    //rgbcloud = Controller3D::movePCL(rgbcloud); // same
+
     viewer->removeAllPointClouds();
     viewer->addPointCloud(updateCloud);
 
     // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
 
-    viewer->spinOnce(200); 
+    viewer->spinOnce(200);
   }
-  
-  thing.join();
 
+  thing.join();
 }

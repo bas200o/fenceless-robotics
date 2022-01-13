@@ -4,7 +4,7 @@
 #include "../include/Controller2D.hpp"
 #include "../include/CameraConnector.hpp"
 
-int omain(){
+int oldmain(){
     CameraConnector *camCon = camCon->getInstance();
     camCon->connectCameras(2, 1);
     GUIApplication gui;
