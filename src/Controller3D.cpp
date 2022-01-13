@@ -3,6 +3,7 @@
 #include <pcl/common/transforms.h>
 // pcl filter
 #include <pcl/filters/passthrough.h>
+#include "../include/SettingSingleton.hpp"
 
 Controller3D::Controller3D(/* args */)
 {
@@ -46,7 +47,8 @@ void Controller3D::DetectObjects(int pCloud)
     {
         return;
     };
-    if(lastInfo[pCloud].getObjects().size() > 0){
+    if (lastInfo[pCloud].getObjects().size() > 0)
+    {
         return;
     }
     pcl::PointCloud<pcl::PointXYZRGB> tempCloud(lastInfo[pCloud].GetPointCloud());
@@ -141,7 +143,15 @@ void Controller3D::CalculateSpeed(int pCloud)
     return;
 }
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, float x, float y, float z)
+// Gets xyz from singleton
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct rotationSettings rs = ds->getRotate();
+    return Controller3D::rotatePCL(OGCloud, rs.x, rs.y, rs.z);
+}
+
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, float x, float y, float z)
 {
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr transCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
 
@@ -156,8 +166,17 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRG
     return transCloud;
 }
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud, float x, float y, float z)
+// Gets xyz from singleton
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud)
 {
+    SettingSingleton *ds = ds->getInstance();
+    struct moveSettings ms = ds->getMove();
+    return Controller3D::movePCL(OGcloud, ms.x, ms.y, ms.z);
+}
+
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud, float x, float y, float z)
+{
+
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr transCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
     Eigen::Affine3f transformer = Eigen::Affine3f::Identity();
     // Move cloud x y z
@@ -168,7 +187,16 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>
     return transCloud;
 }
 
-pcl::PointCloud<pcl::PointXYZ>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
+// Gets xyz from singleton
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct filterSettings rs = ds->getFilter();
+
+    return Controller3D::filterPCL(OGCloud, rs.x, rs.x1, rs.y, rs.y1, rs.z, rs.z1);
+}
+
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
                                               float x, float x1, float y, float y1, float z, float z1)
 {
     pcl::PointCloud<pcl::PointXYZ>::Ptr filterCloud(new pcl::PointCloud<pcl::PointXYZ>);
@@ -183,8 +211,10 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>:
     pass.setFilterLimits(z, z1);
     pass.filter(*filterCloud);
 
-    return filterCloud;
-}
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr rCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::copyPointCloud(*filterCloud, *rCloud);
 
+    return rCloud;
+}
 
 //
