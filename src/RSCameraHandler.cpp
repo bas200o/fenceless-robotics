@@ -5,8 +5,7 @@ RSCameraHandler::RSCameraHandler(/* args */)
     config.enable_stream(RS2_STREAM_COLOR);
     config.enable_stream(RS2_STREAM_INFRARED);
     config.enable_stream(RS2_STREAM_DEPTH);
-    //TEMP REMOVED CAUSE CURRENTLY GIVES ERROR
-    connectCamera();
+    //connectCamera();
 }
 
 RSCameraHandler::RSCameraHandler(int SerialNumber)

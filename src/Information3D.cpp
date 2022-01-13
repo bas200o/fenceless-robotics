@@ -17,6 +17,10 @@ void Information3D::AddPointClouds(std::vector<pcl::PointCloud<pcl::PointXYZRGB>
     return;
 }
 
+void Information3D::AddFullPointCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloud){
+    fullPointCloud = pointCloud;
+}
+
 void Information3D::FindObjects(){
     
 }
@@ -33,4 +37,8 @@ void Information3D::InsertObject(pcl::PointCloud<pcl::PointXYZRGB> segment){
 
 std::vector<FoundObject> Information3D::getObjects(){
     return objects;
+}
+
+std::vector<pcl::PointCloud<pcl::PointXYZRGB>> Information3D::getPointClouds(){
+    return indiviualPointClouds;
 }

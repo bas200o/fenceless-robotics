@@ -38,21 +38,21 @@ void Controller3D::CreateNewInformation()
     return;
 }
 
-void Controller3D::DetectObjects(int pCloud)
+void Controller3D::DetectObjects(int pInfo)
 {
     printf("Detecting \n");
 
-    if (pCloud >= 5)
+    if (pInfo >= 5)
     {
         return;
     };
-    if(lastInfo[pCloud].getObjects().size() > 0){
+    if(lastInfo[pInfo].getObjects().size() > 0){
         return;
     }
-    pcl::PointCloud<pcl::PointXYZRGB> tempCloud(lastInfo[pCloud].GetPointCloud());
+    pcl::PointCloud<pcl::PointXYZRGB> tempInfo(lastInfo[pInfo].GetPointCloud());
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_f(new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
-    *cloud = tempCloud;
+    *cloud = tempInfo;
 
     pcl::VoxelGrid<pcl::PointXYZRGB> vg;
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_filtered(new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -121,22 +121,26 @@ void Controller3D::DetectObjects(int pCloud)
         cloud_cluster->width = cloud_cluster->size();
         cloud_cluster->height = 1;
         cloud_cluster->is_dense = true;
-        lastInfo[pCloud].InsertObject(*cloud_cluster);
+        lastInfo[pInfo].InsertObject(*cloud_cluster);
     }
     return;
 }
 
-void Controller3D::RemoveBackground(int pCloud)
+void Controller3D::RemoveBackground(int pInfo)
 {
     return;
 }
 
-void Controller3D::CombinePointClouds(int pCloud)
+void Controller3D::CombinePointClouds(int pInfo)
 {
+    pcl::PointCloud<pcl::PointXYZRGB> full;
+    for(auto&& pointcloud : lastInfo[pInfo].getPointClouds()){
+        full += pointcloud;
+    }
     return;
 }
 
-void Controller3D::CalculateSpeed(int pCloud)
+void Controller3D::CalculateSpeed(int pInfo)
 {
     return;
 }
