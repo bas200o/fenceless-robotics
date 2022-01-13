@@ -6,7 +6,7 @@ RSCameraHandler::RSCameraHandler(/* args */)
     config.enable_stream(RS2_STREAM_COLOR);
     config.enable_stream(RS2_STREAM_INFRARED);
     config.enable_stream(RS2_STREAM_DEPTH);
-    connectCamera();
+    //connectCamera();
 }
 
 RSCameraHandler::RSCameraHandler(int SerialNumber)
@@ -237,7 +237,6 @@ void RSCameraHandler::connectCamera(){
     pipeRunning = true;
     rs2::device selected_device = selection.get_device();
     auto depth_sensor = selected_device.first<rs2::depth_sensor>();
-
     if (depth_sensor.supports(RS2_OPTION_EMITTER_ENABLED))
     {
         depth_sensor.set_option(RS2_OPTION_EMITTER_ENABLED, 1.f); // Enable emitter

@@ -44,7 +44,7 @@ void task1(string msg)
     std::cout << "task1 says: " << msg;
 }
 
-int main()
+int Omain()
 {
   std::thread thing(camTask);
   

@@ -24,10 +24,11 @@ void CameraConnector::connectCameras(int number, int type){
     case 1:
     {
         printf("yeet \n");
+
         RSCameraHandler* newCamera = new RSCameraHandler();
         //newCamera->runThread();
         connectedCams.push_back(newCamera);
-        connectedCams[0]->runThread();
+        //connectedCams[0]->runThread();
         printf("yoot \n");
         break;
     }
