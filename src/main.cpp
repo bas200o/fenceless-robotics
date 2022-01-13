@@ -47,14 +47,14 @@ void task1(string msg)
   std::cout << "task1 says: " << msg;
 }
 
-int main()
+int testmain()
 {
   SettingSingleton *ds = ds->getInstance();
-  struct rotationSettings rs = {1.0, 0.1, 0.5};
+  struct rotationSettings rs = {0.0, 0.0, 1.0};
   ds->setRotate(rs);
   struct moveSettings ms = {0.0, 0.0, 0.0};
   ds->setMove(ms);
-  struct filterSettings fs = {-1.0, -1.0, -1.0, 1.0, 1.0, 1.0};
+  struct filterSettings fs = {0.0, -1.0, -1.0, 1.0, 1.0, 1.0};
   ds->setFilter(fs);
 
   std::thread thing(camTask);
@@ -62,8 +62,6 @@ int main()
   std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
 
   pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
-  // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
-  // cloud* = camHandler.GetLatestPointCloud();
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
   *cloud = camHandler.getLatestPointCloud();
@@ -74,28 +72,35 @@ int main()
   viewer->initCameraParameters();
   viewer->spinOnce();
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr latestCloud(new pcl::PointCloud<pcl::PointXYZ>);
-  *latestCloud = camHandler.getLatestPointCloud();
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr prevCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+  *prevCloud = camHandler.getLatestPointCloudRGB();
   while (true)
   {
     // pcl::PointCloud<pcl::PointXYZRGB>::Ptr rgbcloud(new pcl::PointCloud<pcl::PointXYZRGB>);
-    pcl::PointCloud<pcl::PointXYZ>::Ptr updateCloud(new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr currentCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
 
-    *latestCloud = *updateCloud;
+    *currentCloud = camHandler.getLatestPointCloudRGB();
 
-     *updateCloud = camHandler.getLatestPointCloud();
+    currentCloud = Controller3D::rotatePCL(currentCloud);
 
-    //rgbcloud = Controller3D::rotatePCL(rCloud); // only works with xyzrgb clouds
+    currentCloud = Controller3D::movePCL(currentCloud);
 
-    //rgbcloud = Controller3D::movePCL(rgbcloud); // same
+    currentCloud = Controller3D::filterPCL(currentCloud);
 
     viewer->removeAllPointClouds();
-    viewer->addPointCloud(updateCloud);
+    viewer->addPointCloud(currentCloud);
 
     // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
 
     viewer->spinOnce(200);
+
+    *prevCloud = *currentCloud;
   }
 
   thing.join();
+}
+
+int main()
+{
+  return testmain();
 }
