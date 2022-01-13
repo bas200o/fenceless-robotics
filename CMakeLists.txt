@@ -10,6 +10,8 @@ find_package( PCL 1.2 REQUIRED )
 find_package (Python2 COMPONENTS Interpreter Development)
 find_package (Threads)
 find_package(OpenCV REQUIRED)
+find_package ( Qt5 COMPONENTS Widgets REQUIRED )
+find_package ( TBB REQUIRED tbb)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
@@ -29,6 +31,9 @@ add_definitions( ${PCL_DEFINITIONS} )
 # For Use Not PreCompiled Features 
 add_definitions( -DPCL_NO_PRECOMPILE )
 
+# No keywords in Qt (clashing with TBB)
+add_definitions( -DQT_NO_KEYWORDS )
+
   # [Linker]>[General]>[Additional Library Directories]
 link_directories( ${PCL_LIBRARY_DIRS} )
 
@@ -42,6 +47,8 @@ add_executable(fenceless-robot ${SRC_FILES})
 target_link_libraries(${PROJECT_NAME} ${realsense2_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} )
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
+target_link_libraries(${PROJECT_NAME} TBB::tbb)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
