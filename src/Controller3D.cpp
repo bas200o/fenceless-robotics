@@ -168,8 +168,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>
     return transCloud;
 }
 
-pcl::PointCloud<pcl::PointXYZ>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
-                                              float x, float x1, float y, float y1, float z, float z1)
+pcl::PointCloud<pcl::PointXYZ>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, float x, float x1, float y, float y1, float z, float z1)
 {
     pcl::PointCloud<pcl::PointXYZ>::Ptr filterCloud(new pcl::PointCloud<pcl::PointXYZ>);
     pcl::copyPointCloud(*OGCloud, *filterCloud);

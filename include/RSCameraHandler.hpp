@@ -48,6 +48,8 @@ public:
      void grabImage();
     void connectCamera();
     void setLatestCloud(pcl::PointCloud<pcl::PointXYZ> pointCloud);
+    rs2::frame postProcess(rs2::frame toFilter);
+
 };
 
 
