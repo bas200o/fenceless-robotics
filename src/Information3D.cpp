@@ -12,7 +12,7 @@ void Information3D::AddPointClouds(std::vector<pcl::PointCloud<pcl::PointXYZRGB>
     indiviualPointClouds = pointClouds;
     //TEMP
     //FULLPOINTCLOUD
-    fullPointCloud = pointClouds[0];
+    //fullPointCloud = pointClouds[0];
     //ENDTEMP
     return;
 }

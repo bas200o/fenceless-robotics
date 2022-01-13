@@ -10,6 +10,9 @@ int main(){
     GUIApplication gui;
     Controller3D cont3;
     cont3.CreateNewInformation();
+    //cont3.rotate
+    //cont3.move
+    //cont3.filter
     cont3.CombinePointClouds(0);
     cont3.DetectObjects(0);
 

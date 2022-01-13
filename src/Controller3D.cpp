@@ -137,6 +137,7 @@ void Controller3D::CombinePointClouds(int pInfo)
     for(auto&& pointcloud : lastInfo[pInfo].getPointClouds()){
         full += pointcloud;
     }
+    lastInfo[pInfo].AddFullPointCloud(full);
     return;
 }
 
