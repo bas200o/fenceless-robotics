@@ -1,6 +1,7 @@
 /*Class used for the GUI*/
 #pragma once
 
+#include <vector>
 #include <QApplication>
 #include <QPushButton>
 #include <QGridLayout>
@@ -13,6 +14,15 @@ struct vec3 {
     int y;
     int z;
 };
+struct vec2 {
+    int x;
+    int y;
+};
+
+struct Object2D {
+    vec2 position;
+    vec2 direction;
+};
 
 struct VisualObject {
     int showTime;
@@ -21,6 +31,40 @@ struct VisualObject {
     vec3 direction;
     double speed;
     double acceleration;
+};
+
+struct StatisticsObject {
+    int uptime; // Seconds
+
+};
+
+class GUIData : public QObject
+{
+    Q_OBJECT
+
+    public:
+
+        QList<Object2D> view2d;
+        QList<VisualObject> table;
+        StatisticsObject stats;
+
+        GUIData(QList<Object2D> view2dObjects, 
+                QList<VisualObject> tableObjects, 
+                StatisticsObject stats);
+
+    public Q_SLOTS: // Coming from the worker threads
+        void addObject_2d(Object2D obj);
+        void addObject_table(VisualObject obj);
+        
+        void updateObject_2d(Object2D obj);
+        void updateObject_table(VisualObject obj);
+        void updateObject_statistics(StatisticsObject obj);
+
+    Q_SIGNALS: // Going to the UI
+        void changed_2d(QList<Object2D> objects);
+        void changed_table(QList<VisualObject> objects);
+        void changed_statistics(StatisticsObject object);
+
 };
 
 class GUIApplication : public QWidget

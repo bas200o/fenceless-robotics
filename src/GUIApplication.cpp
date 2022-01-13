@@ -3,6 +3,7 @@
 GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 {
     setFixedSize(1240, 830);
+    setWindowTitle("Fenceless Robotics");
 
 // Panel 2D View
     QGraphicsScene scene;
