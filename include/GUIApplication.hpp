@@ -8,6 +8,10 @@
 #include <QTableView>
 #include <QTableWidget>
 #include <QGraphicsView>
+#include <QSlider>
+#include <QVBoxLayout>
+#include <QGroupBox>
+
 
 struct vec3 {
     int x;
@@ -44,6 +48,8 @@ class GUIData : public QObject
 
     public:
 
+        
+
         QList<Object2D> view2d;
         QList<VisualObject> table;
         StatisticsObject stats;
@@ -74,6 +80,7 @@ class GUIApplication : public QWidget
         QWidget *pan_view3d;
         QWidget *pan_statistics;
         QTableWidget *pan_table;
+        QWidget *slider_box;
 
         QGridLayout *layout;
 
@@ -90,6 +97,8 @@ class GUIApplication : public QWidget
             "Versnelling" };
 
     public:
+
+        static void ValueChange(int v);
         explicit GUIApplication(QWidget *parent = 0);
 
         int insertObject(VisualObject obj);

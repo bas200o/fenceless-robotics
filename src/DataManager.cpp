@@ -3,8 +3,13 @@
 #include "../include/Controller3D.hpp"
 #include "../include/Controller2D.hpp"
 #include "../include/CameraConnector.hpp"
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <tbb/parallel_for.h>
+#include <tbb/task_arena.h>
 
-<<<<<<< HEAD
 int oldmain(){
     CameraConnector *camCon = camCon->getInstance();
     camCon->connectCameras(2, 1);
@@ -13,25 +18,13 @@ int oldmain(){
     cont3.CreateNewInformation();
     cont3.DetectObjects(0);
 
-//Controller2D cont2;
-//while(true)
+    //Controller2D cont2;
+    //while(true)
 
-//Do 3DVision
+    //Do 3DVision
     cout << "ended \n";
 return 1;
 }
-=======
-// #include <tbb/tbb_thread.h>
-// #include <tbb/tbb.h>
-// #include <tbb/spin_mutex.h>
-
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include "oneapi/tbb/parallel_for.h"
-#include "oneapi/tbb/task_arena.h"
-// #include <tbb/parallel_for.h>
 
 int buildUI(int argc, char **argv)
 {
@@ -42,7 +35,7 @@ int buildUI(int argc, char **argv)
 }
 
 
-int main(int argc, char **argv)
+int maingui(int argc, char **argv)
 {
     CameraConnector *camCon = camCon->getInstance();
     camCon->connectCameras(2, 1);
@@ -71,4 +64,3 @@ int main(int argc, char **argv)
 
     return app.exec();
 }
->>>>>>> GUI

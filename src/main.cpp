@@ -35,6 +35,15 @@
 #include "../include/SettingSingleton.hpp"
 #include "../include/Controller3D.hpp"
 
+#include "../include/DataManager.hpp"
+
+#include <vector>
+#include <QApplication>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QTableView>
+#include <QTableWidget>
+
 RSCameraHandler camHandler;
 
 void camTask()
@@ -54,7 +63,7 @@ int testmain()
   ds->setRotate(rs);
   struct moveSettings ms = {0.0, 0.0, 0.0};
   ds->setMove(ms);
-  struct filterSettings fs = {0.0, -1.0, -1.0, 1.0, 1.0, 1.0};
+  struct filterSettings fs = {-1.0, -1.0, -1.0, 1.0, 1.0, 1.0};
   ds->setFilter(fs);
 
   std::thread thing(camTask);
@@ -83,9 +92,9 @@ int testmain()
 
     currentCloud = Controller3D::rotatePCL(currentCloud);
 
-    currentCloud = Controller3D::movePCL(currentCloud);
+    // currentCloud = Controller3D::movePCL(currentCloud);
 
-    currentCloud = Controller3D::filterPCL(currentCloud);
+    // currentCloud = Controller3D::filterPCL(currentCloud);
 
     viewer->removeAllPointClouds();
     viewer->addPointCloud(currentCloud);
@@ -100,7 +109,14 @@ int testmain()
   thing.join();
 }
 
-int main()
+int task2(int argc, char *argv[])
 {
   return testmain();
+}
+
+int main(int argc, char *argv[])
+{
+  std::thread t1(task2, argc, argv);
+
+  return maingui(argc, argv);
 }
