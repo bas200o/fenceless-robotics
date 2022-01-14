@@ -4,6 +4,8 @@
 #include <QApplication>
 #include <QObject>
 
+using namespace std;
+
 struct vec3 {
     int x;
     int y;
@@ -33,23 +35,38 @@ struct StatisticsObject {
 
 };
 
-class GUIData : public QObject
+struct DataFlags {
+    bool view2d, visualobject, stats;
+};
+
+class GUIData
 {
-    Q_OBJECT
-
     public:
+        static GUIData* getInstance();
 
-        QList<Object2D> view2d;
-        QList<VisualObject> table;
-        StatisticsObject stats;
+        int setObjects(vector<VisualObject> objects);
+        int setObjects(Information3D newData);
+        int setStatistics(StatisticsObject stats);  // Not sure how to implement
 
+        vector<Object2D> getView2D();
+        vector<VisualObject> getTable();
+        StatisticsObject getStats();
+
+        DataFlags getDataFlags();
+
+    private:
         GUIData();
-   /*     GUIData(QList<Object2D> view2dObjects, 
-                QList<VisualObject> tableObjects, 
-                StatisticsObject stats);*/
-        virtual ~GUIData() {};
+        static GUIData* instance;
 
-    public Q_SLOTS: // Coming from the worker threads
+        vector<Object2D> view2d;
+        bool view2d_busy, view2d_newdata;
+        vector<VisualObject> table;
+        bool table_busy, table_newdata;
+        StatisticsObject stats;
+        bool stats_busy, stats_newdata;
+
+
+    /*public Q_SLOTS: // Coming from the worker threads
         void addObject_2d(Object2D obj);
         void addObject_table(VisualObject obj);
         
@@ -64,5 +81,5 @@ class GUIData : public QObject
         void changed_2d(QList<Object2D> objects);
         void changed_table(QList<VisualObject> objects);
         void changed_statistics(StatisticsObject object);
-
+    */
 };
