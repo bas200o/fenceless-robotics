@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     
 
 
-    // GUIData::connect(&guiData, &GUIData::changed_table, 
+    // QObject::connect(&guiData, &GUIData::changed_table, 
     //                     &gui, &GUIApplication::updateTable);
     // QObject::connect(&guiData, &GUIData::changed_statistics,
     //                     &gui, &GUIApplication::updateStatistics);

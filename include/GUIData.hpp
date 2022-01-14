@@ -2,6 +2,7 @@
 
 #include "Information3D.hpp"
 #include <QApplication>
+#include <QObject>
 
 struct vec3 {
     int x;
@@ -46,7 +47,7 @@ class GUIData : public QObject
    /*     GUIData(QList<Object2D> view2dObjects, 
                 QList<VisualObject> tableObjects, 
                 StatisticsObject stats);*/
-        // virtual ~GUIData() {};
+        virtual ~GUIData() {};
 
     public Q_SLOTS: // Coming from the worker threads
         void addObject_2d(Object2D obj);
