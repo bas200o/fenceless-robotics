@@ -216,7 +216,6 @@ pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::convertToRGBPCL()
     pcl::PointCloud<pcl::PointXYZRGB> newCloud;
     // Declare pointcloud object, for calculating pointclouds and texture mappings
     rs2::pointcloud pc;
-
     // Capture a single frame and obtain depth + RGB values from it
     auto frames = RSCameraHandler::pipe.wait_for_frames();
     auto depth = frames.get_depth_frame();
@@ -236,7 +235,6 @@ pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::convertToRGBPCL()
     pcl::PointCloud<pcl::PointXYZRGB> cloud;
 
     std::tuple<uint8_t, uint8_t, uint8_t> RGB_Color;
-
     auto sp = points.get_profile().as<rs2::video_stream_profile>();
 
     cloud.width = static_cast<uint32_t>(sp.width());
@@ -257,7 +255,6 @@ pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::convertToRGBPCL()
         cloud.points[i].g = 255;
         cloud.points[i].b = 255;
     }
-
     return cloud;
 }
 
@@ -325,6 +322,7 @@ void RSCameraHandler::connectCamera()
                 depth_sensor.set_option(RS2_OPTION_LASER_POWER, 0.f); // Disable laser
             }
             CameraConnector::getInstance()->addConnectedRSCamera(serial);
+            std::cout<<"[I] Realsense cam connected \n";
             return;
         }
     }
@@ -365,9 +363,9 @@ rs2::frame RSCameraHandler::postProcess(rs2::frame filtered)
 
     // Configure filter parameters
 
-    //dec_filter.set_option(RS2_OPTION_FILTER_MAGNITUDE, 3);
+    dec_filter.set_option(RS2_OPTION_FILTER_MAGNITUDE, 3);
     //rs2::decimation_filter.set_option(RS2_OPTION_FILTER_MAGNITUDE, 3);
-    //rs2::spatial_filter.set_option(RS2_OPTION_FILTER_SMOOTH_ALPHA, 0.55f);
+    spat_filter.set_option(RS2_OPTION_FILTER_SMOOTH_ALPHA, 0.55f);
     
     // Declare disparity transform from depth to disparity and vice versa
     filtered = dec_filter.process(filtered);

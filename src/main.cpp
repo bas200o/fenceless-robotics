@@ -44,78 +44,80 @@
 #include <QTableView>
 #include <QTableWidget>
 
-RSCameraHandler camHandler;
 
-void camTask()
-{
-  camHandler.runThread();
-}
-// The function we want to execute on the new thread.
-void task1(string msg)
-{
-  std::cout << "task1 says: " << msg;
-}
+// RSCameraHandler camHandler;
 
-int testmain()
-{
-  SettingSingleton *ds = ds->getInstance();
-  struct rotationSettings rs = {0.0, 0.0, 1.0};
-  ds->setRotate(rs);
-  struct moveSettings ms = {0.0, 0.0, 0.0};
-  ds->setMove(ms);
-  struct filterSettings fs = {-1.0, -1.0, -1.0, 1.0, 1.0, 1.0};
-  ds->setFilter(fs);
+// void camTask()
+// {
+//   camHandler.runThread();
+// }// The function we want to execute on the new thread.
+// void task1(string msg)
+// {
+//   std::cout << "task1 says: " << msg;
+// }
 
-  std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
-  std::thread thing(camTask);
+// int testmain()
+// {
+//   SettingSingleton *ds = ds->getInstance();
+//   struct rotationSettings rs = {0.0, 0.0, 1.0};
+//   ds->setRotate(rs);
+//   struct moveSettings ms = {0.0, 0.0, 0.0};
+//   ds->setMove(ms);
+//   struct filterSettings fs = {-1.0, -1.0, -1.0, 1.0, 1.0, 1.0};
+//   ds->setFilter(fs);
+
+//   std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
+//   std::thread thing(camTask);
   
-  pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
+//   pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
-  *cloud = camHandler.getLatestPointCloud();
+//   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
+//   *cloud = camHandler.getLatestPointCloud();
 
-  viewer->setBackgroundColor(0, 0, 0);
-  viewer->addPointCloud(cloud);
-  // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
-  viewer->initCameraParameters();
-  viewer->spinOnce();
+//   viewer->setBackgroundColor(0, 0, 0);
+//   viewer->addPointCloud(cloud);
+//   // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
+//   viewer->initCameraParameters();
+//   viewer->spinOnce();
 
-  pcl::PointCloud<pcl::PointXYZRGB>::Ptr prevCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
-  *prevCloud = std::get<0>(camHandler.getLatestPointCloudRGB());
-  while (true)
-  {
-    // pcl::PointCloud<pcl::PointXYZRGB>::Ptr rgbcloud(new pcl::PointCloud<pcl::PointXYZRGB>);
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr currentCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+//   pcl::PointCloud<pcl::PointXYZRGB>::Ptr prevCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+//   *prevCloud = std::get<0>(camHandler.getLatestPointCloudRGB());
+//   while (true)
+//   {
+//     // pcl::PointCloud<pcl::PointXYZRGB>::Ptr rgbcloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+//     pcl::PointCloud<pcl::PointXYZRGB>::Ptr currentCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
 
-    *currentCloud = std::get<0>(camHandler.getLatestPointCloudRGB());
+//     *currentCloud = std::get<0>(camHandler.getLatestPointCloudRGB());
 
-    currentCloud = Controller3D::rotatePCL(currentCloud);
+//     currentCloud = Controller3D::rotatePCL(currentCloud);
 
-    // currentCloud = Controller3D::movePCL(currentCloud);
+//     // currentCloud = Controller3D::movePCL(currentCloud);
 
-    // currentCloud = Controller3D::filterPCL(currentCloud);
+//     // currentCloud = Controller3D::filterPCL(currentCloud);
 
-    viewer->removeAllPointClouds();
-    viewer->addPointCloud(currentCloud);
+//     viewer->removeAllPointClouds();
+//     viewer->addPointCloud(currentCloud);
 
-    // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
+//     // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
 
-    viewer->spinOnce(200);
+//     viewer->spinOnce(200);
 
-    *prevCloud = *currentCloud;
-  }
+//     *prevCloud = *currentCloud;
+//   }
 
-  thing.join();
-}
+//   thing.join();
+// }
 
-int task2(int argc, char *argv[])
-{
-  return testmain();
-}
+// int task2(int argc, char *argv[])
+// {
+//   return testmain();
+// }
 
 int main(int argc, char *argv[])
 {
-  std::thread t1(task2, argc, argv);
+  //std::thread t1(task2, argc, argv);
 
-  return maingui(argc, argv);
+  //return maingui(argc, argv);
+  DataManager dm;
+  dm.dataMain();
 }

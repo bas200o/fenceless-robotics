@@ -48,7 +48,8 @@ void Controller3D::DetectObjects(int pInfo)
     {
         return;
     };
-    if(lastInfo[pInfo].getObjects().size() > 0){
+    if (lastInfo[pInfo].getObjects().size() > 0)
+    {
         return;
     }
     pcl::PointCloud<pcl::PointXYZRGB> tempInfo(lastInfo[pInfo].GetPointCloud());
@@ -131,7 +132,8 @@ void Controller3D::DetectObjects(int pInfo)
 void Controller3D::CombinePointClouds(int pInfo)
 {
     pcl::PointCloud<pcl::PointXYZRGB> full;
-    for(auto&& pointcloud : lastInfo[pInfo].getPointClouds()){
+    for (auto &&pointcloud : lastInfo[pInfo].getPointClouds())
+    {
         full += pointcloud;
     }
     lastInfo[pInfo].AddFullPointCloud(full);
@@ -141,37 +143,44 @@ void Controller3D::CombinePointClouds(int pInfo)
 void Controller3D::CalculateSpeed()
 {
     Information3D previous;
-    if(lastInfo[2].getObjects().size() > 0){
+    if (lastInfo[2].getObjects().size() > 0)
+    {
         previous = lastInfo[2];
     }
-    else if(lastInfo[1].getObjects().size() > 0){
+    else if (lastInfo[1].getObjects().size() > 0)
+    {
         previous = lastInfo[1];
     }
-    else{
-        for(auto&& object : lastInfo[0].getObjects()){
-            object.setSpeed(0);
+    else
+    {
+        lastInfo[0].objects[0].setSpeed(0);
+        for (int i = 0 ; i < lastInfo[0].objects.size() ; i++ )
+        {
+        lastInfo[0].objects[i].setSpeed(0);
         }
         return;
     }
     FoundObject movedObject;
     float shortestDist = FLT_MAX;
     float dist;
-    for(FoundObject object : lastInfo[0].getObjects()){
-        for(FoundObject oldObject : previous.getObjects()){
+    for (int i = 0 ; i < lastInfo[0].objects.size() ; i++ )
+    {
+        FoundObject object = lastInfo[0].objects[i];
+        for (FoundObject oldObject : previous.getObjects())
+        {
             dist = euclideanDistance(object.getLocation(), oldObject.getLocation());
-            if(object.getSize()*-0.10 < object.getSize() - oldObject.getSize() < object.getSize()*0.10 
-                                                        && dist < shortestDist)
-                {
-                    shortestDist = dist;
-                    movedObject = oldObject;
-                }
+            if (object.getSize() * -0.10 < object.getSize() - oldObject.getSize() < object.getSize() * 0.10 && dist < shortestDist && dist < previous.GetPointCloud().width)
+            {
+                shortestDist = dist;
+                movedObject = oldObject;
             }
-            double speed;
+        }
+        double speed = 0;
         //calculate speed
         //dist/time
-        speed = shortestDist/(lastInfo[0].getTimeStamp()-previous.getTimeStamp());
-            object.setSpeed(speed);
-        }
+        speed = shortestDist / (lastInfo[0].getTimeStamp() - previous.getTimeStamp());
+        lastInfo[0].objects[i].setSpeed(speed);
+    }
 }
 
 // Gets xyz from singleton
@@ -217,7 +226,6 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::movePCL(pcl::PointCloud<pcl
     pcl::transformPointCloud(*OGcloud, *transCloud, transformer);
     return transCloud;
 }
-
 
 // Gets xyz from singleton
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud)

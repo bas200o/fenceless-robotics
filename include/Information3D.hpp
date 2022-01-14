@@ -11,17 +11,20 @@
 class Information3D
 {
 private:
-    //List of foundobjects
-    std::vector<FoundObject> objects;
+
     //Vector of individual pointclouds
     std::vector<pcl::PointCloud<pcl::PointXYZRGB>> indiviualPointClouds;
     //Merged Pointcloud
     pcl::PointCloud<pcl::PointXYZRGB> fullPointCloud;
     //TimeStamp
-    double timeStamp;
+    double timeStamp = 0;
     
 public:
-//Constructor
+
+    //List of foundobjects
+    std::vector<FoundObject> objects;
+
+    //Constructor
     Information3D();
     //Deconstructor
     ~Information3D();

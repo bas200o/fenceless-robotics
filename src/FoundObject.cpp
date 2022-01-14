@@ -27,11 +27,13 @@ for(int i = 0 ; i < numPoints ; i++){
     //object
     //if(ly < objectCloud.points[i].
 }
-float cx, cy, cz;
+float cx, cy, cz, cx2,cy2,cz2;
 cx = x/numPoints;
 cy = y/numPoints;
 cz = z/numPoints;
-location = pcl::PointXYZRGB(cx, cy, cz);
+location.x = cx;
+location.y = cy;
+location.z = cz;
 centerMass = std::tuple<float, float, float> {cx, cy, cz};
 
     for (int i = 0; i < numPoints; i++)
@@ -51,7 +53,7 @@ return;
 }
 
     void FoundObject::setSpeed(double sp){
-        FoundObject::speed = sp;
+        speed = sp;
     }
 
     double FoundObject::getSpeed(){
