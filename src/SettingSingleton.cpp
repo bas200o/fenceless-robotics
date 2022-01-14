@@ -5,8 +5,6 @@ filterSettings fs;
 moveSettings ms;
 SettingSingleton *SettingSingleton::instance;
 
-
-
 SettingSingleton::SettingSingleton()
 {
     rs = {0.0, 0.0, 0.0};

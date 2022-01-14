@@ -4,7 +4,8 @@
 #include "../include/Controller2D.hpp"
 #include "../include/CameraConnector.hpp"
 
-int oldmain(){
+int oldmain()
+{
     CameraConnector *camCon = camCon->getInstance();
     camCon->connectCameras(2, 1);
     GUIApplication gui;
@@ -12,10 +13,10 @@ int oldmain(){
     cont3.CreateNewInformation();
     cont3.DetectObjects(0);
 
-//Controller2D cont2;
-//while(true)
+    //Controller2D cont2;
+    //while(true)
 
-//Do 3DVision
+    //Do 3DVision
     cout << "ended \n";
-return 1;
+    return 1;
 }

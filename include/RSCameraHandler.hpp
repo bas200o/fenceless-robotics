@@ -36,7 +36,7 @@ private:
     bool pipeRunning = false;
     
 public:
-    RSCameraHandler(/* args */);
+    RSCameraHandler();
     ~RSCameraHandler();
     pcl::PointCloud<pcl::PointXYZ> getLatestPointCloud();
     pcl::PointCloud<pcl::PointXYZRGB> getLatestPointCloudRGB();

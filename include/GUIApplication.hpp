@@ -3,10 +3,10 @@
 
 class GUIApplication
 {
-private:
-    /* data */
 public:
-    GUIApplication(/* args */);
+    //Contstructor
+    GUIApplication();
+    //Deconstructor
     ~GUIApplication();
 };
 

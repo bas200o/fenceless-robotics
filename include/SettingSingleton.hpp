@@ -1,3 +1,5 @@
+/*Singleton used to keep track of settings for translating the camera's 
+*/
 #pragma once
 
 using namespace std;

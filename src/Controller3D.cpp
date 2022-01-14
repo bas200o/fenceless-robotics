@@ -128,11 +128,6 @@ void Controller3D::DetectObjects(int pCloud)
     return;
 }
 
-void Controller3D::RemoveBackground(int pCloud)
-{
-    return;
-}
-
 void Controller3D::CombinePointClouds(int pCloud)
 {
     return;
@@ -197,7 +192,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<p
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
-                                              float x, float x1, float y, float y1, float z, float z1)
+                                                               float x, float x1, float y, float y1, float z, float z1)
 {
     pcl::PointCloud<pcl::PointXYZ>::Ptr filterCloud(new pcl::PointCloud<pcl::PointXYZ>);
     pcl::copyPointCloud(*OGCloud, *filterCloud);
