@@ -8,17 +8,11 @@ RSCameraHandler::RSCameraHandler(/* args */)
     //connectCamera();
 }
 
-RSCameraHandler::RSCameraHandler(int SerialNumber)
-{
-    config.enable_stream(RS2_STREAM_COLOR);
-    config.enable_stream(RS2_STREAM_INFRARED);
-    config.enable_stream(RS2_STREAM_DEPTH);
-}
-
 RSCameraHandler::~RSCameraHandler()
 {
     if (pipeRunning)
     {
+        CameraConnector::getInstance()->remConnectedRSCamera(pipe.get_active_profile().get_device().get_info(RS2_CAMERA_INFO_SERIAL_NUMBER));
         pipe.stop();
     }
 }
@@ -28,6 +22,13 @@ void RSCameraHandler::setLatestCloud(pcl::PointCloud<pcl::PointXYZ> pointCloud)
     CameraHandler::latestCloud_mtx.lock();
     CameraHandler::latestCloud = pointCloud;
     CameraHandler::latestCloud_mtx.unlock();
+}
+
+void RSCameraHandler::setLatestCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloud)
+{
+    CameraHandler::latestRGBCloud_mtx.lock();
+    CameraHandler::latestRGBCloud = pointCloud;
+    CameraHandler::latestRGBCloud_mtx.unlock();
 }
 
 cv::Mat RSCameraHandler::convertToMatrix()
@@ -62,6 +63,12 @@ std::tuple<int, int, int> RGB_Texture(rs2::video_frame texture, rs2::texture_coo
 
 std::tuple<pcl::PointCloud<pcl::PointXYZRGB>, pcl::PointCloud<pcl::PointXYZ>> RSCameraHandler::convertBothPCL()
 {
+
+    rs2::pointcloud pc;
+    RSCameraHandler::frames = pipe.wait_for_frames();
+    rs2::depth_frame depth = frames.get_depth_frame();
+
+    auto RGB = frames.get_color_frame();
 
     pcl::PointCloud<pcl::PointXYZ> cloud;
     pcl::PointCloud<pcl::PointXYZRGB> cloudRGB;
@@ -194,8 +201,6 @@ pcl::PointCloud<pcl::PointXYZ> RSCameraHandler::convertToPCL()
     auto Texture_Coord = points.get_texture_coordinates();
     auto Vertex = points.get_vertices();
 
-    // Iterating through all points and setting XYZ coordinates
-    // and RGB values
     for (int i = 0; i < points.size(); i++)
     {
         cloud.points[i].x = Vertex[i].x;
@@ -206,19 +211,57 @@ pcl::PointCloud<pcl::PointXYZ> RSCameraHandler::convertToPCL()
     return cloud;
 }
 
-void RSCameraHandler::grabImage()
+pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::convertToRGBPCL()
 {
+    pcl::PointCloud<pcl::PointXYZRGB> newCloud;
+    // Declare pointcloud object, for calculating pointclouds and texture mappings
     rs2::pointcloud pc;
-    RSCameraHandler::frames = pipe.wait_for_frames();
+
+    // Capture a single frame and obtain depth + RGB values from it
+    auto frames = RSCameraHandler::pipe.wait_for_frames();
+    auto depth = frames.get_depth_frame();
     //Set timestamp here
-    rs2::depth_frame depth = frames.get_depth_frame();
     rs2::frame frame = postProcess(depth);
     depth = frame;
     auto RGB = frames.get_color_frame();
 
     // Map Color texture to each point
     pc.map_to(RGB);
-    RSCameraHandler::points = pc.calculate(depth);
+
+    // Generate Point Cloud
+    auto points = pc.calculate(depth);
+
+    // Object Declaration (Point Cloud)
+    pcl::PointCloud<pcl::PointXYZRGB> cloud;
+
+    std::tuple<uint8_t, uint8_t, uint8_t> RGB_Color;
+
+    auto sp = points.get_profile().as<rs2::video_stream_profile>();
+
+    cloud.width = static_cast<uint32_t>(sp.width());
+    cloud.height = static_cast<uint32_t>(sp.height());
+    cloud.is_dense = false;
+    cloud.points.resize(points.size());
+
+    auto Texture_Coord = points.get_texture_coordinates();
+    auto Vertex = points.get_vertices();
+
+    for (int i = 0; i < points.size(); i++)
+    {
+        cloud.points[i].x = Vertex[i].x;
+        cloud.points[i].y = Vertex[i].y;
+        cloud.points[i].z = Vertex[i].z;
+
+        cloud.points[i].r = 255;
+        cloud.points[i].g = 255;
+        cloud.points[i].b = 255;
+    }
+
+    return cloud;
+}
+
+void RSCameraHandler::grabImage()
+{
 }
 
 void RSCameraHandler::runThread()
@@ -226,6 +269,8 @@ void RSCameraHandler::runThread()
     while (true)
     {
         RSCameraHandler::grabImage();
+        // auto thing = convertBothPCL();
+        RSCameraHandler::setLatestCloud(convertToRGBPCL());
         RSCameraHandler::setLatestCloud(convertToPCL());
     }
 }
@@ -236,30 +281,53 @@ void RSCameraHandler::threadRunner()
 
 void RSCameraHandler::connectCamera()
 {
-    rs2::pipeline_profile selection = pipe.start(config);
-    pipeRunning = true;
-    rs2::device selected_device = selection.get_device();
-    auto depth_sensor = selected_device.first<rs2::depth_sensor>();
-    if (depth_sensor.supports(RS2_OPTION_EMITTER_ENABLED))
-    {
-        depth_sensor.set_option(RS2_OPTION_EMITTER_ENABLED, 1.f); // Enable emitter
-        pipe.wait_for_frames();
-        depth_sensor.set_option(RS2_OPTION_EMITTER_ENABLED, 0.f); // Disable emitter
-    }
 
-    if (depth_sensor.supports(RS2_OPTION_LASER_POWER))
+    std::vector<std::string> serials;
+ 
+    std::vector<std::string> connectedCams = CameraConnector::getInstance()->getConnectedRSCameras();
+    for (std::string serial : serials)
     {
-        // Query min and max values:
-        auto range = depth_sensor.get_option_range(RS2_OPTION_LASER_POWER);
-        depth_sensor.set_option(RS2_OPTION_LASER_POWER, range.max); // Set max power
-        sleep(1);
-        depth_sensor.set_option(RS2_OPTION_LASER_POWER, 0.f); // Disable laser
+        bool hasBeenConnected = false;
+        for (size_t i = 0; i < connectedCams.size(); i++)
+        {
+            if (connectedCams.at(i) == serial)
+            {
+                hasBeenConnected = true;
+                break;
+            }
+        }
+        if (!hasBeenConnected)
+        {
+            config.enable_device(serial);
+            pipe.start(config);
+            pipeRunning = true;
+            auto depth_sensor = pipe.get_active_profile().get_device().first<rs2::depth_sensor>();
+
+            if (depth_sensor.supports(RS2_OPTION_EMITTER_ENABLED))
+            {
+                depth_sensor.set_option(RS2_OPTION_EMITTER_ENABLED, 1.f); // Enable emitter
+                pipe.wait_for_frames();
+                depth_sensor.set_option(RS2_OPTION_EMITTER_ENABLED, 0.f); // Disable emitter
+            }
+
+            if (depth_sensor.supports(RS2_OPTION_LASER_POWER))
+            {
+                // Query min and max values:
+                auto range = depth_sensor.get_option_range(RS2_OPTION_LASER_POWER);
+                depth_sensor.set_option(RS2_OPTION_LASER_POWER, range.max); // Set max power
+                sleep(1);
+                depth_sensor.set_option(RS2_OPTION_LASER_POWER, 0.f); // Disable laser
+            }
+            CameraConnector::getInstance()->addConnectedRSCamera(serial);
+            return;
+        }
     }
+    std::cout << "No available device found" << std::endl;
 }
 
 pcl::PointCloud<pcl::PointXYZ> RSCameraHandler::getLatestPointCloud()
 {
-    double tStamp;
+
     pcl::PointCloud<pcl::PointXYZ> cloudCopy;
     CameraHandler::latestCloud_mtx.lock();
     cloudCopy = CameraHandler::latestCloud;
@@ -269,55 +337,14 @@ pcl::PointCloud<pcl::PointXYZ> RSCameraHandler::getLatestPointCloud()
 
 pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::getLatestPointCloudRGB()
 {
-    double tStamp;
     pcl::PointCloud<pcl::PointXYZRGB> cloudCopy;
     CameraHandler::latestRGBCloud_mtx.lock();
     cloudCopy = CameraHandler::latestRGBCloud;
-    tStamp = CameraHandler::timeStamp;
     CameraHandler::latestRGBCloud_mtx.unlock();
-    ///TEMP CODE
-    pcl::PCDReader reader;
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudView(new pcl::PointCloud<pcl::PointXYZRGB>);
-    reader.read("/home/bas/Documents/POINTUCLOUTU/Captured_Frame1.pcd", *cloudView);
-    pcl::PointCloud<pcl::PointXYZRGB> cloud = *cloudView;
-    ///END TEMP CODE
-    return cloud;
+    return cloudCopy;
 }
 
-rs2::frame RSCameraHandler::postProcess(rs2::frame filtered)
+bool RSCameraHandler::getPipeRunning()
 {
-    rs2::decimation_filter dec_filter; // Decimation - reduces depth frame density
-    rs2::spatial_filter spat_filter;   // Spatial    - edge-preserving spatial smoothing
-    rs2::temporal_filter temp_filter;  // Temporal   - reduces temporal noise
-
-    // Configure filter parameters
-
-    //dec_filter.set_option(RS2_OPTION_FILTER_MAGNITUDE, 3);
-    //rs2::decimation_filter.set_option(RS2_OPTION_FILTER_MAGNITUDE, 3);
-    //rs2::spatial_filter.set_option(RS2_OPTION_FILTER_SMOOTH_ALPHA, 0.55f);
-    
-    // Declare disparity transform from depth to disparity and vice versa
-    filtered = dec_filter.process(filtered);
-    filtered = spat_filter.process(filtered);
-    filtered = temp_filter.process(filtered);
-    
-    return filtered;
+    return pipeRunning;
 }
-
-// void RSCameraHandler::setTimeStamp(double timeStamp)
-// {
-//     CameraHandler::timeStamp_mtx.lock();
-//     CameraHandler::timeStamp = timeStamp;
-//     CameraHandler::timeStamp_mtx.unlock();
-// }
-
-// double RSCameraHandler::getTimeStamp()
-// {
-
-//     double tStamp;
-//     CameraHandler::latestCloud_mtx.lock();
-//     tStamp = CameraHandler::timeStamp;
-//     CameraHandler::latestCloud_mtx.unlock();
-//     return tStamp;
-// }
-

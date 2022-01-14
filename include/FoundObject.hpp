@@ -1,4 +1,4 @@
-/*Objects found in 3d pcl*/
+/*Objects class for found objects in pointcloud*/
 #pragma once
 #include <tuple>
 #include <vector>
@@ -10,20 +10,24 @@
 class FoundObject
 {
 private:
+    //Point with the location/centermass of the FoundObject
     pcl::PointXYZRGB location;
-    //std::tuple<float, float> size;//misschien los width height depth
+    //The longest size of an object
     float size;
     float speed;
+    //The centermass of the object
     std::tuple<float, float, float> centerMass;
+    //The pointcloud of the object
     pcl::PointCloud<pcl::PointXYZRGB> objectCloud;
+    //Calculates the size and location of the object
     void CalculateValues();
-    void CalculateSize();
-    void CalculateLocation();
 
 
 public:
+    //Constructor
     FoundObject(pcl::PointCloud<pcl::PointXYZRGB> objectCloud);
     FoundObject();
+    //Destructor
     ~FoundObject();
     void setSpeed(float sp);
     float getSpeed();
@@ -32,4 +36,3 @@ public:
     float getSize();
 
 };
-

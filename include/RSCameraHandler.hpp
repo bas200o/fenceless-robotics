@@ -1,6 +1,7 @@
 /*Class that uses interface cameraHandler to create PCL and image data from realsense*/
 #pragma once
 #include "../include/CameraHandler.hpp"
+#include "../include/CameraConnector.hpp"
 #include <librealsense2/rs.hpp>
 #include <librealsense2/hpp/rs_internal.hpp>
 #include <iostream>
@@ -33,23 +34,21 @@ private:
     rs2::points points;
 
     bool pipeRunning = false;
-
-
-
     
 public:
-    RSCameraHandler(/* args */);
-    RSCameraHandler(int number);
+    RSCameraHandler();
     ~RSCameraHandler();
     pcl::PointCloud<pcl::PointXYZ> getLatestPointCloud();
     pcl::PointCloud<pcl::PointXYZRGB> getLatestPointCloudRGB();
     void runThread();
     void threadRunner();
-     void grabImage();
+    void grabImage();
     void connectCamera();
     void setLatestCloud(pcl::PointCloud<pcl::PointXYZ> pointCloud);
     rs2::frame postProcess(rs2::frame toFilter);
 
+    void setLatestCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloud);
+    bool getPipeRunning();
 };
 
 

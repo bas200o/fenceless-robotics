@@ -1,6 +1,5 @@
 #include "../include/FoundObject.hpp"
 
-
 FoundObject::FoundObject(pcl::PointCloud<pcl::PointXYZRGB> objectCloud)
 {
     this->objectCloud = objectCloud;
@@ -35,14 +34,20 @@ cz = z/numPoints;
 location = pcl::PointXYZRGB(cx, cy, cz);
 centerMass = std::tuple<float, float, float> {cx, cy, cz};
 
-for(int i = 0 ; i < numPoints ; i++){
-    float tempsize = euclideanDistance(objectCloud.points[i], objectCloud.points[0]);
-    if(tempsize < 0){
-        tempsize = tempsize * -1;
+    for (int i = 0; i < numPoints; i++)
+    {
+        float tempsize = euclideanDistance(objectCloud.points[i], objectCloud.points[0]);
+        if (tempsize < 0)
+        {
+            tempsize = tempsize * -1;
+        }
+        if (tempsize > maxsize)
+        {
+            maxsize = tempsize;
+        }
     }
-    if(tempsize > maxsize){
-        maxsize = tempsize;
-    }
+    size = maxsize;
+    return;
 }
 size = maxsize;
 return;
