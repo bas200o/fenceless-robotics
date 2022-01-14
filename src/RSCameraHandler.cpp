@@ -210,6 +210,7 @@ void RSCameraHandler::grabImage()
 {
     rs2::pointcloud pc;
     RSCameraHandler::frames = pipe.wait_for_frames();
+    //Set timestamp here
     rs2::depth_frame depth = frames.get_depth_frame();
     rs2::frame frame = postProcess(depth);
     depth = frame;
@@ -258,7 +259,7 @@ void RSCameraHandler::connectCamera()
 
 pcl::PointCloud<pcl::PointXYZ> RSCameraHandler::getLatestPointCloud()
 {
-
+    double tStamp;
     pcl::PointCloud<pcl::PointXYZ> cloudCopy;
     CameraHandler::latestCloud_mtx.lock();
     cloudCopy = CameraHandler::latestCloud;
@@ -268,9 +269,11 @@ pcl::PointCloud<pcl::PointXYZ> RSCameraHandler::getLatestPointCloud()
 
 pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::getLatestPointCloudRGB()
 {
+    double tStamp;
     pcl::PointCloud<pcl::PointXYZRGB> cloudCopy;
     CameraHandler::latestRGBCloud_mtx.lock();
     cloudCopy = CameraHandler::latestRGBCloud;
+    tStamp = CameraHandler::timeStamp;
     CameraHandler::latestRGBCloud_mtx.unlock();
     ///TEMP CODE
     pcl::PCDReader reader;
@@ -287,9 +290,9 @@ rs2::frame RSCameraHandler::postProcess(rs2::frame filtered)
     rs2::spatial_filter spat_filter;   // Spatial    - edge-preserving spatial smoothing
     rs2::temporal_filter temp_filter;  // Temporal   - reduces temporal noise
 
-
     // Configure filter parameters
 
+    //dec_filter.set_option(RS2_OPTION_FILTER_MAGNITUDE, 3);
     //rs2::decimation_filter.set_option(RS2_OPTION_FILTER_MAGNITUDE, 3);
     //rs2::spatial_filter.set_option(RS2_OPTION_FILTER_SMOOTH_ALPHA, 0.55f);
     
@@ -300,4 +303,21 @@ rs2::frame RSCameraHandler::postProcess(rs2::frame filtered)
     
     return filtered;
 }
+
+// void RSCameraHandler::setTimeStamp(double timeStamp)
+// {
+//     CameraHandler::timeStamp_mtx.lock();
+//     CameraHandler::timeStamp = timeStamp;
+//     CameraHandler::timeStamp_mtx.unlock();
+// }
+
+// double RSCameraHandler::getTimeStamp()
+// {
+
+//     double tStamp;
+//     CameraHandler::latestCloud_mtx.lock();
+//     tStamp = CameraHandler::timeStamp;
+//     CameraHandler::latestCloud_mtx.unlock();
+//     return tStamp;
+// }
 

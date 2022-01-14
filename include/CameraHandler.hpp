@@ -36,6 +36,7 @@ private:
     virtual void connectCamera() = 0;
 
 public:
+    double timeStamp;
     virtual pcl::PointCloud<pcl::PointXYZ> getLatestPointCloud() = 0;
     virtual pcl::PointCloud<pcl::PointXYZRGB> getLatestPointCloudRGB() = 0;
 

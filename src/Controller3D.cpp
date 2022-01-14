@@ -141,10 +141,39 @@ void Controller3D::CombinePointClouds(int pInfo)
     return;
 }
 
-void Controller3D::CalculateSpeed(int pInfo)
+void Controller3D::CalculateSpeed()
 {
-    return;
+    Information3D previous;
+    if(lastInfo[2].getObjects().size() > 0){
+        previous = lastInfo[2];
+    }
+    else if(lastInfo[1].getObjects().size() > 0){
+        previous = lastInfo[1];
+    }
+    else{
+        for(auto&& object : lastInfo[0].getObjects()){
+            object.setSpeed(0);
+        }
+        return;
+    }
+    FoundObject movedObject;
+    float shortestDist = FLT_MAX;
+    float dist;
+    for(FoundObject object : lastInfo[0].getObjects()){
+        for(FoundObject oldObject : previous.getObjects()){
+            dist = euclideanDistance(object.getLocation(), oldObject.getLocation());
+            if(object.getSize()*-0.10 < object.getSize() - oldObject.getSize() < object.getSize()*0.10 
+                                                        && dist < shortestDist)
+                {
+                    shortestDist = dist;
+                    movedObject = oldObject;
+                }
+            }
+        //calculate speed
+        //dist/time
+        }
 }
+
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, float x, float y, float z)
 {

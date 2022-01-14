@@ -10,17 +10,26 @@
 class FoundObject
 {
 private:
-    std::tuple<float, float> location;
+    pcl::PointXYZRGB location;
     //std::tuple<float, float> size;//misschien los width height depth
     float size;
-    std::tuple<float, float> centerMass;
+    float speed;
+    std::tuple<float, float, float> centerMass;
     pcl::PointCloud<pcl::PointXYZRGB> objectCloud;
     void CalculateValues();
     void CalculateSize();
     void CalculateLocation();
 
+
 public:
     FoundObject(pcl::PointCloud<pcl::PointXYZRGB> objectCloud);
+    FoundObject();
     ~FoundObject();
+    void setSpeed(float sp);
+    float getSpeed();
+    pcl::PointCloud<pcl::PointXYZRGB> getObjectCloud();
+    pcl::PointXYZRGB getLocation();
+    float getSize();
+
 };
 
