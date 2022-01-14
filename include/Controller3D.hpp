@@ -12,6 +12,7 @@
 #include <pcl/search/kdtree.h>
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/segmentation/extract_clusters.h>
+#include "../include/SettingSingleton.hpp"
 
 class Controller3D
 {
@@ -35,6 +36,8 @@ public:
 
     //Rotates a pointcloud based on the settings in SettingSingleton
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud);
+    //Rotates a pointcloud based on the settings provided
+    static pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, rotationSettings rs);
     //Rotates a pointcloud based on passed variables
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
                                                             float x, float y, float z);

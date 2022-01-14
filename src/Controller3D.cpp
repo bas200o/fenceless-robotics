@@ -146,6 +146,12 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::rotatePCL(pcl::PointCloud<p
     return Controller3D::rotatePCL(OGCloud, rs.x, rs.y, rs.z);
 }
 
+// Gets xyz from singleton
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, rotationSettings rs)
+{
+    return Controller3D::rotatePCL(OGCloud, rs.x, rs.y, rs.z);
+}
+
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, float x, float y, float z)
 {
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr transCloud(new pcl::PointCloud<pcl::PointXYZRGB>);

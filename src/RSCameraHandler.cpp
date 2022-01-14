@@ -323,10 +323,11 @@ void RSCameraHandler::connectCamera()
                 depth_sensor.set_option(RS2_OPTION_LASER_POWER, 0.f); // Disable laser
             }
             CameraConnector::getInstance()->addConnectedRSCamera(serial);
+            std::cout << "[I] Realsense cam has been connected" << std::endl;
             return;
         }
     }
-    std::cout << "No available device found" << std::endl;
+    std::cout << "[E] No available device found" << std::endl;
 }
 
 pcl::PointCloud<pcl::PointXYZ> RSCameraHandler::getLatestPointCloud()

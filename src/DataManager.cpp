@@ -39,14 +39,13 @@ int buildUI(int argc, char **argv)
 int maingui(int argc, char **argv)
 {
     CameraConnector *camCon = camCon->getInstance();
-    camCon->connectCameras(2, 1);
+    // camCon->connectCameras(2, 1);
 
     tbb::task_arena arena;
 
     arena.enqueue( [] {
 
-        CameraConnector *camCon = CameraConnector::getInstance();
-        camCon->connectCameras(2, 1);
+        
 
         Controller3D cont3;
         Controller2D cont2;
