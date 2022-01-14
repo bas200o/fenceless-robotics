@@ -5,7 +5,7 @@ RSCameraHandler::RSCameraHandler(/* args */)
     config.enable_stream(RS2_STREAM_COLOR);
     config.enable_stream(RS2_STREAM_INFRARED);
     config.enable_stream(RS2_STREAM_DEPTH);
-    //connectCamera();
+    connectCamera();
 }
 
 RSCameraHandler::~RSCameraHandler()
@@ -283,7 +283,12 @@ void RSCameraHandler::connectCamera()
 {
 
     std::vector<std::string> serials;
- 
+        for (auto &&dev : ctx.query_devices())
+    {
+
+        serials.push_back(dev.get_info(RS2_CAMERA_INFO_SERIAL_NUMBER));
+        std::cout << dev.get_info(RS2_CAMERA_INFO_SERIAL_NUMBER) << std::endl;
+    }
     std::vector<std::string> connectedCams = CameraConnector::getInstance()->getConnectedRSCameras();
     for (std::string serial : serials)
     {
@@ -337,9 +342,11 @@ pcl::PointCloud<pcl::PointXYZ> RSCameraHandler::getLatestPointCloud()
 
 pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::getLatestPointCloudRGB()
 {
+    double tStamp;
     pcl::PointCloud<pcl::PointXYZRGB> cloudCopy;
     CameraHandler::latestRGBCloud_mtx.lock();
     cloudCopy = CameraHandler::latestRGBCloud;
+    tStamp = CameraHandler::timeStamp;
     CameraHandler::latestRGBCloud_mtx.unlock();
     return cloudCopy;
 }
@@ -347,4 +354,24 @@ pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::getLatestPointCloudRGB()
 bool RSCameraHandler::getPipeRunning()
 {
     return pipeRunning;
+}
+
+rs2::frame RSCameraHandler::postProcess(rs2::frame filtered)
+{
+    rs2::decimation_filter dec_filter; // Decimation - reduces depth frame density
+    rs2::spatial_filter spat_filter;   // Spatial    - edge-preserving spatial smoothing
+    rs2::temporal_filter temp_filter;  // Temporal   - reduces temporal noise
+
+    // Configure filter parameters
+
+    //dec_filter.set_option(RS2_OPTION_FILTER_MAGNITUDE, 3);
+    //rs2::decimation_filter.set_option(RS2_OPTION_FILTER_MAGNITUDE, 3);
+    //rs2::spatial_filter.set_option(RS2_OPTION_FILTER_SMOOTH_ALPHA, 0.55f);
+    
+    // Declare disparity transform from depth to disparity and vice versa
+    filtered = dec_filter.process(filtered);
+    filtered = spat_filter.process(filtered);
+    filtered = temp_filter.process(filtered);
+    
+    return filtered;
 }

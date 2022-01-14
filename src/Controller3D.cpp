@@ -127,11 +127,6 @@ void Controller3D::DetectObjects(int pInfo)
     return;
 }
 
-void Controller3D::RemoveBackground(int pInfo)
-{
-    return;
-}
-
 void Controller3D::CombinePointClouds(int pInfo)
 {
     pcl::PointCloud<pcl::PointXYZRGB> full;
@@ -222,15 +217,6 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::movePCL(pcl::PointCloud<pcl
 
 // Gets xyz from singleton
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct filterSettings rs = ds->getFilter();
-
-    return Controller3D::filterPCL(OGCloud, rs.x, rs.x1, rs.y, rs.y1, rs.z, rs.z1);
-}
-
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
-                                                               float x, float x1, float y, float y1, float z, float z1)
 {
     SettingSingleton *ds = ds->getInstance();
     struct filterSettings rs = ds->getFilter();

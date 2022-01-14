@@ -42,4 +42,10 @@ public:
     //Moves a pointcloud based on passed variables
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud,
                                                             float x, float y, float z);
+//Filters a pointcloud based on the settings in SettingSingleton
+    static pcl::PointCloud<pcl::PointXYZRGB>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud);
+    //Filters a pointcloud based on passed variables
+    static pcl::PointCloud<pcl::PointXYZRGB>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
+                                                            float x, float x1, float y, float y1, float z, float z1);
+
 };

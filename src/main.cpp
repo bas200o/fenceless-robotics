@@ -66,10 +66,9 @@ int testmain()
   struct filterSettings fs = {-1.0, -1.0, -1.0, 1.0, 1.0, 1.0};
   ds->setFilter(fs);
 
-  std::thread thing(camTask);
-
   std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
-
+  std::thread thing(camTask);
+  
   pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);

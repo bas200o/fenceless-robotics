@@ -46,19 +46,8 @@ centerMass = std::tuple<float, float, float> {cx, cy, cz};
             maxsize = tempsize;
         }
     }
-    size = maxsize;
-    return;
-}
 size = maxsize;
 return;
-}
-
-void FoundObject::CalculateLocation(){
-
-}
-
-void FoundObject::CalculateSize(){
-    
 }
 
     void FoundObject::setSpeed(float sp){
