@@ -11,6 +11,8 @@
 #include <QSlider>
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include <QLabel>
+
 
 
 struct vec3 {
@@ -99,6 +101,13 @@ class GUIApplication : public QWidget
     public:
 
         static void ValueChange(int v);
+        static void rotationChangeX(int X);
+        static void rotationChangeY(int Y);
+        static void rotationChangeZ(int Z);
+        static void positionChangeX(int X);
+        static void positionChangeY(int Y);
+        static void positionChangeZ(int Z);
+        
         explicit GUIApplication(QWidget *parent = 0);
 
         int insertObject(VisualObject obj);

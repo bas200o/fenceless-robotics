@@ -1,4 +1,6 @@
-/*Class used for all 2D vision and makes objects with information*/
+/*Class used for all 2D vision and makes objects with information
+/*Currently not used since no 2D vision is used in the application
+*/
 
 #pragma once
 #include "../include/CameraConnector.hpp"
@@ -6,11 +8,9 @@
 
 class Controller2D
 {
-private:
-    /* data */
 public:
-    Controller2D(/* args */);
+    //Constructor
+    Controller2D();
+    //Destructor
     ~Controller2D();
 };
-
-

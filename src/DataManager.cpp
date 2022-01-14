@@ -10,7 +10,8 @@
 #include <tbb/parallel_for.h>
 #include <tbb/task_arena.h>
 
-int oldmain(){
+int oldmain()
+{
     CameraConnector *camCon = camCon->getInstance();
     camCon->connectCameras(2, 1);
     GUIApplication gui;
@@ -23,7 +24,7 @@ int oldmain(){
 
     //Do 3DVision
     cout << "ended \n";
-return 1;
+    return 1;
 }
 
 int buildUI(int argc, char **argv)
@@ -38,14 +39,13 @@ int buildUI(int argc, char **argv)
 int maingui(int argc, char **argv)
 {
     CameraConnector *camCon = camCon->getInstance();
-    camCon->connectCameras(2, 1);
+    // camCon->connectCameras(2, 1);
 
     tbb::task_arena arena;
 
     arena.enqueue( [] {
 
-        CameraConnector *camCon = CameraConnector::getInstance();
-        camCon->connectCameras(2, 1);
+        
 
         Controller3D cont3;
         Controller2D cont2;

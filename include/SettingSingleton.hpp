@@ -1,3 +1,5 @@
+/*Singleton used to keep track of settings for translating the camera's 
+*/
 #pragma once
 
 using namespace std;
@@ -33,6 +35,12 @@ public:
     void setRotate(rotationSettings data);
     moveSettings getMove();
     void setMove(moveSettings data);
+
+    rotationSettings getRotate2();
+    void setRotate2(rotationSettings data);
+    moveSettings getMove2();
+    void setMove2(moveSettings data);
+
     filterSettings getFilter();
     void setFilter(filterSettings data);
 };
