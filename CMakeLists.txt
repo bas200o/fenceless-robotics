@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.14.0)
 project(fenceless-robot VERSION 0.1.0)
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+# set(CMAKE_PREFIX_PATH "/opt/intel/oneapi/tbb/latest")
+
 include(CTest)
 enable_testing()
 
@@ -11,6 +16,8 @@ find_package (Threads)
 find_package(OpenCV REQUIRED)
 find_package ( Qt5 COMPONENTS Widgets REQUIRED )
 find_package ( TBB REQUIRED tbb)
+
+qt5_wrap_cpp(gui_SRC GUIApplication.hpp GUIApplication.cpp GUIData.hpp GUIData.cpp)
 
 # [C/C++]>[General]>[Additional Include Directories]
 include_directories( ${PCL_INCLUDE_DIRS} )

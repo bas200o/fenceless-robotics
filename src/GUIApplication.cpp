@@ -29,17 +29,15 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     pan_table = new QTableWidget(this);
     pan_table->setFixedSize(1220, 400);
 
-    pan_table->setRowCount(sizeof(tableObjects) / sizeof(tableObjects[0]));
-    pan_table->setColumnCount(9);
+    pan_table->setRowCount(1);
+    pan_table->setColumnCount(tableHeaders.count());
     pan_table->setHorizontalHeaderLabels(tableHeaders);
 
-    // Filling 5 rows with zeroes as a starter
-    for (int i = 0; i < 9; i++)
-        for (int j = 0; j < 5; j++)
-            tableObjects[i][j] = new QTableWidgetItem(tr("%1").arg(0));
-    for (int i = 0; i < 9; i++)
-        for (int j = 0; j < 5; j++)
-            pan_table->setItem(j, i, tableObjects[i][j]);
+    // Filling 1 row with zeroes as a starter
+    for (int i = 0; i < 7; i++)
+    {
+        pan_table->setItem(0, i, new QTableWidgetItem("0"));
+    }
 
 // Combining layout
     layout = new QGridLayout(this);
@@ -49,3 +47,28 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     layout->addWidget(pan_table, 1, 0, 1, 3);
 
 }
+
+void GUIApplication::updateTable(QList<VisualObject> objects)
+{
+    pan_table->setRowCount(objects.count());
+    int row = 0;
+    for(VisualObject obj : objects)
+    {
+        QString pos = QString("[%1,%2,%3]").arg(obj.position.x, obj.position.y, obj.position.z);
+        QString dir = QString("[%1,%2,%3]").arg(obj.direction.x, obj.direction.y, obj.direction.z);
+
+        pan_table->setItem(row, 0, new QTableWidgetItem("-"));              // ID
+        pan_table->setItem(row, 1, new QTableWidgetItem("-"));              // Tijd in beeld
+        pan_table->setItem(row, 2, new QTableWidgetItem(pos));              // Positie
+        pan_table->setItem(row, 3, new QTableWidgetItem(obj.size));         // Diameter
+        pan_table->setItem(row, 4, new QTableWidgetItem(dir));              // Richting
+        pan_table->setItem(row, 5, new QTableWidgetItem(obj.speed));        // Snelheid
+        pan_table->setItem(row, 6, new QTableWidgetItem(obj.acceleration)); // Versnelling
+
+        row++;
+    }   
+    pan_table->repaint();
+}
+
+void GUIApplication::update2d(QList<Object2D> objects){}
+void GUIApplication:: updateStatistics(StatisticsObject obj){}
