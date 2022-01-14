@@ -107,6 +107,7 @@ class GUIApplication : public QWidget
         static void positionChangeX(int X);
         static void positionChangeY(int Y);
         static void positionChangeZ(int Z);
+        static void filterChangex(int v);
         
         explicit GUIApplication(QWidget *parent = 0);
 
