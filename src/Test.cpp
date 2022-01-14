@@ -83,13 +83,16 @@ int main()
 {
   // getAndDisplayPCL();
   CameraConnector::getInstance()->connectCameras(0, 1);
+  CameraConnector::getInstance()->connectCameras(1, 1);
   // CameraConnector::getInstance()->connectCameras(1, 1);
 
   std::this_thread::sleep_for(std::chrono::nanoseconds(100000));
   pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
   *cloud = CameraConnector::getInstance()->retrievePointClouds().at(0);
-
+  pcl::visualization::PCLVisualizer::Ptr viewer2 (new pcl::visualization::PCLVisualizer ("3D Viewer"));
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud2(new pcl::PointCloud<pcl::PointXYZRGB>);
+  *cloud2 = CameraConnector::getInstance()->retrievePointClouds().at(1);
   
 
   viewer->setBackgroundColor (0, 0, 0);
@@ -98,18 +101,29 @@ int main()
   viewer->initCameraParameters ();
   viewer->spinOnce();
 
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr latestCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
-    *latestCloud = CameraConnector::getInstance()->retrievePointClouds().at(0);
+  viewer2->setBackgroundColor (0, 0, 0);
+  viewer2->addPointCloud(cloud2);
+  viewer2->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
+  viewer2->initCameraParameters ();
+  viewer2->spinOnce();
+
   while(true) {
 
-    pcl::PointCloud<pcl::PointXYZ>::Ptr updateCloud(new pcl::PointCloud<pcl::PointXYZ>);
+    // pcl::PointCloud<pcl::PointXYZ>::Ptr updateCloud(new pcl::PointCloud<pcl::PointXYZ>);
     *cloud = CameraConnector::getInstance()->retrievePointClouds().at(0);
     
     viewer->removeAllPointClouds();
     viewer->addPointCloud(cloud);
 
+    *cloud = CameraConnector::getInstance()->retrievePointClouds().at(1);
+    
+    viewer2->removeAllPointClouds();
+    viewer2->addPointCloud(cloud2);
+    
+
     // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
 
     viewer->spinOnce(200); 
+    viewer2->spinOnce(200);
   }
 }

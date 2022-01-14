@@ -279,13 +279,7 @@ void RSCameraHandler::threadRunner() {
 void RSCameraHandler::connectCamera(){
 
     std::vector<std::string> serials;
-
-    for (auto&& dev : ctx.query_devices()) {
-
-        serials.push_back(dev.get_info(RS2_CAMERA_INFO_SERIAL_NUMBER));
-        std::cout << dev.get_info(RS2_CAMERA_INFO_SERIAL_NUMBER) << std::endl;
-    }
-        
+ 
     std::vector<std::string> connectedCams = CameraConnector::getInstance()->getConnectedRSCameras();
     for (std::string serial : serials)
     {   
