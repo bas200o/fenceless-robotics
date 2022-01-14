@@ -41,3 +41,11 @@ std::vector<FoundObject> Information3D::getObjects()
 std::vector<pcl::PointCloud<pcl::PointXYZRGB>> Information3D::getPointClouds(){
     return indiviualPointClouds;
 }
+
+void Information3D::setTimeStamp(double tStamp){
+    timeStamp = tStamp;
+}
+
+double Information3D::getTimeStamp(){
+    return timeStamp;
+}

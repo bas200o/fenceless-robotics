@@ -14,7 +14,7 @@ private:
     pcl::PointXYZRGB location;
     //The longest size of an object
     float size;
-    float speed;
+    double speed;
     //The centermass of the object
     std::tuple<float, float, float> centerMass;
     //The pointcloud of the object
@@ -29,8 +29,8 @@ public:
     FoundObject();
     //Destructor
     ~FoundObject();
-    void setSpeed(float sp);
-    float getSpeed();
+    void setSpeed(double sp);
+    double getSpeed();
     pcl::PointCloud<pcl::PointXYZRGB> getObjectCloud();
     pcl::PointXYZRGB getLocation();
     float getSize();

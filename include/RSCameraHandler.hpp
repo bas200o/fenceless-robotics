@@ -39,7 +39,7 @@ public:
     RSCameraHandler();
     ~RSCameraHandler();
     pcl::PointCloud<pcl::PointXYZ> getLatestPointCloud();
-    pcl::PointCloud<pcl::PointXYZRGB> getLatestPointCloudRGB();
+    std::tuple<pcl::PointCloud<pcl::PointXYZRGB>, double> getLatestPointCloudRGB();
     void runThread();
     void threadRunner();
     void grabImage();

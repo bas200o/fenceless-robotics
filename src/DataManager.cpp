@@ -23,6 +23,7 @@ int oldmain()
     cont3.CalculateSpeed();
     cont3.CombinePointClouds(0);
     cont3.DetectObjects(0);
+    cont3.CalculateSpeed();
 
     //Controller2D cont2;
     //while(true)

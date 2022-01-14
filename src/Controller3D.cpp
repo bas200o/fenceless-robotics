@@ -35,6 +35,7 @@ void Controller3D::CreateNewInformation()
     }
     CameraConnector *camCon = camCon->getInstance();
     lastInfo[0].AddPointClouds(camCon->retrievePointClouds());
+    lastInfo[0].setTimeStamp(camCon->getLastTimeStamp());
     printf("Created first info \n");
     return;
 }
@@ -165,8 +166,11 @@ void Controller3D::CalculateSpeed()
                     movedObject = oldObject;
                 }
             }
+            double speed;
         //calculate speed
         //dist/time
+        speed = shortestDist/(lastInfo[0].getTimeStamp()-previous.getTimeStamp());
+            object.setSpeed(speed);
         }
 }
 

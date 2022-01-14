@@ -221,6 +221,7 @@ pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::convertToRGBPCL()
     auto frames = RSCameraHandler::pipe.wait_for_frames();
     auto depth = frames.get_depth_frame();
     //Set timestamp here
+    timeStamp = frames.get_timestamp();
     rs2::frame frame = postProcess(depth);
     depth = frame;
     auto RGB = frames.get_color_frame();
@@ -340,7 +341,7 @@ pcl::PointCloud<pcl::PointXYZ> RSCameraHandler::getLatestPointCloud()
     return cloudCopy;
 }
 
-pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::getLatestPointCloudRGB()
+std::tuple<pcl::PointCloud<pcl::PointXYZRGB>, double> RSCameraHandler::getLatestPointCloudRGB()
 {
     double tStamp;
     pcl::PointCloud<pcl::PointXYZRGB> cloudCopy;
@@ -348,7 +349,7 @@ pcl::PointCloud<pcl::PointXYZRGB> RSCameraHandler::getLatestPointCloudRGB()
     cloudCopy = CameraHandler::latestRGBCloud;
     tStamp = CameraHandler::timeStamp;
     CameraHandler::latestRGBCloud_mtx.unlock();
-    return cloudCopy;
+    return {cloudCopy, tStamp};
 }
 
 bool RSCameraHandler::getPipeRunning()

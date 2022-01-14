@@ -17,7 +17,8 @@ private:
     std::vector<pcl::PointCloud<pcl::PointXYZRGB>> indiviualPointClouds;
     //Merged Pointcloud
     pcl::PointCloud<pcl::PointXYZRGB> fullPointCloud;
-    
+    //TimeStamp
+    double timeStamp;
     
 public:
 //Constructor
@@ -35,6 +36,8 @@ public:
     //Retrieves the list of found objects
     std::vector<FoundObject> getObjects();
     std::vector<pcl::PointCloud<pcl::PointXYZRGB>> getPointClouds();
+    void setTimeStamp(double tStamp);
+    double getTimeStamp();
 };
 
 

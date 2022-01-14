@@ -50,11 +50,11 @@ size = maxsize;
 return;
 }
 
-    void FoundObject::setSpeed(float sp){
+    void FoundObject::setSpeed(double sp){
         FoundObject::speed = sp;
     }
 
-    float FoundObject::getSpeed(){
+    double FoundObject::getSpeed(){
         return FoundObject::speed;
     }
 

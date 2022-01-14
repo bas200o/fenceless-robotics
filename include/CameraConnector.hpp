@@ -18,7 +18,9 @@ class CameraConnector
 public:
    //Vector of connected camera handlers
    std::vector<CameraHandler *> connectedCams;
-
+   
+   //retrieves the last timestamp
+   double getLastTimeStamp();
    //Get the existing instance of camera connector
    static CameraConnector *getInstance();
    //Connects a camera of a type at position number
@@ -33,6 +35,8 @@ public:
    void remConnectedRSCamera(std::string id);
 
 private:
+   //Is the last retrieved timestamp
+   double lastTimeStamp;
    //CameraConnector instance
    static CameraConnector *pSingleton;
    //Lists as a quick fix so RSCamerHandler is working

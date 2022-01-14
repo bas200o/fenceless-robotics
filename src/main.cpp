@@ -81,13 +81,13 @@ int testmain()
   viewer->spinOnce();
 
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr prevCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
-  *prevCloud = camHandler.getLatestPointCloudRGB();
+  *prevCloud = std::get<0>(camHandler.getLatestPointCloudRGB());
   while (true)
   {
     // pcl::PointCloud<pcl::PointXYZRGB>::Ptr rgbcloud(new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr currentCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
 
-    *currentCloud = camHandler.getLatestPointCloudRGB();
+    *currentCloud = std::get<0>(camHandler.getLatestPointCloudRGB());
 
     currentCloud = Controller3D::rotatePCL(currentCloud);
 
