@@ -79,8 +79,8 @@ int testmain()
   
   for (size_t i = 0; i < cloud2->points.size(); i++)
     {
-      cloud2->points[i].g = 0;
-      cloud2->points[i].b = 0;
+      cloud->points[i].g = 0;
+      cloud->points[i].b = 0;
     }
 
 
