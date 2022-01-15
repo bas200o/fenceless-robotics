@@ -43,6 +43,8 @@
 #include <QTableView>
 #include <QTableWidget>
 
+#include <assert.h>
+
 // RSCameraHandler camHandler;
 
 // void camTask()
@@ -62,20 +64,21 @@ int testmain()
   ds->setRotate(rs);
   struct moveSettings ms = {0.0, 0.0, 0.0};
   ds->setMove(ms);
-  struct filterSettings fs = {-1.0, -1.0, -1.0, 1.0, 1.0, 1.0};
+  struct filterSettings fs = {-10.0, 10.0, -10.0, 10.0, -10.0, 10.0};
   ds->setFilter(fs);
 
-  std::this_thread::sleep_for(std::chrono::nanoseconds(10000));
+  //std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
   CameraConnector *camCon = CameraConnector::getInstance();
+  assert(camCon && "Couldn't connect to cam, cam was null!");
   pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
 
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud2(new pcl::PointCloud<pcl::PointXYZRGB>);
 
-    auto pointclouds = camCon->retrievePointClouds();
+  auto pointclouds = camCon->retrievePointClouds();
 
-    *cloud  = pointclouds.at(0);
-    *cloud2 = pointclouds.at(1);
+  *cloud  = pointclouds.at(0);
+  *cloud2 = pointclouds.at(1);
   
   for (size_t i = 0; i < cloud2->points.size(); i++)
     {
@@ -89,7 +92,9 @@ int testmain()
   viewer->addPointCloud(cloud2, "cloud2");
   // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
   viewer->initCameraParameters();
-  viewer->spinOnce();
+  viewer->addCoordinateSystem();
+  viewer->setWindowName("fenceless-robotics");
+  viewer->spinOnce(200);
 
 
 
@@ -99,11 +104,15 @@ int testmain()
     pcl::copyPointCloud(*cloud, *cloudCopy);
     cloudCopy = Controller3D::rotatePCL(cloudCopy);
     cloudCopy = Controller3D::movePCL(cloudCopy);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr mainCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+    *mainCloud += *cloud2;
+    *mainCloud += *cloudCopy;
     
-    // currentCloud = Controller3D::filterPCL(currentCloud);
+    mainCloud = Controller3D::filterPCL(mainCloud);
 
-    // viewer->removeAllPointClouds();
-    viewer->updatePointCloud(cloudCopy,  "cloud1");
+    viewer->removeAllPointClouds();
+    viewer->addPointCloud(mainCloud, "maincloud");
+    
     viewer->updatePointCloud(cloud2, "cloud2"); 
 
     // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);

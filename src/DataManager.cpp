@@ -44,17 +44,8 @@ int maingui(int argc, char **argv)
     tbb::task_arena arena;
 
     arena.enqueue( [] {
-
-        
-
         Controller3D cont3;
         Controller2D cont2;
-
-        cout << "Hello vision!" << endl;
-
-        // while(true)
-            //Do 3D vision
-
     });
     
 

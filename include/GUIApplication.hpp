@@ -13,24 +13,26 @@
 #include <QGroupBox>
 #include <QLabel>
 
-
-
-struct vec3 {
+struct vec3
+{
     int x;
     int y;
     int z;
 };
-struct vec2 {
+struct vec2
+{
     int x;
     int y;
 };
 
-struct Object2D {
+struct Object2D
+{
     vec2 position;
     vec2 direction;
 };
 
-struct VisualObject {
+struct VisualObject
+{
     int showTime;
     vec3 position;
     double size;
@@ -39,79 +41,79 @@ struct VisualObject {
     double acceleration;
 };
 
-struct StatisticsObject {
+struct StatisticsObject
+{
     int uptime; // Seconds
-
 };
 
 class GUIData : public QObject
 {
     Q_OBJECT
 
-    public:
+public:
+    QList<Object2D> view2d;
+    QList<VisualObject> table;
+    StatisticsObject stats;
 
-        
+    GUIData(QList<Object2D> view2dObjects,
+            QList<VisualObject> tableObjects,
+            StatisticsObject stats);
 
-        QList<Object2D> view2d;
-        QList<VisualObject> table;
-        StatisticsObject stats;
+public Q_SLOTS: // Coming from the worker threads
+    void addObject_2d(Object2D obj);
+    void addObject_table(VisualObject obj);
 
-        GUIData(QList<Object2D> view2dObjects, 
-                QList<VisualObject> tableObjects, 
-                StatisticsObject stats);
+    void updateObject_2d(Object2D obj);
+    void updateObject_table(VisualObject obj);
+    void updateObject_statistics(StatisticsObject obj);
 
-    public Q_SLOTS: // Coming from the worker threads
-        void addObject_2d(Object2D obj);
-        void addObject_table(VisualObject obj);
-        
-        void updateObject_2d(Object2D obj);
-        void updateObject_table(VisualObject obj);
-        void updateObject_statistics(StatisticsObject obj);
-
-    Q_SIGNALS: // Going to the UI
-        void changed_2d(QList<Object2D> objects);
-        void changed_table(QList<VisualObject> objects);
-        void changed_statistics(StatisticsObject object);
-
+Q_SIGNALS: // Going to the UI
+    void changed_2d(QList<Object2D> objects);
+    void changed_table(QList<VisualObject> objects);
+    void changed_statistics(StatisticsObject object);
 };
 
 class GUIApplication : public QWidget
 {
-    private:
-        QGraphicsView *pan_view2d;
-        QWidget *pan_view3d;
-        QWidget *pan_statistics;
-        QTableWidget *pan_table;
-        QWidget *slider_box;
+private:
+    QGraphicsView *pan_view2d;
+    QWidget *pan_view3d;
+    QWidget *pan_statistics;
+    QTableWidget *pan_table;
+    QWidget *slider_box;
 
-        QGridLayout *layout;
+    QGridLayout *layout;
 
-        QTableWidgetItem *tableObjects[9][10];
-        QStringList tableHeaders = { 
-            "ID", 
-            "Tijd in beeld", 
-            "PosX", 
-            "PosY", 
-            "PosZ", 
-            "Formaat", 
-            "Snelheid",
-            "Richting", 
-            "Versnelling" };
+    QTableWidgetItem *tableObjects[9][10];
+    QStringList tableHeaders = {
+        "ID",
+        "Tijd in beeld",
+        "PosX",
+        "PosY",
+        "PosZ",
+        "Formaat",
+        "Snelheid",
+        "Richting",
+        "Versnelling"};
 
-    public:
+public:
+    static void ValueChange(int v);
+    static void rotationChangeX(int X);
+    static void rotationChangeY(int Y);
+    static void rotationChangeZ(int Z);
+    static void positionChangeX(int X);
+    static void positionChangeY(int Y);
+    static void positionChangeZ(int Z);
+    static void filterChangex(int v);
+    static void filterChangex1(int v);
+    static void filterChangey(int v);
+    static void filterChangey1(int v);
+    static void filterChangez(int v);
+    static void filterChangez1(int v);
 
-        static void ValueChange(int v);
-        static void rotationChangeX(int X);
-        static void rotationChangeY(int Y);
-        static void rotationChangeZ(int Z);
-        static void positionChangeX(int X);
-        static void positionChangeY(int Y);
-        static void positionChangeZ(int Z);
-        
-        explicit GUIApplication(QWidget *parent = 0);
+    explicit GUIApplication(QWidget *parent = 0);
 
-        int insertObject(VisualObject obj);
-        int updateObject(int id, VisualObject obj);
-        void destroyObject(int id);
-
+    int insertObject(VisualObject obj);
+    int updateObject(int id, VisualObject obj);
+    void destroyObject(int id);
 };

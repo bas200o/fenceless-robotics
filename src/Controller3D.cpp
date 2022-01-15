@@ -4,6 +4,9 @@
 // pcl filter
 #include <pcl/filters/passthrough.h>
 #include "../include/SettingSingleton.hpp"
+#include <iostream>
+#include <chrono>
+#include <ctime>
 
 Controller3D::Controller3D(/* args */)
 {
@@ -193,29 +196,47 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<p
 {
     SettingSingleton *ds = ds->getInstance();
     struct filterSettings rs = ds->getFilter();
-
+    
     return Controller3D::filterPCL(OGCloud, rs.x, rs.x1, rs.y, rs.y1, rs.z, rs.z1);
 }
 
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
                                                                float x, float x1, float y, float y1, float z, float z1)
 {
-    pcl::PointCloud<pcl::PointXYZ>::Ptr filterCloud(new pcl::PointCloud<pcl::PointXYZ>);
-    pcl::copyPointCloud(*OGCloud, *filterCloud);
-    pcl::PassThrough<pcl::PointXYZ> pass;
-    pass.setInputCloud(filterCloud);
-    pass.setFilterFieldName("x");
-    pass.setFilterLimits(x, x1);
-    pass.setFilterFieldName("y");
-    pass.setFilterLimits(y, y1);
-    pass.setFilterFieldName("z");
-    pass.setFilterLimits(z, z1);
-    pass.filter(*filterCloud);
 
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr rCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
-    pcl::copyPointCloud(*filterCloud, *rCloud);
+    auto start = std::chrono::system_clock::now();
+    std::cout << "Filter box : \n";
+    std::cout << "x = " << x << ", x1 = " << x1 << "\n";
+    std::cout << "y = " << y << ", y1 = " << y1 << "\n";
+    std::cout << "z = " << z << ", z1 = " << z1 << std::endl;
+    
+    pcl::PointCloud<pcl::PointXYZRGB> filteredCloud;
+    filteredCloud.reserve(OGCloud->points.size());
+    
+    for (pcl::PointCloud<pcl::PointXYZRGB>::iterator it = OGCloud->begin(); it != OGCloud->end(); it++)
+    {
+        if (!(  
+                it->x < x || it->x > x1 ||
+                it->y < y || it->y > y1 ||
+                it->z < z || it->z > z1
+            ))
+        {
+            filteredCloud.push_back(*it);
+        }
+    }
 
-    return rCloud;
+    *OGCloud = std::move(filteredCloud);
+
+    auto end = std::chrono::system_clock::now();
+
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+
+    std::cout << "finished computation at " << std::ctime(&end_time)
+              << "elapsed time: " << elapsed_seconds.count() << "s" << std::endl;
+    std::cout << "Displaying " << OGCloud->points.size() << " points" << std::endl; 
+
+    return OGCloud;
 }
 
 //
