@@ -194,7 +194,6 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::movePCL(pcl::PointCloud<pcl
 // Gets xyz from singleton
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud)
 {
-    std::cout << "kees";
     SettingSingleton *ds = ds->getInstance();
     struct filterSettings rs = ds->getFilter();
     
@@ -212,7 +211,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<p
     std::cout << "z = " << z << ", z1 = " << z1 << std::endl;
     
     pcl::PointCloud<pcl::PointXYZRGB> filteredCloud;
-    filteredCloud.reserve(OGCloud->points.size() / 10);
+    filteredCloud.reserve(OGCloud->points.size());
     
     for (pcl::PointCloud<pcl::PointXYZRGB>::iterator it = OGCloud->begin(); it != OGCloud->end(); it++)
     {

@@ -58,6 +58,46 @@ void GUIApplication::filterChangex(int v)
     ds->setFilter(fs);
 }
 
+void GUIApplication::filterChangex1(int v)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct filterSettings fs = ds->getFilter();
+    fs.x1 = (float)(v / 1000.0);
+    ds->setFilter(fs);
+}
+
+void GUIApplication::filterChangey(int v)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct filterSettings fs = ds->getFilter();
+    fs.y = (float)(v / 1000.0);
+    ds->setFilter(fs);
+}
+
+void GUIApplication::filterChangey1(int v)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct filterSettings fs = ds->getFilter();
+    fs.y1 = (float)(v / 1000.0);
+    ds->setFilter(fs);
+}
+
+void GUIApplication::filterChangez(int v)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct filterSettings fs = ds->getFilter();
+    fs.z = (float)(v / 1000.0);
+    ds->setFilter(fs);
+}
+
+void GUIApplication::filterChangez1(int v)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct filterSettings fs = ds->getFilter();
+    fs.z1 = (float)(v / 1000.0);
+    ds->setFilter(fs);
+}
+
 GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 {
     setFixedSize(1240, 830);
@@ -126,7 +166,26 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     sliderFX->setMinimum(-4000);
     sliderFX->setMaximum(4000);
     connect(sliderFX, &QSlider::valueChanged, this, GUIApplication::filterChangex);
-
+    auto sliderFX1 = new QSlider(Qt::Horizontal);
+    sliderFX1->setMinimum(-4000);
+    sliderFX1->setMaximum(4000);
+    connect(sliderFX1, &QSlider::valueChanged, this, GUIApplication::filterChangex1);
+    auto sliderFY = new QSlider(Qt::Horizontal);
+    sliderFY->setMinimum(-4000);
+    sliderFY->setMaximum(4000);
+    connect(sliderFY, &QSlider::valueChanged, this, GUIApplication::filterChangey);
+    auto sliderFY1 = new QSlider(Qt::Horizontal);
+    sliderFY1->setMinimum(-4000);
+    sliderFY1->setMaximum(4000);
+    connect(sliderFY1, &QSlider::valueChanged, this, GUIApplication::filterChangey1);
+    auto sliderFZ = new QSlider(Qt::Horizontal);
+    sliderFZ->setMinimum(-4000);
+    sliderFZ->setMaximum(4000);
+    connect(sliderFZ, &QSlider::valueChanged, this, GUIApplication::filterChangez);
+    auto sliderFZ1 = new QSlider(Qt::Horizontal);
+    sliderFZ1->setMinimum(-4000);
+    sliderFZ1->setMaximum(4000);
+    connect(sliderFZ1, &QSlider::valueChanged, this, GUIApplication::filterChangez1);
 
     auto mx = new QLabel("move x");
     auto my = new QLabel("move y");
@@ -134,6 +193,9 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     auto rx = new QLabel("rotate x");
     auto ry = new QLabel("rotate y");
     auto rz = new QLabel("rotate z");
+    auto fx = new QLabel("filter x");
+    auto fy = new QLabel("filter y");
+    auto fz = new QLabel("filter z");
 
     // Combining layout
     layout = new QGridLayout(this);
@@ -155,5 +217,13 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     layout->addWidget(sliderRtZ, 7, 1, 1, 2);
     layout->addWidget(rz, 7, 0, 1, 1);
 
-    layout->addWidget(sliderFX, 8, 1, 1, 2);
+    layout->addWidget(sliderFX, 8, 1, 1, 1);
+    layout->addWidget(sliderFX1, 8, 2, 1, 1);
+    layout->addWidget(fx, 8, 0, 1, 1);
+    layout->addWidget(sliderFY, 9, 1, 1, 1);
+    layout->addWidget(sliderFY1, 9, 2, 1, 1);
+    layout->addWidget(fy, 9, 0, 1, 1);
+    layout->addWidget(sliderFZ, 10, 1, 1, 1);
+    layout->addWidget(sliderFZ1, 10, 2, 1, 1);
+    layout->addWidget(fz, 10, 0, 1, 1);
 }

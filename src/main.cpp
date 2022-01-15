@@ -92,13 +92,14 @@ int testmain()
   viewer->addPointCloud(cloud2, "cloud2");
   // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
   viewer->initCameraParameters();
+  viewer->addCoordinateSystem();
+  viewer->setWindowName("fenceless-robotics");
   viewer->spinOnce(200);
 
 
 
   while (true)
   {
-    std::cout << "jan" << std::endl;
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudCopy(new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::copyPointCloud(*cloud, *cloudCopy);
     cloudCopy = Controller3D::rotatePCL(cloudCopy);
@@ -111,7 +112,7 @@ int testmain()
 
     viewer->removeAllPointClouds();
     viewer->addPointCloud(mainCloud, "maincloud");
-    viewer->addCoordinateSystem();
+    
     viewer->updatePointCloud(cloud2, "cloud2"); 
 
     // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
