@@ -39,35 +39,50 @@ int DataManager::dataMain()
 
 
 
-int maingui(int argc, char **argv)
+int DataManager::maingui(int argc, char **argv)
 {
-    CameraConnector *camCon = camCon->getInstance();
-    // camCon->connectCameras(2, 1);
-
     QApplication app(argc, argv);
     GUIData *guiData = guiData->getInstance();
     GUIApplication gui;
 
-
     tbb::task_arena arena;
-
-    arena.enqueue( [&] {
-        
-
-        Controller3D cont3;
-        Controller2D cont2;
-    });
 
     arena.enqueue( [&] 
     {
-        // QObject::connect(&guiData, &GUIData::changed_table, &gui, &GUIApplication::updateTable);
+        this_thread::sleep_for(std::chrono::seconds(5));
 
-        // guiData.updateTable(QList<VisualObject> {});
+        while(true)
+        {
+            DataFlags df = GUIData::getInstance()->getDataFlags();
+            cout << "Dataflags: " << df.view2d << df.visualobject << df.stats << endl;
+
+            if(df.view2d)
+                gui.update2d(GUIData::getInstance()->getView2D());
+
+            if(df.visualobject)
+                gui.updateTable(GUIData::getInstance()->getTable());
+
+            if(df.stats)
+                gui.updateStatistics(GUIData::getInstance()->getStats());
+
+            this_thread::sleep_for(std::chrono::seconds(2));    
+        }
     });
+
+#ifndef __DEBUG_UI
+    arena.enqueue( [&] {
+
+        cout << "Filling with random objects in 5 seconds" << endl;
+        this_thread::sleep_for(std::chrono::seconds(5));        
+        GUIData::getInstance()->setObjects(vector<VisualObject> {
+            { 1, {10, 20, 30}, 0.0f, {100, 200, 300}, 123, 567 },
+            { 2, {12, 22, 32}, 0.0f, {102, 202, 302}, 123, 567 }, 
+            { 3, {13, 23, 33}, 0.3f, {103, 203, 303}, 123, 456 }
+        });
+    });
+#endif
     
 
-
     gui.show();
-
     return app.exec();
 }

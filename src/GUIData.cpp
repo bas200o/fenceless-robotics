@@ -115,6 +115,12 @@ vector<VisualObject> GUIData::getTable()
     if(table_busy)
         return vector<VisualObject>(); // Empty vector indicates bad result
     
+    cout << "Returning table: \n";
+    for(VisualObject v: table)
+    {
+        cout << v.direction.x << v.direction.y << v.direction.z << endl;
+    }
+
     table_newdata = false;
     return table;
 }
