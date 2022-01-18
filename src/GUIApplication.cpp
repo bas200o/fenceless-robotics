@@ -100,7 +100,7 @@ void GUIApplication::filterChangez1(int v)
 
 GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 {
-    setFixedSize(1240, 830);
+    setFixedSize(1240, 950);
     setWindowTitle("Fenceless Robotics");
 
     // Panel 2D View
@@ -122,7 +122,7 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 
     // Panel Table
     pan_table = new QTableWidget(this);
-    pan_table->setFixedSize(1220, 400);
+    pan_table->setFixedSize(1220, 300);
 
     pan_table->setRowCount(1);
     pan_table->setColumnCount(tableHeaders.count());

@@ -39,7 +39,7 @@ int DataManager::dataMain()
 
 
 
-int maingui(int argc, char **argv)
+int DataManager::maingui(int argc, char **argv)
 {
     CameraConnector *camCon = camCon->getInstance();
     // camCon->connectCameras(2, 1);

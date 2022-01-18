@@ -156,7 +156,7 @@ void Controller3D::CalculateSpeed()
     }
     else
     {
-        lastInfo[0].objects[0].setSpeed(0);
+        // lastInfo[0].objects[0].setSpeed(0);
         for (int i = 0 ; i < lastInfo[0].objects.size() ; i++ )
         {
         lastInfo[0].objects[i].setSpeed(0);
