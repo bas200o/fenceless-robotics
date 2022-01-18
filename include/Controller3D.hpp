@@ -13,6 +13,7 @@
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/segmentation/extract_clusters.h>
 #include "../include/SettingSingleton.hpp"
+#include "../include/GUIData.hpp"
 
 class Controller3D
 {
@@ -36,6 +37,8 @@ public:
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr CombinePointClouds(int pCloud);
     //Calculates the speed of object by comparing them to either the previous pointcloud or the one before
     void CalculateSpeed();
+    //
+    void pushUIData();
     //Rotates a pointcloud based on the settings in SettingSingleton
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud);
     //Rotates a pointcloud based on the settings provided

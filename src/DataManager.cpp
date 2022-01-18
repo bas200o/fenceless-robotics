@@ -21,6 +21,7 @@ int DataManager::dataMain()
     cont3.ProccesPointcloud();
     cont3.DetectObjects(0);
     cont3.CalculateSpeed();
+    
     }
     //Controller2D cont2;
     //while(true)

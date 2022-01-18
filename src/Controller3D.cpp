@@ -328,4 +328,9 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<p
     return OGCloud;
 }
 
+void Controller3D::pushUIData(){
+    GUIData::getInstance()->setObjects(lastInfo[0]);
+}
+
+
 //
