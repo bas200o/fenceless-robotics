@@ -2,7 +2,6 @@
 #include "../include/SettingSingleton.hpp"
 #include <iostream>
 
-
 GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 {
     setFixedSize(1240, 950);
@@ -134,29 +133,46 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 
 }
 
-void GUIApplication::updateTable(QList<VisualObject> objects)
+void GUIApplication::updateTable(vector<VisualObject> objects)
 {
-    pan_table->setRowCount(objects.count());
+    pan_table->setRowCount(objects.size());
     int row = 0;
+
+    cout << "New ontents of table:\n";
+
     for(VisualObject obj : objects)
     {
-        QString pos = QString("[%1,%2,%3]").arg(obj.position.x, obj.position.y, obj.position.z);
-        QString dir = QString("[%1,%2,%3]").arg(obj.direction.x, obj.direction.y, obj.direction.z);
+        QString pos = QString("[%1, %2, %3]")
+            .arg(obj.position.x)
+            .arg(obj.position.y)
+            .arg(obj.position.z);
+        QString dir = QString("[%1, %2, %3]")
+            .arg(obj.direction.x)
+            .arg(obj.direction.y)
+            .arg(obj.direction.z);
 
-        pan_table->setItem(row, 0, new QTableWidgetItem("-"));              // ID
-        pan_table->setItem(row, 1, new QTableWidgetItem("-"));              // Tijd in beeld
-        pan_table->setItem(row, 2, new QTableWidgetItem(pos));              // Positie
-        pan_table->setItem(row, 3, new QTableWidgetItem(obj.size));         // Diameter
-        pan_table->setItem(row, 4, new QTableWidgetItem(dir));              // Richting
-        pan_table->setItem(row, 5, new QTableWidgetItem(obj.speed));        // Snelheid
-        pan_table->setItem(row, 6, new QTableWidgetItem(obj.acceleration)); // Versnelling
+        cout // brrrr
+            << row << " | "
+            << pos.toStdString() << " | "
+            << obj.size << " | "
+            << dir.toStdString() << " | "
+            << obj.speed << " | "
+            << obj.acceleration 
+        << endl;
+
+        // pan_table->setItem(row, 0, new QTableWidgetItem("-"));                                  // ID -> Removed for now
+        pan_table->setItem(row, 1, new QTableWidgetItem(QString("%1").arg(obj.showTime)));      // Tijd in beeld
+        pan_table->setItem(row, 2, new QTableWidgetItem(pos));                                  // Positie
+        pan_table->setItem(row, 3, new QTableWidgetItem(QString("%1").arg(obj.size)));          // Diameter
+        pan_table->setItem(row, 4, new QTableWidgetItem(dir));                                  // Richting
+        pan_table->setItem(row, 5, new QTableWidgetItem(QString("%1").arg(obj.speed)));         // Snelheid
+        pan_table->setItem(row, 6, new QTableWidgetItem(QString("%1").arg(obj.acceleration)));  // Versnelling
 
         row++;
     }   
-    pan_table->repaint();
 }
 
-void GUIApplication::update2d(QList<Object2D> objects){}
+void GUIApplication::update2d(vector<Object2D> objects){}
 void GUIApplication:: updateStatistics(StatisticsObject obj){}
 
 void GUIApplication::rotationChangeX(int x)

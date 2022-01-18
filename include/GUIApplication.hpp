@@ -52,8 +52,8 @@ class GUIApplication : public QWidget
         static void filterChangez(int v);
         static void filterChangez1(int v);
 
-        void update2d(QList<Object2D> objects);
-        void updateTable(QList<VisualObject> objects);
+        void update2d(vector<Object2D> objects);
+        void updateTable(vector<VisualObject> objects);
         void updateStatistics(StatisticsObject object);
         
 };
