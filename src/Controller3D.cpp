@@ -38,26 +38,27 @@ void Controller3D::CreateNewInformation()
     }
     CameraConnector *camCon = camCon->getInstance();
     lastInfo[0].AddPointClouds(camCon->retrievePointClouds());
+    lastInfo[0].setTimeStamp(camCon->getLastTimeStamp());
     printf("Created first info \n");
     return;
 }
 
-void Controller3D::DetectObjects(int pCloud)
+void Controller3D::DetectObjects(int pInfo)
 {
     printf("Detecting \n");
 
-    if (pCloud >= 5)
+    if (pInfo >= 5)
     {
         return;
     };
-    if (lastInfo[pCloud].getObjects().size() > 0)
+    if (lastInfo[pInfo].getObjects().size() > 0)
     {
         return;
     }
-    pcl::PointCloud<pcl::PointXYZRGB> tempCloud(lastInfo[pCloud].GetPointCloud());
+    pcl::PointCloud<pcl::PointXYZRGB> tempInfo(lastInfo[pInfo].GetPointCloud());
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_f(new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
-    *cloud = tempCloud;
+    *cloud = tempInfo;
 
     pcl::VoxelGrid<pcl::PointXYZRGB> vg;
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_filtered(new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -126,19 +127,63 @@ void Controller3D::DetectObjects(int pCloud)
         cloud_cluster->width = cloud_cluster->size();
         cloud_cluster->height = 1;
         cloud_cluster->is_dense = true;
-        lastInfo[pCloud].InsertObject(*cloud_cluster);
+        lastInfo[pInfo].InsertObject(*cloud_cluster);
     }
     return;
 }
 
-void Controller3D::CombinePointClouds(int pCloud)
+void Controller3D::CombinePointClouds(int pInfo)
 {
+    pcl::PointCloud<pcl::PointXYZRGB> full;
+    for (auto &&pointcloud : lastInfo[pInfo].getPointClouds())
+    {
+        full += pointcloud;
+    }
+    lastInfo[pInfo].AddFullPointCloud(full);
     return;
 }
 
-void Controller3D::CalculateSpeed(int pCloud)
+void Controller3D::CalculateSpeed()
 {
-    return;
+    Information3D previous;
+    if (lastInfo[2].getObjects().size() > 0)
+    {
+        previous = lastInfo[2];
+    }
+    else if (lastInfo[1].getObjects().size() > 0)
+    {
+        previous = lastInfo[1];
+    }
+    else
+    {
+        lastInfo[0].objects[0].setSpeed(0);
+        for (int i = 0 ; i < lastInfo[0].objects.size() ; i++ )
+        {
+        lastInfo[0].objects[i].setSpeed(0);
+        }
+        return;
+    }
+    FoundObject movedObject;
+    float shortestDist = FLT_MAX;
+    float dist;
+    for (int i = 0 ; i < lastInfo[0].objects.size() ; i++ )
+    {
+        FoundObject object = lastInfo[0].objects[i];
+        for (FoundObject oldObject : previous.getObjects())
+        {
+            dist = euclideanDistance(object.getLocation(), oldObject.getLocation());
+            if (object.getSize() * -0.10 < object.getSize() - oldObject.getSize() < object.getSize() * 0.10 && dist < shortestDist && dist < previous.GetPointCloud().width)
+            {
+                shortestDist = dist;
+                movedObject = oldObject;
+            }
+        }
+        double speed = 0;
+        //calculate speed
+        //dist/time
+        speed = shortestDist / (lastInfo[0].getTimeStamp() - previous.getTimeStamp());
+        lastInfo[0].objects[i].setSpeed(speed);
+    }
 }
 
 // Gets xyz from singleton

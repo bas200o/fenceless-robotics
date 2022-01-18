@@ -45,9 +45,10 @@ private:
     virtual void connectCamera() = 0;
 
 public:
+    double timeStamp;
     //retrieves the latest cloud
     virtual pcl::PointCloud<pcl::PointXYZ> getLatestPointCloud() = 0;
-    virtual pcl::PointCloud<pcl::PointXYZRGB> getLatestPointCloudRGB() = 0;
+    virtual std::tuple<pcl::PointCloud<pcl::PointXYZRGB>, double> getLatestPointCloudRGB() = 0;
     //main loop of the handler thread
     virtual void runThread() = 0;
 };

@@ -90,8 +90,15 @@ std::vector<pcl::PointCloud<pcl::PointXYZRGB>> CameraConnector::retrievePointClo
 {
     float s = connectedCams.size();
     std::vector<pcl::PointCloud<pcl::PointXYZRGB>> pointclouds;
+    std::tuple<pcl::PointCloud<pcl::PointXYZRGB>, double> cloudStamp;
     for(int i = 0; i<s ; i++) {
-        pointclouds.push_back(connectedCams.at(i)->getLatestPointCloudRGB());
+        cloudStamp = connectedCams.at(i)->getLatestPointCloudRGB();
+        pointclouds.push_back(std::get<0>(cloudStamp));
     }
+    CameraConnector::lastTimeStamp = std::get<1>(cloudStamp);
     return pointclouds;
+}
+
+double CameraConnector::getLastTimeStamp(){
+    return lastTimeStamp;
 }

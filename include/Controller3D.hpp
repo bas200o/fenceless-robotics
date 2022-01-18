@@ -32,8 +32,7 @@ public:
     //Combines the pointclouds from pointcloudinfo lastinfo[pcloud]
     void CombinePointClouds(int pCloud);
     //Calculates the speed of object by comparing them to either the previous pointcloud or the one before
-    void CalculateSpeed(int pCloud);
-
+    void CalculateSpeed();
     //Rotates a pointcloud based on the settings in SettingSingleton
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud);
     //Rotates a pointcloud based on the settings provided
@@ -46,9 +45,10 @@ public:
     //Moves a pointcloud based on passed variables
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud,
                                                             float x, float y, float z);
-    //Filters a pointcloud based on the settings in SettingSingleton
+//Filters a pointcloud based on the settings in SettingSingleton
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud);
     //Filters a pointcloud based on passed variables
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
                                                             float x, float x1, float y, float y1, float z, float z1);
+
 };

@@ -115,7 +115,7 @@ int testmain()
     
     viewer->updatePointCloud(cloud2, "cloud2"); 
 
-    // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
+//     viewer->spinOnce(200);
 
     viewer->spinOnce(200);
   }
@@ -129,11 +129,13 @@ int task2(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
-  CameraConnector *camCon = CameraConnector::getInstance();
-  camCon->connectCameras(0, 1);
-  camCon->connectCameras(1, 1);
+ // CameraConnector *camCon = CameraConnector::getInstance();
+ // camCon->connectCameras(0, 1);
+  //camCon->connectCameras(1, 1);
   // het();
-  std::thread t1(task2, argc, argv);
+  //std::thread t1(task2, argc, argv);
 
-  return maingui(argc, argv);
+  //return maingui(argc, argv);
+  DataManager dm;
+  dm.dataMain();
 }

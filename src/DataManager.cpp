@@ -3,6 +3,7 @@
 #include "../include/Controller3D.hpp"
 #include "../include/Controller2D.hpp"
 #include "../include/CameraConnector.hpp"
+#include "../include/DataManager.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -10,15 +11,23 @@
 #include <tbb/parallel_for.h>
 #include <tbb/task_arena.h>
 
-int oldmain()
+int DataManager::dataMain()
 {
+    
     CameraConnector *camCon = camCon->getInstance();
-    camCon->connectCameras(2, 1);
-    GUIApplication gui;
+    camCon->connectCameras(0, 1);
+    //GUIApplication gui;
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     Controller3D cont3;
+    while(true){
     cont3.CreateNewInformation();
+    //cont3.rotate
+    //cont3.move
+    //cont3.filter
+    cont3.CombinePointClouds(0);
     cont3.DetectObjects(0);
-
+    cont3.CalculateSpeed();
+    }
     //Controller2D cont2;
     //while(true)
 

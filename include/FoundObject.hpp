@@ -11,19 +11,28 @@ class FoundObject
 {
 private:
     //Point with the location/centermass of the FoundObject
-    std::tuple<float, float> location;
+    pcl::PointXYZRGB location;
     //The longest size of an object
-    float size;
+    float size = 0;
+    double speed = 1;
     //The centermass of the object
-    std::tuple<float, float> centerMass;
+    std::tuple<float, float, float> centerMass;
     //The pointcloud of the object
     pcl::PointCloud<pcl::PointXYZRGB> objectCloud;
     //Calculates the size and location of the object
     void CalculateValues();
 
+
 public:
     //Constructor
     FoundObject(pcl::PointCloud<pcl::PointXYZRGB> objectCloud);
+    FoundObject();
     //Destructor
     ~FoundObject();
+    void setSpeed(double sp);
+    double getSpeed();
+    pcl::PointCloud<pcl::PointXYZRGB> getObjectCloud();
+    pcl::PointXYZRGB getLocation();
+    float getSize();
+
 };
