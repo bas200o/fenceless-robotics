@@ -30,6 +30,8 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 
     pan_table->setRowCount(1);
     pan_table->setColumnCount(tableHeaders.count());
+    pan_table->setColumnWidth(2, 200);
+    pan_table->setColumnWidth(4, 200);
     pan_table->setHorizontalHeaderLabels(tableHeaders);
 
     // Filling 1 row with zeroes as a starter
