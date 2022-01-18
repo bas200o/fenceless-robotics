@@ -45,6 +45,14 @@ class GUIApplication : public QWidget
         static void positionChangeX(int X);
         static void positionChangeY(int Y);
         static void positionChangeZ(int Z);
+
+        static void rotationChangeX1(int X);
+        static void rotationChangeY1(int Y);
+        static void rotationChangeZ1(int Z);
+        static void positionChangeX1(int X);
+        static void positionChangeY1(int Y);
+        static void positionChangeZ1(int Z);
+
         static void filterChangex(int v);
         static void filterChangex1(int v);
         static void filterChangey(int v);
