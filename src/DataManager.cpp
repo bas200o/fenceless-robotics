@@ -4,9 +4,6 @@
 #include "../include/Controller2D.hpp"
 #include "../include/CameraConnector.hpp"
 
-// #include <tbb/tbb_thread.h>
-// #include <tbb/tbb.h>
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -20,7 +17,7 @@ int main(int argc, char **argv)
     CameraConnector *camCon = camCon->getInstance();
 
     QApplication app(argc, argv);
-    GUIData guiData;
+    GUIData *guiData = guiData->getInstance();
     GUIApplication gui;
 
 
@@ -48,13 +45,6 @@ int main(int argc, char **argv)
     });
     
 
-
-    // QObject::connect(&guiData, &GUIData::changed_table, 
-    //                     &gui, &GUIApplication::updateTable);
-    // QObject::connect(&guiData, &GUIData::changed_statistics,
-    //                     &gui, &GUIApplication::updateStatistics);
-    // QObject::connect(&guiData, &GUIData::changed_2d,
-    //                     &gui, &GUIApplication::update2d);
 
     gui.show();
 

@@ -65,21 +65,4 @@ class GUIData
         StatisticsObject stats;
         bool stats_busy, stats_newdata;
 
-
-    /*public Q_SLOTS: // Coming from the worker threads
-        void addObject_2d(Object2D obj);
-        void addObject_table(VisualObject obj);
-        
-        void updateObject_2d(Object2D obj);
-        void updateObject_table(VisualObject obj);
-        void updateObject_statistics(StatisticsObject obj);
-
-        void updateTable(QList<VisualObject> newTable);
-        void updateTable(Information3D newData);
-
-    Q_SIGNALS: // Going to the UI
-        void changed_2d(QList<Object2D> objects);
-        void changed_table(QList<VisualObject> objects);
-        void changed_statistics(StatisticsObject object);
-    */
 };

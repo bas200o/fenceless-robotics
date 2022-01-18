@@ -22,6 +22,7 @@ GUIData* GUIData::getInstance()
 int GUIData::setObjects(vector<VisualObject> objects)
 {
     int success = 1;
+
     // Table
     if(!table_busy)
     {
@@ -32,7 +33,9 @@ int GUIData::setObjects(vector<VisualObject> objects)
         table_busy = false;
         table_newdata = true;
     } else
+    {
         success = 0;
+    }
 
     // View2D
     vector<Object2D> objs;
@@ -58,8 +61,10 @@ int GUIData::setObjects(vector<VisualObject> objects)
         view2d_busy = false;
         view2d_newdata = true;
     } else
+    {
         success = 0;
-
+    }
+    
     return success;
 }
 
