@@ -30,6 +30,8 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 
     pan_table->setRowCount(1);
     pan_table->setColumnCount(tableHeaders.count());
+    pan_table->setColumnWidth(2, 200);
+    pan_table->setColumnWidth(4, 200);
     pan_table->setHorizontalHeaderLabels(tableHeaders);
 
     // Filling 1 row with zeroes as a starter
@@ -63,6 +65,32 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     sliderRtZ->setMinimum(-4000);
     sliderRtZ->setMaximum(4000);
     connect(sliderRtZ, &QSlider::valueChanged, this, GUIApplication::rotationChangeZ);
+
+    // Yannick
+    auto sliderMvX1 = new QSlider(Qt::Horizontal);
+    sliderMvX1->setMinimum(-4000);
+    sliderMvX1->setMaximum(4000);
+    connect(sliderMvX1, &QSlider::valueChanged, this, GUIApplication::positionChangeX);
+    auto sliderMvY1 = new QSlider(Qt::Horizontal);
+    sliderMvY1->setMinimum(-4000);
+    sliderMvY1->setMaximum(4000);
+    connect(sliderMvY1, &QSlider::valueChanged, this, GUIApplication::positionChangeY);
+    auto sliderMvZ1 = new QSlider(Qt::Horizontal);
+    sliderMvZ1->setMinimum(-4000);
+    sliderMvZ1->setMaximum(4000);
+    connect(sliderMvZ1, &QSlider::valueChanged, this, GUIApplication::positionChangeZ);
+    auto sliderRtX1 = new QSlider(Qt::Horizontal);
+    sliderRtX1->setMinimum(-4000);
+    sliderRtX1->setMaximum(4000);
+    connect(sliderRtX1, &QSlider::valueChanged, this, GUIApplication::rotationChangeX);
+    auto sliderRtY1 = new QSlider(Qt::Horizontal);
+    sliderRtY1->setMinimum(-4000);
+    sliderRtY1->setMaximum(4000);
+    connect(sliderRtY1, &QSlider::valueChanged, this, GUIApplication::rotationChangeY);
+    auto sliderRtZ1 = new QSlider(Qt::Horizontal);
+    sliderRtZ1->setMinimum(-4000);
+    sliderRtZ1->setMaximum(4000);
+    connect(sliderRtZ1, &QSlider::valueChanged, this, GUIApplication::rotationChangeZ);
 
     auto sliderFX = new QSlider(Qt::Horizontal);
     sliderFX->setMinimum(-4000);
@@ -110,18 +138,25 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     layout->addWidget(pan_statistics, 0, 2);
     layout->addWidget(pan_table, 1, 0, 1, 3);
 
-    layout->addWidget(sliderMvX, 2, 1, 1, 2);
+    layout->addWidget(sliderMvX, 2, 1, 1, 1);
     layout->addWidget(mx, 2, 0, 1, 1);
-    layout->addWidget(sliderMvY, 3, 1, 1, 2);
+    layout->addWidget(sliderMvY, 3, 1, 1, 1);
     layout->addWidget(my, 3, 0, 1, 1);
-    layout->addWidget(sliderMvZ, 4, 1, 1, 2);
+    layout->addWidget(sliderMvZ, 4, 1, 1, 1);
     layout->addWidget(mz, 4, 0, 1, 1);
-    layout->addWidget(sliderRtX, 5, 1, 1, 2);
+    layout->addWidget(sliderRtX, 5, 1, 1, 1);
     layout->addWidget(rx, 5, 0, 1, 1);
-    layout->addWidget(sliderRtY, 6, 1, 1, 2);
+    layout->addWidget(sliderRtY, 6, 1, 1, 1);
     layout->addWidget(ry, 6, 0, 1, 1);
-    layout->addWidget(sliderRtZ, 7, 1, 1, 2);
+    layout->addWidget(sliderRtZ, 7, 1, 1, 1);
     layout->addWidget(rz, 7, 0, 1, 1);
+
+    layout->addWidget(sliderMvX1, 2, 2, 1, 1);
+    layout->addWidget(sliderMvY1, 3, 2, 1, 1);
+    layout->addWidget(sliderMvZ1, 4, 2, 1, 1);
+    layout->addWidget(sliderRtX1, 5, 2, 1, 1);
+    layout->addWidget(sliderRtY1, 6, 2, 1, 1);
+    layout->addWidget(sliderRtZ1, 7, 2, 1, 1);
 
     layout->addWidget(sliderFX, 8, 1, 1, 1);
     layout->addWidget(sliderFX1, 8, 2, 1, 1);
@@ -219,6 +254,54 @@ void GUIApplication::positionChangeZ(int z)
     rs.z = (float)(z / 1000.0);
     ds->setMove(rs);
 }
+
+//////////
+
+void GUIApplication::rotationChangeX1(int x)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct rotationSettings rs = ds->getRotate2();
+    rs.x = (float)(x / 1000.0);
+    ds->setRotate2(rs);
+}
+void GUIApplication::rotationChangeY1(int y)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct rotationSettings rs = ds->getRotate2();
+    rs.y = (float)(y / 1000.0);
+    ds->setRotate2(rs);
+}
+void GUIApplication::rotationChangeZ1(int z)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct rotationSettings rs = ds->getRotate2();
+    rs.z = (float)(z / 1000.0);
+    ds->setRotate2(rs);
+}
+void GUIApplication::positionChangeX1(int x)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct moveSettings rs = ds->getMove2();
+    rs.x = (float)(x / 1000.0);
+    ds->setMove2(rs);
+}
+void GUIApplication::positionChangeY1(int y)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct moveSettings rs = ds->getMove2();
+    rs.y = (float)(y / 1000.0);
+    ds->setMove2(rs);
+}
+void GUIApplication::positionChangeZ1(int z)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct moveSettings rs = ds->getMove2();
+    rs.z = (float)(z / 1000.0);
+    ds->setMove2(rs);
+}
+
+////////////
+
 void GUIApplication::filterChangex(int v)
 {
     SettingSingleton *ds = ds->getInstance();
