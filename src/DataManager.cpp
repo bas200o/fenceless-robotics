@@ -8,14 +8,15 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "oneapi/tbb/parallel_for.h"
-#include "oneapi/tbb/task_arena.h"
+#include "tbb/parallel_for.h"
+#include "tbb/task_arena.h"
 
 int DataManager::dataMain()
 {
     
     CameraConnector *camCon = camCon->getInstance();
     camCon->connectCameras(0, 1);
+    camCon->connectCameras(1, 1);
     //GUIApplication gui;
     std::this_thread::sleep_for(std::chrono::seconds(1));
     Controller3D cont3;

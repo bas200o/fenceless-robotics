@@ -72,7 +72,7 @@ int GUIData::setObjects(Information3D data)
 {
     vector<VisualObject> vos;
 
-    // TODO: Process Information3D
+    //for(auto : data.
 
     return setObjects(vos);
 }
