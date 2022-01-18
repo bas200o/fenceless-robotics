@@ -103,11 +103,7 @@ int testmain()
 
     viewer->removeAllPointClouds();
     viewer->addPointCloud(mainCloud, "maincloud");
-    
     viewer->updatePointCloud(cloud2, "cloud2"); 
-
-//     viewer->spinOnce(200);
-
     viewer->spinOnce(200);
   }
 }
@@ -125,9 +121,7 @@ int main(int argc, char *argv[])
   camCon->connectCameras(1, 1);
   std::this_thread::sleep_for(std::chrono::seconds(2));
   // het();
-  std::thread t1(task2, argc, argv);
-
-  //return maingui(argc, argv);
+  // std::thread t1(task2, argc, argv);
   DataManager dm;
   dm.dataMain();
 }

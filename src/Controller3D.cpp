@@ -10,6 +10,12 @@
 
 Controller3D::Controller3D(/* args */)
 {
+     pcl::visualization::PCLVisualizer::Ptr viewerTemp(new pcl::visualization::PCLVisualizer("3D Viewer"));
+    viewer = viewerTemp;
+    viewer->setBackgroundColor(0, 0, 0);
+    viewer->initCameraParameters();
+    viewer->addCoordinateSystem();
+    viewer->setWindowName("config sceen");
 }
 
 Controller3D::~Controller3D()
@@ -63,7 +69,7 @@ void Controller3D::DetectObjects(int pInfo)
     pcl::VoxelGrid<pcl::PointXYZRGB> vg;
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_filtered(new pcl::PointCloud<pcl::PointXYZRGB>);
     vg.setInputCloud(cloud);
-    vg.setLeafSize(0.01f, 0.01f, 0.01f);
+    vg.setLeafSize(0.03f, 0.03f, 0.03f);
     vg.filter(*cloud_filtered);
 
     // Create the segmentation object for the planar model and set all the parameters
@@ -134,7 +140,7 @@ void Controller3D::DetectObjects(int pInfo)
 
 void Controller3D::ProccesPointcloud()
 {
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr full;
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr full(new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud2(new pcl::PointCloud<pcl::PointXYZRGB>);
 
@@ -142,11 +148,19 @@ void Controller3D::ProccesPointcloud()
     *cloud = clouds.at(0);
     *cloud2 = clouds.at(1);
 
+
+
+
     for (size_t i = 0; i < cloud->points.size(); i++)
     {
       cloud->points[i].g = 0;
       cloud->points[i].b = 0;
     }
+
+    //debugging
+    viewer->removeAllPointClouds();
+    viewer->addPointCloud(full);
+    viewer->spinOnce(5);
 
     full = rotatePCL(cloud);
     full = movePCL(full);
@@ -154,6 +168,8 @@ void Controller3D::ProccesPointcloud()
     full = rotatePCL(full, SettingSingleton::getInstance()->getRotate2());
     full = filterPCL(full);
     lastInfo[0].AddFullPointCloud(*full);
+    
+
     return;
 }
 
@@ -181,7 +197,7 @@ void Controller3D::CalculateSpeed()
     }
     else
     {
-        lastInfo[0].objects[0].setSpeed(0);
+        // lastInfo[0].objects[0].setSpeed(0);
         for (int i = 0 ; i < lastInfo[0].objects.size() ; i++ )
         {
         lastInfo[0].objects[i].setSpeed(0);
@@ -281,10 +297,10 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<p
 {
 
     auto start = std::chrono::system_clock::now();
-    std::cout << "Filter box : \n";
-    std::cout << "x = " << x << ", x1 = " << x1 << "\n";
-    std::cout << "y = " << y << ", y1 = " << y1 << "\n";
-    std::cout << "z = " << z << ", z1 = " << z1 << std::endl;
+    // std::cout << "Filter box : \n";
+    // std::cout << "x = " << x << ", x1 = " << x1 << "\n";
+    // std::cout << "y = " << y << ", y1 = " << y1 << "\n";
+    // std::cout << "z = " << z << ", z1 = " << z1 << std::endl;
     
     pcl::PointCloud<pcl::PointXYZRGB> filteredCloud;
     filteredCloud.reserve(OGCloud->points.size());
@@ -308,9 +324,9 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<p
     std::chrono::duration<double> elapsed_seconds = end - start;
     std::time_t end_time = std::chrono::system_clock::to_time_t(end);
 
-    std::cout << "finished computation at " << std::ctime(&end_time)
-              << "elapsed time: " << elapsed_seconds.count() << "s" << std::endl;
-    std::cout << "Displaying " << OGCloud->points.size() << " points" << std::endl; 
+    // std::cout << "finished computation at " << std::ctime(&end_time)
+    //           << "elapsed time: " << elapsed_seconds.count() << "s" << std::endl;
+    // std::cout << "Displaying " << OGCloud->points.size() << " points" << std::endl; 
 
     return OGCloud;
 }

@@ -19,6 +19,7 @@ class Controller3D
 private:
     //Array with the last 5 info of progressed pointclouds
     Information3D lastInfo[5];
+    pcl::visualization::PCLVisualizer::Ptr viewer;
 
 public:
     //Constructor

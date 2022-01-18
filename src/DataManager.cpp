@@ -19,10 +19,6 @@ int DataManager::dataMain()
     while(true){
     cont3.CreateNewInformation();
     cont3.ProccesPointcloud();
-    //cont3.rotate
-    //cont3.move
-    //cont3.filter
-    //cont3.CombinePointClouds(0);
     cont3.DetectObjects(0);
     cont3.CalculateSpeed();
     }
