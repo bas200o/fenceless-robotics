@@ -71,3 +71,7 @@ return;
     float FoundObject::getSize(){
         return FoundObject::size;
     }
+
+    std::tuple<float, float, float> FoundObject::getCenterMass(){
+        return FoundObject::centerMass;
+    };

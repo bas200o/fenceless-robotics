@@ -72,10 +72,21 @@ int GUIData::setObjects(Information3D data)
 {
     vector<VisualObject> vos;
 
-    //for(auto : data.
+    for(FoundObject obj : data.getObjects()){
+        std::tuple<float, float, float> center = obj.getCenterMass();
+        vec3 vec = {(int)(get<0>(center)*1000), (int)(get<1>(center)*1000), (int)(get<2>(center)*1000)};
+        VisualObject vs = {-1, vec, obj.getSize(), -1, (int)obj.getSpeed()*1000, -1};
+        vos.push_back(vs);
+    // int showTime;
+    // vec3 position;
+    // double size;
+    // vec3 direction;
+    // double speed;
+    // double acceleration;
+    }
 
     return setObjects(vos);
-}
+};
 
 int GUIData::setStatistics(StatisticsObject newStats)
 {
