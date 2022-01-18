@@ -45,17 +45,6 @@
 
 #include <assert.h>
 
-// RSCameraHandler camHandler;
-
-// void camTask()
-// {
-//   camHandler.runThread();
-// }
-// // The function we want to execute on the new thread.
-// void task1(string msg)
-// {
-//   std::cout << "task1 says: " << msg;
-// }
 
 int testmain()
 {
@@ -105,10 +94,12 @@ int testmain()
     cloudCopy = Controller3D::rotatePCL(cloudCopy);
     cloudCopy = Controller3D::movePCL(cloudCopy);
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr mainCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+
     *mainCloud += *cloud2;
     *mainCloud += *cloudCopy;
     
     mainCloud = Controller3D::filterPCL(mainCloud);
+
 
     viewer->removeAllPointClouds();
     viewer->addPointCloud(mainCloud, "maincloud");
@@ -129,11 +120,12 @@ int task2(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
- // CameraConnector *camCon = CameraConnector::getInstance();
- // camCon->connectCameras(0, 1);
-  //camCon->connectCameras(1, 1);
+  CameraConnector *camCon = CameraConnector::getInstance();
+  camCon->connectCameras(0, 1);
+  camCon->connectCameras(1, 1);
+  std::this_thread::sleep_for(std::chrono::seconds(2));
   // het();
-  //std::thread t1(task2, argc, argv);
+  std::thread t1(task2, argc, argv);
 
   //return maingui(argc, argv);
   DataManager dm;

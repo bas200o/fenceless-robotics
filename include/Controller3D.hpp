@@ -27,10 +27,12 @@ public:
     ~Controller3D();
     //Does object detection/segmentation on the information passed
     void DetectObjects(int pCloud);
+    //Procceses the new point cloud  only works with 2 cams
+    void ProccesPointcloud();
     //Creates information from by receiving the pointclouds from CameraConnector
     void CreateNewInformation();
     //Combines the pointclouds from pointcloudinfo lastinfo[pcloud]
-    void CombinePointClouds(int pCloud);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr CombinePointClouds(int pCloud);
     //Calculates the speed of object by comparing them to either the previous pointcloud or the one before
     void CalculateSpeed();
     //Rotates a pointcloud based on the settings in SettingSingleton
@@ -42,6 +44,8 @@ public:
                                                             float x, float y, float z);
     //Moves a pointcloud based on the settings in SettingSingleton
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud);
+    //Moves a pointcloud based on the settings in SettingSingleton
+    static pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud, moveSettings ms);
     //Moves a pointcloud based on passed variables
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud,
                                                             float x, float y, float z);

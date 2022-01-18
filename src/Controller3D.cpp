@@ -132,15 +132,40 @@ void Controller3D::DetectObjects(int pInfo)
     return;
 }
 
-void Controller3D::CombinePointClouds(int pInfo)
+void Controller3D::ProccesPointcloud()
 {
-    pcl::PointCloud<pcl::PointXYZRGB> full;
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr full;
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud2(new pcl::PointCloud<pcl::PointXYZRGB>);
+
+    auto clouds = lastInfo[0].getPointClouds();
+    *cloud = clouds.at(0);
+    *cloud2 = clouds.at(1);
+
+    for (size_t i = 0; i < cloud->points.size(); i++)
+    {
+      cloud->points[i].g = 0;
+      cloud->points[i].b = 0;
+    }
+
+    full = rotatePCL(cloud);
+    full = movePCL(full);
+    *full += *cloud2;
+    full = rotatePCL(full, SettingSingleton::getInstance()->getRotate2());
+    full = filterPCL(full);
+    lastInfo[0].AddFullPointCloud(*full);
+    return;
+}
+
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::CombinePointClouds(int pInfo)
+{
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr full;
     for (auto &&pointcloud : lastInfo[pInfo].getPointClouds())
     {
-        full += pointcloud;
+        *full += pointcloud;
     }
-    lastInfo[pInfo].AddFullPointCloud(full);
-    return;
+    // lastInfo[pInfo].AddFullPointCloud(*full);
+    return full;
 }
 
 void Controller3D::CalculateSpeed()
@@ -220,6 +245,12 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::movePCL(pcl::PointCloud<pcl
 {
     SettingSingleton *ds = ds->getInstance();
     struct moveSettings ms = ds->getMove();
+    return Controller3D::movePCL(OGcloud, ms.x, ms.y, ms.z);
+}
+
+// Gets xyz from singleton
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud, moveSettings ms)
+{
     return Controller3D::movePCL(OGcloud, ms.x, ms.y, ms.z);
 }
 
