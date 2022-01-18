@@ -47,14 +47,13 @@ int DataManager::maingui(int argc, char **argv)
 
     tbb::task_arena arena;
 
-    arena.enqueue( [&] 
+    arena.enqueue( [&] // UI update worker
     {
         this_thread::sleep_for(std::chrono::seconds(5));
 
         while(true)
         {
             DataFlags df = GUIData::getInstance()->getDataFlags();
-            cout << "Dataflags: " << df.view2d << df.visualobject << df.stats << endl;
 
             if(df.view2d)
                 gui.update2d(GUIData::getInstance()->getView2D());
@@ -65,12 +64,12 @@ int DataManager::maingui(int argc, char **argv)
             if(df.stats)
                 gui.updateStatistics(GUIData::getInstance()->getStats());
 
-            this_thread::sleep_for(std::chrono::seconds(2));    
+            this_thread::sleep_for(std::chrono::milliseconds(30));    
         }
     });
 
 #ifndef __DEBUG_UI
-    arena.enqueue( [&] {
+    arena.enqueue( [&] { // Filling UI with values
 
         cout << "Filling with random objects in 5 seconds" << endl;
         this_thread::sleep_for(std::chrono::seconds(5));        
