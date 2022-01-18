@@ -8,8 +8,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <tbb/parallel_for.h>
-#include <tbb/task_arena.h>
+#include "tbb/parallel_for.h"
+#include "tbb/task_arena.h"
 
 int DataManager::dataMain()
 {
@@ -30,31 +30,51 @@ int DataManager::dataMain()
     return 1;
 }
 
-int buildUI(int argc, char **argv)
+
+
+int DataManager::maingui(int argc, char **argv)
 {
     QApplication app(argc, argv);
+    GUIData *guiData = guiData->getInstance();
     GUIApplication gui;
-    gui.show();
-    return app.exec();
-}
-
-
-int maingui(int argc, char **argv)
-{
-    CameraConnector *camCon = camCon->getInstance();
-    // camCon->connectCameras(2, 1);
 
     tbb::task_arena arena;
 
-    arena.enqueue( [] {
-        Controller3D cont3;
-        Controller2D cont2;
+    arena.enqueue( [&] // UI update worker
+    {
+        this_thread::sleep_for(std::chrono::seconds(5));
+
+        while(true)
+        {
+            DataFlags df = GUIData::getInstance()->getDataFlags();
+
+            if(df.view2d)
+                gui.update2d(GUIData::getInstance()->getView2D());
+
+            if(df.visualobject)
+                gui.updateTable(GUIData::getInstance()->getTable());
+
+            if(df.stats)
+                gui.updateStatistics(GUIData::getInstance()->getStats());
+
+            this_thread::sleep_for(std::chrono::milliseconds(30));    
+        }
     });
+
+#ifndef __DEBUG_UI
+    arena.enqueue( [&] { // Filling UI with values
+
+        cout << "Filling with random objects in 5 seconds" << endl;
+        this_thread::sleep_for(std::chrono::seconds(5));        
+        GUIData::getInstance()->setObjects(vector<VisualObject> {
+            { 1, {10, 20, 30}, 0.0f, {100, 200, 300}, 123, 567 },
+            { 2, {12, 22, 32}, 0.0f, {102, 202, 302}, 123, 567 }, 
+            { 3, {13, 23, 33}, 0.3f, {103, 203, 303}, 123, 456 }
+        });
+    });
+#endif
     
 
-    QApplication app(argc, argv);
-    GUIApplication gui;
     gui.show();
-
     return app.exec();
 }

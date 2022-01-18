@@ -123,5 +123,6 @@ int main(int argc, char *argv[])
   // het();
   // std::thread t1(task2, argc, argv);
   DataManager dm;
-  dm.dataMain();
+  // dm.dataMain();
+  return dm.maingui(argc, argv);
 }

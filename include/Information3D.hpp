@@ -33,7 +33,7 @@ public:
     void AddFullPointCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloud);
     void FindObjects();
     //Retrieves the merged pointcloud
-    pcl::PointCloud<pcl::PointXYZRGB> GetPointCloud();
+    pcl::PointCloud<pcl::PointXYZRGB> getPointCloud();
     //Inserts an object into the object list
     void InsertObject(pcl::PointCloud<pcl::PointXYZRGB> segment);
     //Retrieves the list of found objects

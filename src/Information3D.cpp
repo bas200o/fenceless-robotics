@@ -22,7 +22,7 @@ void Information3D::FindObjects(){
     
 }
 
-pcl::PointCloud<pcl::PointXYZRGB> Information3D::GetPointCloud(){
+pcl::PointCloud<pcl::PointXYZRGB> Information3D::getPointCloud(){
     return fullPointCloud;
 }
 

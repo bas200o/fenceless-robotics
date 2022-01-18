@@ -35,7 +35,7 @@ void Controller3D::CreateNewInformation()
     //cout << sizeof(lastInfo) / sizeof(lastInfo[0]) << endl;
     for (int i = 1; i < sizeof(lastInfo) / sizeof(lastInfo[0]); i++)
     {
-        if (temp2.GetPointCloud().size() > 0)
+        if (temp2.getPointCloud().size() > 0)
         {
             temp1 = lastInfo[i];
             lastInfo[i] = temp2;
@@ -52,6 +52,8 @@ void Controller3D::CreateNewInformation()
 void Controller3D::DetectObjects(int pInfo)
 {
     printf("Detecting \n");
+    cout<<lastInfo[pInfo].getPointCloud().points.size()<<endl;
+    //lastInfo[pInfo].
 
     if (pInfo >= 5)
     {
@@ -61,7 +63,7 @@ void Controller3D::DetectObjects(int pInfo)
     {
         return;
     }
-    pcl::PointCloud<pcl::PointXYZRGB> tempInfo(lastInfo[pInfo].GetPointCloud());
+    pcl::PointCloud<pcl::PointXYZRGB> tempInfo(lastInfo[pInfo].getPointCloud());
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_f(new pcl::PointCloud<pcl::PointXYZRGB>);
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
     *cloud = tempInfo;
@@ -193,7 +195,6 @@ void Controller3D::CalculateSpeed()
     }
     else
     {
-        // lastInfo[0].objects[0].setSpeed(0);
         for (int i = 0 ; i < lastInfo[0].objects.size() ; i++ )
         {
         lastInfo[0].objects[i].setSpeed(0);
@@ -209,7 +210,7 @@ void Controller3D::CalculateSpeed()
         for (FoundObject oldObject : previous.getObjects())
         {
             dist = euclideanDistance(object.getLocation(), oldObject.getLocation());
-            if (object.getSize() * -0.10 < object.getSize() - oldObject.getSize() < object.getSize() * 0.10 && dist < shortestDist && dist < previous.GetPointCloud().width)
+            if (object.getSize() * -0.10 < object.getSize() - oldObject.getSize() < object.getSize() * 0.10 && dist < shortestDist && dist < previous.getPointCloud().width)
             {
                 shortestDist = dist;
                 movedObject = oldObject;

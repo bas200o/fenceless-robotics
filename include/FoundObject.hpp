@@ -33,6 +33,7 @@ public:
     double getSpeed();
     pcl::PointCloud<pcl::PointXYZRGB> getObjectCloud();
     pcl::PointXYZRGB getLocation();
+    std::tuple<float, float, float> getCenterMass();
     float getSize();
 
 };

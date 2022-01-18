@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.14.0)
 project(fenceless-robot VERSION 0.1.0)
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
 include(CTest)
 enable_testing()
 
@@ -10,7 +14,7 @@ find_package (PCL 1.2 REQUIRED)
 find_package (Python2 COMPONENTS Interpreter Development)
 find_package (Threads)
 find_package (OpenCV REQUIRED)
-find_package (Qt5 COMPONENTS Widgets REQUIRED)
+find_package (Qt5 COMPONENTS Widgets Core Gui REQUIRED)
 find_package (TBB REQUIRED tbb)
 
 # [C/C++]>[General]>[Additional Include Directories]
@@ -45,6 +49,8 @@ add_executable(fenceless-robot ${SRC_FILES})
 target_link_libraries(${PROJECT_NAME} ${realsense2_LIBRARY})
 target_link_libraries(${PROJECT_NAME} ${PCL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} )
+target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Gui)
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 target_link_libraries(${PROJECT_NAME} TBB::tbb)
 
