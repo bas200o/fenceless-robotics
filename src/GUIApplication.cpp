@@ -88,6 +88,8 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     sliderFZ1->setMinimum(-4000);
     sliderFZ1->setMaximum(4000);
     connect(sliderFZ1, &QSlider::valueChanged, this, GUIApplication::filterChangez1);
+    auto pancake = new QPushButton("Stop configuring");
+    connect(pancake, &QPushButton::released, this, GUIApplication::setConfiguring);
 
     auto mx = new QLabel("move x");
     auto my = new QLabel("move y");
@@ -104,7 +106,7 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     // Combining layout
     layout = new QGridLayout(this);
     layout->addWidget(pan_view2d, 0, 0);
-    layout->addWidget(pan_view3d, 0, 1);
+    layout->addWidget(pancake, 0, 1);
     layout->addWidget(pan_statistics, 0, 2);
     layout->addWidget(pan_table, 1, 0, 1, 3);
 
@@ -138,7 +140,7 @@ void GUIApplication::updateTable(vector<VisualObject> objects)
     pan_table->setRowCount(objects.size());
     int row = 0;
 
-    cout << "New ontents of table:\n";
+    // cout << "New ontents of table:\n";
 
     for(VisualObject obj : objects)
     {
@@ -151,14 +153,14 @@ void GUIApplication::updateTable(vector<VisualObject> objects)
             .arg(obj.direction.y)
             .arg(obj.direction.z);
 
-        cout // brrrr
-            << row << " | "
-            << pos.toStdString() << " | "
-            << obj.size << " | "
-            << dir.toStdString() << " | "
-            << obj.speed << " | "
-            << obj.acceleration 
-        << endl;
+        // cout // brrrr
+        //     << row << " | "
+        //     << pos.toStdString() << " | "
+        //     << obj.size << " | "
+        //     << dir.toStdString() << " | "
+        //     << obj.speed << " | "
+        //     << obj.acceleration 
+        // << endl;
 
         // pan_table->setItem(row, 0, new QTableWidgetItem("-"));                                  // ID -> Removed for now
         pan_table->setItem(row, 1, new QTableWidgetItem(QString("%1").arg(obj.showTime)));      // Tijd in beeld
@@ -259,3 +261,34 @@ void GUIApplication::filterChangez1(int v)
     fs.z1 = (float)(v / 1000.0);
     ds->setFilter(fs);
 }
+
+void printXYZ(moveSettings ms) {
+    std::cout << "Move box : \n";
+    std::cout << "x = " << ms.x << ", y = " << ms.y << ", z = " << ms.z << "\n";
+}
+void printXYZ(rotationSettings rs) {
+    std::cout << "Rotation box : \n";
+    std::cout << "x = " << rs.x << ", y = " << rs.y << ", z = " << rs.z << "\n";
+}
+
+void printXYZ(filterSettings fs) {
+    std::cout << "Filter box : \n";
+    std::cout << "x = " << fs.x << ", x1 = " << fs.x1 << "\n";
+    std::cout << "y = " << fs.y << ", y1 = " << fs.y1 << "\n";
+    std::cout << "z = " << fs.z << ", z1 = " << fs.z1 << std::endl;
+}
+
+void GUIApplication::setConfiguring(){
+    std::cout << "Stopped Configure" << std::endl;
+
+    printXYZ(SettingSingleton::getInstance()->getMove());
+    printXYZ(SettingSingleton::getInstance()->getMove2());
+    printXYZ(SettingSingleton::getInstance()->getRotate());
+    printXYZ(SettingSingleton::getInstance()->getRotate2());
+    printXYZ(SettingSingleton::getInstance()->getFilter());
+
+
+    GUIData::getInstance()->configuring = false;
+    return;
+}
+

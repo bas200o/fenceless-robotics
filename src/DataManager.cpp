@@ -19,6 +19,9 @@ int DataManager::dataMain()
     while(true)
     {
         cont3.CreateNewInformation();
+        while(GUIData::getInstance()->configuring){
+            cont3.configure();
+        }
         cont3.ProccesPointcloud();
         cont3.DetectObjects(0);
         cont3.CalculateSpeed();

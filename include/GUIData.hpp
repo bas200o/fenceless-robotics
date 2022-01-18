@@ -48,6 +48,8 @@ class GUIData
         int setObjects(Information3D newData);
         int setStatistics(StatisticsObject stats);  // Not sure how to implement
 
+        bool configuring = true;
+
         vector<Object2D> getView2D();
         vector<VisualObject> getTable();
         StatisticsObject getStats();

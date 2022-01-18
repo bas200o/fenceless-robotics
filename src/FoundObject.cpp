@@ -53,6 +53,7 @@ return;
 }
 
     void FoundObject::setSpeed(double sp){
+        // std::cout << sp << std::endl;
         speed = sp;
     }
 

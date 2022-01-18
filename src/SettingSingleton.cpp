@@ -9,9 +9,9 @@ SettingSingleton *SettingSingleton::instance;
 
 SettingSingleton::SettingSingleton()
 {
-    rs = {0.0, 0.0, 0.0};
+    rs = {0.718, 0.156, -0.065};
     fs = {-10.0, 10.0, -10.0, 10.0, -10.0, 10.0};
-    ms = {0.0, 0.0, 0.0};
+    ms = {0.0, 1.129, 0.0};
     rs2 = {0.0, 0.0, 0.0};
     ms2 = {0.0, 0.0, 0.0};
 }

@@ -39,6 +39,8 @@ public:
     void CalculateSpeed();
     //
     void pushUIData();
+    //
+    void configure();
     //Rotates a pointcloud based on the settings in SettingSingleton
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud);
     //Rotates a pointcloud based on the settings provided

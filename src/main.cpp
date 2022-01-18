@@ -53,8 +53,8 @@ int testmain()
   ds->setRotate(rs);
   struct moveSettings ms = {0.0, 0.0, 0.0};
   ds->setMove(ms);
-  struct filterSettings fs = {-10.0, 10.0, -10.0, 10.0, -10.0, 10.0};
-  ds->setFilter(fs);
+  // struct filterSettings fs = {-10.0, 10.0, -10.0, 10.0, -10.0, 10.0};
+  // ds->setFilter(fs);
 
   //std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
   CameraConnector *camCon = CameraConnector::getInstance();
@@ -69,11 +69,7 @@ int testmain()
   *cloud  = pointclouds.at(0);
   *cloud2 = pointclouds.at(1);
   
-  for (size_t i = 0; i < cloud2->points.size(); i++)
-    {
-      cloud->points[i].g = 0;
-      cloud->points[i].b = 0;
-    }
+
 
 
   viewer->setBackgroundColor(0, 0, 0);
@@ -89,21 +85,28 @@ int testmain()
 
   while (true)
   {
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudCopy(new pcl::PointCloud<pcl::PointXYZRGB>);
-    pcl::copyPointCloud(*cloud, *cloudCopy);
-    cloudCopy = Controller3D::rotatePCL(cloudCopy);
-    cloudCopy = Controller3D::movePCL(cloudCopy);
-    pcl::PointCloud<pcl::PointXYZRGB>::Ptr mainCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
 
-    *mainCloud += *cloud2;
-    *mainCloud += *cloudCopy;
-    
-    mainCloud = Controller3D::filterPCL(mainCloud);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr full(new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr  cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud2(new pcl::PointCloud<pcl::PointXYZRGB>);
+
+
+
+    for (size_t i = 0; i < cloud->points.size(); i++)
+    {
+      cloud->points[i].g = 0;
+      cloud->points[i].b = 0;
+    }
+
+    full = Controller3D::rotatePCL(cloud);
+    full = Controller3D::movePCL(full);
+    *full += *cloud2;
+    full = Controller3D::rotatePCL(full, SettingSingleton::getInstance()->getRotate2());
+    full = Controller3D::filterPCL(full);
 
 
     viewer->removeAllPointClouds();
-    viewer->addPointCloud(mainCloud, "maincloud");
-    viewer->updatePointCloud(cloud2, "cloud2"); 
+    viewer->addPointCloud(full, "maincloud");
     viewer->spinOnce(200);
   }
 }
@@ -119,7 +122,7 @@ int main(int argc, char *argv[])
 {
   CameraConnector *camCon = CameraConnector::getInstance();
   camCon->connectCameras(0, 1);
-  camCon->connectCameras(1, 1);
+  // camCon->connectCameras(1, 1);
   std::this_thread::sleep_for(std::chrono::seconds(2));
   // het();
   

@@ -51,6 +51,7 @@ class GUIApplication : public QWidget
         static void filterChangey1(int v);
         static void filterChangez(int v);
         static void filterChangez1(int v);
+        static void setConfiguring();
 
         void update2d(vector<Object2D> objects);
         void updateTable(vector<VisualObject> objects);
