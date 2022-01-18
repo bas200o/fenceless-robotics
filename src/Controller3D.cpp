@@ -165,9 +165,9 @@ void Controller3D::ProccesPointcloud()
     lastInfo[0].AddFullPointCloud(*full);
     
     //debugging
-    viewer->removeAllPointClouds();
-    viewer->addPointCloud(full);
-    viewer->spinOnce(5);
+    // viewer->removeAllPointClouds();
+    // viewer->addPointCloud(full);
+    // viewer->spinOnce(5);
     return;
 }
 

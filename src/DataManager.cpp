@@ -16,12 +16,13 @@ int DataManager::dataMain()
     
     //GUIApplication gui;
     Controller3D cont3;
-    while(true){
-    cont3.CreateNewInformation();
-    cont3.ProccesPointcloud();
-    cont3.DetectObjects(0);
-    cont3.CalculateSpeed();
-    
+    while(true)
+    {
+        cont3.CreateNewInformation();
+        cont3.ProccesPointcloud();
+        cont3.DetectObjects(0);
+        cont3.CalculateSpeed();
+        cont3.pushUIData();
     }
     //Controller2D cont2;
     //while(true)
@@ -29,6 +30,15 @@ int DataManager::dataMain()
     //Do 3DVision
     cout << "ended \n";
     return 1;
+}
+
+int DataManager::startThreads(int argc, char **argv) 
+{
+    arena.enqueue( [&] 
+    {
+        dataMain();
+    });
+    return 0;
 }
 
 
@@ -39,7 +49,7 @@ int DataManager::maingui(int argc, char **argv)
     GUIData *guiData = guiData->getInstance();
     GUIApplication gui;
 
-    tbb::task_arena arena;
+    
 
     arena.enqueue( [&] // UI update worker
     {

@@ -109,10 +109,11 @@ int testmain()
 }
 
 
-int task2(int argc, char *argv[])
+int rotatePCLWindowTask(int argc, char *argv[])
 {
   return testmain();
 }
+
 
 int main(int argc, char *argv[])
 {
@@ -121,8 +122,10 @@ int main(int argc, char *argv[])
   camCon->connectCameras(1, 1);
   std::this_thread::sleep_for(std::chrono::seconds(2));
   // het();
-  // std::thread t1(task2, argc, argv);
+  
   DataManager dm;
-  // dm.dataMain();
+
+  dm.startThreads(argc, argv);
+
   return dm.maingui(argc, argv);
 }
