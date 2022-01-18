@@ -1,118 +1,141 @@
-#include <librealsense2/rs.hpp>
-#include <librealsense2/hpp/rs_internal.hpp>
 #include <iostream>
+#include <algorithm>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/thread/thread.hpp>
+#include <string>
+
+// Intel Realsense Headers
+#include <librealsense2/rs.hpp> // Include RealSense Cross Platform API
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
+#include <pcl/filters/passthrough.h>
+#include <pcl/common/common_headers.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/console/parse.h>
+#include <boost/thread/thread.hpp>
+#include <pcl/io/io.h>
 #include <pcl/visualization/cloud_viewer.h>
+#include <pcl/ModelCoefficients.h>
+#include <pcl/point_types.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/filters/extract_indices.h>
+#include <pcl/filters/voxel_grid.h>
+#include <pcl/features/normal_3d.h>
+#include <pcl/search/kdtree.h>
+#include <pcl/sample_consensus/method_types.h>
+#include <pcl/sample_consensus/model_types.h>
+#include <pcl/segmentation/sac_segmentation.h>
+#include <pcl/segmentation/extract_clusters.h>
+#include <thread>
+#include <chrono>
 
-int mainOld()
+#include "../include/SettingSingleton.hpp"
+#include "../include/Controller3D.hpp"
+
+#include "../include/DataManager.hpp"
+
+#include <vector>
+#include <QApplication>
+#include <QPushButton>
+#include <QGridLayout>
+#include <QTableView>
+#include <QTableWidget>
+
+#include <assert.h>
+
+// RSCameraHandler camHandler;
+
+// void camTask()
+// {
+//   camHandler.runThread();
+// }
+// // The function we want to execute on the new thread.
+// void task1(string msg)
+// {
+//   std::cout << "task1 says: " << msg;
+// }
+
+int testmain()
 {
-    rs2::context ctx;
+  SettingSingleton *ds = ds->getInstance();
+  struct rotationSettings rs = {0.0, 0.0, 1.0};
+  ds->setRotate(rs);
+  struct moveSettings ms = {0.0, 0.0, 0.0};
+  ds->setMove(ms);
+  struct filterSettings fs = {-10.0, 10.0, -10.0, 10.0, -10.0, 10.0};
+  ds->setFilter(fs);
 
-    std::cout << "hello from librealsense - " << RS2_API_VERSION_STR << std::endl;
-    std::cout << "You have " << ctx.query_devices().size() << " RealSense devices connected" << std::endl;
+  //std::this_thread::sleep_for(std::chrono::nanoseconds(1000));
+  CameraConnector *camCon = CameraConnector::getInstance();
+  assert(camCon && "Couldn't connect to cam, cam was null!");
+  pcl::visualization::PCLVisualizer::Ptr viewer(new pcl::visualization::PCLVisualizer("3D Viewer"));
 
-    pcl::PointCloud<pcl::PointXYZRGB> cloud;
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud2(new pcl::PointCloud<pcl::PointXYZRGB>);
 
-    //fill coud with data,
+  auto pointclouds = camCon->retrievePointClouds();
 
-
-    cloud.width = 100;
-    cloud.height = 1;
-    cloud.is_dense = false;
-    cloud.points.resize(cloud.width * cloud.height);
-
-    for (size_t i = 0; i < cloud.points.size(); i++) {
-        cloud.points[i].x = 1024 * rand() / (RAND_MAX + 1.0f);
-        cloud.points[i].y = 1024 * rand() / (RAND_MAX + 1.0f);
-        cloud.points[i].z = 1024 * rand() / (RAND_MAX + 1.0f);
-        cloud.points[i].r = 255 * rand() / (RAND_MAX + 1.0f);
-        cloud.points[i].g = 255 * rand() / (RAND_MAX + 1.0f);
-        cloud.points[i].b = 255 * rand() / (RAND_MAX + 1.0f);
+  *cloud  = pointclouds.at(0);
+  *cloud2 = pointclouds.at(1);
+  
+  for (size_t i = 0; i < cloud2->points.size(); i++)
+    {
+      cloud->points[i].g = 0;
+      cloud->points[i].b = 0;
     }
 
 
-    pcl::io::savePCDFileASCII("test_pcd.pcd", cloud);
-    std::cerr << "Saved " << cloud.points.size() << " data points to test_pcd.pcd." << std::endl;
-
-//     for (size_t i = 0; i < cloud.points.size(); i++) {
-//         std::cerr << "      " << cloud.points[i].x << " " << cloud.points[i].y << " " << cloud.points[i].z << std::endl;
-//     }
-
-//     pcl::PointCloud<pcl::PointXYZ>::Ptr hey;
-//     pcl::io::loadPCDFile("test_pcd.pcd", *hey);
-//    //... populate cloud
-
-//    pcl::visualization::CloudViewer viewer ("Simple Cloud Viewer");
-//    viewer.showCloud(hey );
-//    while (!viewer.wasStopped ())
-//    {
-//    }
+  viewer->setBackgroundColor(0, 0, 0);
+  viewer->addPointCloud(cloud, "cloud1");
+  viewer->addPointCloud(cloud2, "cloud2");
+  // viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1);
+  viewer->initCameraParameters();
+  viewer->addCoordinateSystem();
+  viewer->setWindowName("fenceless-robotics");
+  viewer->spinOnce(200);
 
 
 
-    return 0;
+  while (true)
+  {
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudCopy(new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::copyPointCloud(*cloud, *cloudCopy);
+    cloudCopy = Controller3D::rotatePCL(cloudCopy);
+    cloudCopy = Controller3D::movePCL(cloudCopy);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr mainCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+    *mainCloud += *cloud2;
+    *mainCloud += *cloudCopy;
+    
+    mainCloud = Controller3D::filterPCL(mainCloud);
+
+    viewer->removeAllPointClouds();
+    viewer->addPointCloud(mainCloud, "maincloud");
+    
+    viewer->updatePointCloud(cloud2, "cloud2"); 
+
+//     viewer->spinOnce(200);
+
+    viewer->spinOnce(200);
+  }
 }
 
-// #include <pcl/visualization/cloud_viewer.h>
-// #include <iostream>
-// #include <pcl/io/io.h>
-// #include <pcl/io/pcd_io.h>
-    
-// int user_data;
-    
-// void 
-// viewerOneOff (pcl::visualization::PCLVisualizer& viewer)
-// {
-//     viewer.setBackgroundColor (1.0, 0.5, 1.0);
-//     pcl::PointXYZ o;
-//     o.x = 1.0;
-//     o.y = 0;
-//     o.z = 0;
-//     viewer.addSphere (o, 0.25, "sphere", 0);
-//     std::cout << "i only run once" << std::endl;
-    
-// }
-    
-// void 
-// viewerPsycho (pcl::visualization::PCLVisualizer& viewer)
-// {
-//     static unsigned count = 0;
-//     std::stringstream ss;
-//     ss << "Once per viewer loop: " << count++;
-//     viewer.removeShape ("text", 0);
-//     viewer.addText (ss.str(), 200, 300, "text", 0);
-    
-//     //FIXME: possible race condition here:
-//     user_data++;
-// }
-    
-// int 
-// main ()
-// {
-//     pcl::PointCloud<pcl::PointXYZRGBA>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZRGBA>);
-//     pcl::io::loadPCDFile ("my_point_cloud.pcd", *cloud);
-    
-//     pcl::visualization::CloudViewer viewer("Cloud Viewer");
-    
-//     //blocks until the cloud is actually rendered
-//     viewer.showCloud(cloud);
-    
-//     //use the following functions to get access to the underlying more advanced/powerful
-//     //PCLVisualizer
-    
-//     //This will only get called once
-//     viewer.runOnVisualizationThreadOnce (viewerOneOff);
-    
-//     //This will get called once per visualization iteration
-//     viewer.runOnVisualizationThread (viewerPsycho);
-//     while (!viewer.wasStopped ())
-//     {
-//     //you can also do cool processing here
-//     //FIXME: Note that this is running in a separate thread from viewerPsycho
-//     //and you should guard against race conditions yourself...
-//     user_data++;
-//     }
-//     return 0;
-// }
+
+int task2(int argc, char *argv[])
+{
+  return testmain();
+}
+
+int main(int argc, char *argv[])
+{
+ // CameraConnector *camCon = CameraConnector::getInstance();
+ // camCon->connectCameras(0, 1);
+  //camCon->connectCameras(1, 1);
+  // het();
+  //std::thread t1(task2, argc, argv);
+
+  //return maingui(argc, argv);
+  DataManager dm;
+  dm.dataMain();
+}

@@ -8,6 +8,10 @@
 #include <QTableView>
 #include <QTableWidget>
 #include <QGraphicsView>
+#include <QSlider>
+#include <QVBoxLayout>
+#include <QGroupBox>
+#include <QLabel>
 #include "../include/GUIData.hpp"
 
 class GUIApplication : public QWidget
@@ -19,7 +23,7 @@ class GUIApplication : public QWidget
         QWidget *pan_statistics;
         QTableWidget *pan_table;
 
-        QGridLayout *layout;
+    QGridLayout *layout;
 
         QStringList tableHeaders = { 
             "ID", 
@@ -33,10 +37,22 @@ class GUIApplication : public QWidget
     public:
         explicit GUIApplication(QWidget *parent = 0);
         virtual ~GUIApplication() {};
+        
+    static void ValueChange(int v);
+    static void rotationChangeX(int X);
+    static void rotationChangeY(int Y);
+    static void rotationChangeZ(int Z);
+    static void positionChangeX(int X);
+    static void positionChangeY(int Y);
+    static void positionChangeZ(int Z);
+    static void filterChangex(int v);
+    static void filterChangex1(int v);
+    static void filterChangey(int v);
+    static void filterChangey1(int v);
+    static void filterChangez(int v);
+    static void filterChangez1(int v);
 
-        int insertObject(VisualObject obj);
-        int updateObject(int id, VisualObject obj);
-        void destroyObject(int id);
+    explicit GUIApplication(QWidget *parent = 0);
 
     public Q_SLOTS:
         void update2d(QList<Object2D> objects);
