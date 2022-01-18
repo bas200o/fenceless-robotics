@@ -10,7 +10,7 @@ SettingSingleton *SettingSingleton::instance;
 SettingSingleton::SettingSingleton()
 {
     rs = {0.0, 0.0, 0.0};
-    fs = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    fs = {-10.0, 10.0, -10.0, 10.0, -10.0, 10.0};
     ms = {0.0, 0.0, 0.0};
     rs2 = {0.0, 0.0, 0.0};
     ms2 = {0.0, 0.0, 0.0};

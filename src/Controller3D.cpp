@@ -32,7 +32,7 @@ void Controller3D::CreateNewInformation()
     //make sure the first is the newest info
     temp2 = lastInfo[0];
     lastInfo[0] = Info3D;
-    cout << sizeof(lastInfo) / sizeof(lastInfo[0]) << endl;
+    //cout << sizeof(lastInfo) / sizeof(lastInfo[0]) << endl;
     for (int i = 1; i < sizeof(lastInfo) / sizeof(lastInfo[0]); i++)
     {
         if (temp2.GetPointCloud().size() > 0)
@@ -69,7 +69,7 @@ void Controller3D::DetectObjects(int pInfo)
     pcl::VoxelGrid<pcl::PointXYZRGB> vg;
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_filtered(new pcl::PointCloud<pcl::PointXYZRGB>);
     vg.setInputCloud(cloud);
-    vg.setLeafSize(0.03f, 0.03f, 0.03f);
+    vg.setLeafSize(0.01f, 0.01f, 0.01f);
     vg.filter(*cloud_filtered);
 
     // Create the segmentation object for the planar model and set all the parameters
@@ -134,6 +134,7 @@ void Controller3D::DetectObjects(int pInfo)
         cloud_cluster->height = 1;
         cloud_cluster->is_dense = true;
         lastInfo[pInfo].InsertObject(*cloud_cluster);
+        std::cout << "another one"<< std::endl;
     }
     return;
 }
@@ -148,19 +149,11 @@ void Controller3D::ProccesPointcloud()
     *cloud = clouds.at(0);
     *cloud2 = clouds.at(1);
 
-
-
-
     for (size_t i = 0; i < cloud->points.size(); i++)
     {
       cloud->points[i].g = 0;
       cloud->points[i].b = 0;
     }
-
-    //debugging
-    viewer->removeAllPointClouds();
-    viewer->addPointCloud(full);
-    viewer->spinOnce(5);
 
     full = rotatePCL(cloud);
     full = movePCL(full);
@@ -169,7 +162,10 @@ void Controller3D::ProccesPointcloud()
     full = filterPCL(full);
     lastInfo[0].AddFullPointCloud(*full);
     
-
+    //debugging
+    viewer->removeAllPointClouds();
+    viewer->addPointCloud(full);
+    viewer->spinOnce(5);
     return;
 }
 
