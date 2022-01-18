@@ -2,101 +2,6 @@
 #include "../include/SettingSingleton.hpp"
 #include <iostream>
 
-void GUIApplication::rotationChangeX(int x)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct rotationSettings rs = ds->getRotate();
-    rs.x = (float)(x / 1000.0);
-    ds->setRotate(rs);
-}
-
-void GUIApplication::rotationChangeY(int y)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct rotationSettings rs = ds->getRotate();
-    rs.y = (float)(y / 1000.0);
-    ds->setRotate(rs);
-}
-
-void GUIApplication::rotationChangeZ(int z)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct rotationSettings rs = ds->getRotate();
-    rs.z = (float)(z / 1000.0);
-    ds->setRotate(rs);
-}
-
-void GUIApplication::positionChangeX(int x)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct moveSettings rs = ds->getMove();
-    rs.x = (float)(x / 1000.0);
-    ds->setMove(rs);
-}
-
-void GUIApplication::positionChangeY(int y)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct moveSettings rs = ds->getMove();
-    rs.y = (float)(y / 1000.0);
-    ds->setMove(rs);
-}
-
-void GUIApplication::positionChangeZ(int z)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct moveSettings rs = ds->getMove();
-    rs.z = (float)(z / 1000.0);
-    ds->setMove(rs);
-}
-
-void GUIApplication::filterChangex(int v)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct filterSettings fs = ds->getFilter();
-    fs.x = (float)(v / 1000.0);
-    ds->setFilter(fs);
-}
-
-void GUIApplication::filterChangex1(int v)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct filterSettings fs = ds->getFilter();
-    fs.x1 = (float)(v / 1000.0);
-    ds->setFilter(fs);
-}
-
-void GUIApplication::filterChangey(int v)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct filterSettings fs = ds->getFilter();
-    fs.y = (float)(v / 1000.0);
-    ds->setFilter(fs);
-}
-
-void GUIApplication::filterChangey1(int v)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct filterSettings fs = ds->getFilter();
-    fs.y1 = (float)(v / 1000.0);
-    ds->setFilter(fs);
-}
-
-void GUIApplication::filterChangez(int v)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct filterSettings fs = ds->getFilter();
-    fs.z = (float)(v / 1000.0);
-    ds->setFilter(fs);
-}
-
-void GUIApplication::filterChangez1(int v)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct filterSettings fs = ds->getFilter();
-    fs.z1 = (float)(v / 1000.0);
-    ds->setFilter(fs);
-}
 
 GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 {
@@ -134,7 +39,7 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
         pan_table->setItem(0, i, new QTableWidgetItem("0"));
     }
 
-    auto name = new QLabel("Hey Link Listen");
+    #pragma region PCL Sliders
     auto sliderMvX = new QSlider(Qt::Horizontal);
     sliderMvX->setMinimum(-4000);
     sliderMvX->setMaximum(4000);
@@ -195,6 +100,8 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     auto fy = new QLabel("filter y");
     auto fz = new QLabel("filter z");
 
+    #pragma endregion PCL Sliders
+
     // Combining layout
     layout = new QGridLayout(this);
     layout->addWidget(pan_view2d, 0, 0);
@@ -224,6 +131,7 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     layout->addWidget(sliderFZ, 10, 1, 1, 1);
     layout->addWidget(sliderFZ1, 10, 2, 1, 1);
     layout->addWidget(fz, 10, 0, 1, 1);
+
 }
 
 void GUIApplication::updateTable(QList<VisualObject> objects)
@@ -250,3 +158,88 @@ void GUIApplication::updateTable(QList<VisualObject> objects)
 
 void GUIApplication::update2d(QList<Object2D> objects){}
 void GUIApplication:: updateStatistics(StatisticsObject obj){}
+
+void GUIApplication::rotationChangeX(int x)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct rotationSettings rs = ds->getRotate();
+    rs.x = (float)(x / 1000.0);
+    ds->setRotate(rs);
+}
+void GUIApplication::rotationChangeY(int y)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct rotationSettings rs = ds->getRotate();
+    rs.y = (float)(y / 1000.0);
+    ds->setRotate(rs);
+}
+void GUIApplication::rotationChangeZ(int z)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct rotationSettings rs = ds->getRotate();
+    rs.z = (float)(z / 1000.0);
+    ds->setRotate(rs);
+}
+void GUIApplication::positionChangeX(int x)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct moveSettings rs = ds->getMove();
+    rs.x = (float)(x / 1000.0);
+    ds->setMove(rs);
+}
+void GUIApplication::positionChangeY(int y)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct moveSettings rs = ds->getMove();
+    rs.y = (float)(y / 1000.0);
+    ds->setMove(rs);
+}
+void GUIApplication::positionChangeZ(int z)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct moveSettings rs = ds->getMove();
+    rs.z = (float)(z / 1000.0);
+    ds->setMove(rs);
+}
+void GUIApplication::filterChangex(int v)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct filterSettings fs = ds->getFilter();
+    fs.x = (float)(v / 1000.0);
+    ds->setFilter(fs);
+}
+void GUIApplication::filterChangex1(int v)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct filterSettings fs = ds->getFilter();
+    fs.x1 = (float)(v / 1000.0);
+    ds->setFilter(fs);
+}
+void GUIApplication::filterChangey(int v)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct filterSettings fs = ds->getFilter();
+    fs.y = (float)(v / 1000.0);
+    ds->setFilter(fs);
+}
+void GUIApplication::filterChangey1(int v)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct filterSettings fs = ds->getFilter();
+    fs.y1 = (float)(v / 1000.0);
+    ds->setFilter(fs);
+}
+void GUIApplication::filterChangez(int v)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct filterSettings fs = ds->getFilter();
+    fs.z = (float)(v / 1000.0);
+    ds->setFilter(fs);
+}
+void GUIApplication::filterChangez1(int v)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct filterSettings fs = ds->getFilter();
+    fs.z1 = (float)(v / 1000.0);
+    ds->setFilter(fs);
+}

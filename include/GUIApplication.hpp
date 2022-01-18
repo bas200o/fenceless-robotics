@@ -51,8 +51,7 @@ class GUIApplication : public QWidget
         static void filterChangey1(int v);
         static void filterChangez(int v);
         static void filterChangez1(int v);
-        
-    public Q_SLOTS:
+
         void update2d(QList<Object2D> objects);
         void updateTable(QList<VisualObject> objects);
         void updateStatistics(StatisticsObject object);
