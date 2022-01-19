@@ -243,16 +243,20 @@ void Controller3D::CalculateSpeed()
         for (FoundObject oldObject : previous.getObjects())
         {
             dist = euclideanDistance(object.getLocation(), oldObject.getLocation());
-            if (object.getSize() * -0.10 < object.getSize() - oldObject.getSize() < object.getSize() * 0.10 && dist < shortestDist && dist < previous.getPointCloud().width)
+            if (object.getSize() * -0.30 < object.getSize() - oldObject.getSize() < object.getSize() * 0.30 && dist < shortestDist && dist < previous.getPointCloud().width)
             {
                 shortestDist = dist;
                 movedObject = oldObject;
             }
         }
         double speed = 0;
+        if(shortestDist != FLT_MAX){
         //calculate speed
         //dist/time
         speed = shortestDist / (lastInfo[0].getTimeStamp() - previous.getTimeStamp());
+        }
+        else speed = -1;
+        //cout<<speed<<endl;
         lastInfo[0].objects[i].setSpeed(speed);
     }
 }
