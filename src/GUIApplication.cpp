@@ -41,35 +41,46 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     }
 
     #pragma region PCL Sliders
+    moveSettings ms =  SettingSingleton::getInstance()->getMove();
+    moveSettings ms1 = SettingSingleton::getInstance()->getMove2();
+    rotationSettings rs =  SettingSingleton::getInstance()->getRotate();
+    rotationSettings rs1 =  SettingSingleton::getInstance()->getRotate2();
     auto sliderMvX = new QSlider(Qt::Horizontal);
     sliderMvX->setMinimum(-4000);
     sliderMvX->setMaximum(4000);
+    sliderMvX->setValue(ms.x * 1000);
     connect(sliderMvX, &QSlider::valueChanged, this, GUIApplication::positionChangeX);
     auto sliderMvY = new QSlider(Qt::Horizontal);
     sliderMvY->setMinimum(-4000);
     sliderMvY->setMaximum(4000);
+    sliderMvY->setValue(ms.y * 1000);
     connect(sliderMvY, &QSlider::valueChanged, this, GUIApplication::positionChangeY);
     auto sliderMvZ = new QSlider(Qt::Horizontal);
     sliderMvZ->setMinimum(-4000);
     sliderMvZ->setMaximum(4000);
+    sliderMvZ->setValue(ms.z * 1000);
     connect(sliderMvZ, &QSlider::valueChanged, this, GUIApplication::positionChangeZ);
     auto sliderRtX = new QSlider(Qt::Horizontal);
     sliderRtX->setMinimum(-4000);
     sliderRtX->setMaximum(4000);
+    sliderRtX->setValue(rs.x * 1000);
     connect(sliderRtX, &QSlider::valueChanged, this, GUIApplication::rotationChangeX);
     auto sliderRtY = new QSlider(Qt::Horizontal);
     sliderRtY->setMinimum(-4000);
     sliderRtY->setMaximum(4000);
+    sliderRtY->setValue(rs.y * 1000);
     connect(sliderRtY, &QSlider::valueChanged, this, GUIApplication::rotationChangeY);
     auto sliderRtZ = new QSlider(Qt::Horizontal);
     sliderRtZ->setMinimum(-4000);
     sliderRtZ->setMaximum(4000);
+    sliderRtZ->setValue(rs.z * 1000);
     connect(sliderRtZ, &QSlider::valueChanged, this, GUIApplication::rotationChangeZ);
 
     // Yannick
     auto sliderMvX1 = new QSlider(Qt::Horizontal);
     sliderMvX1->setMinimum(-4000);
     sliderMvX1->setMaximum(4000);
+    sliderMvX1->setValue(ms1.x * 1000);
     connect(sliderMvX1, &QSlider::valueChanged, this, GUIApplication::positionChangeX1);
     auto sliderMvY1 = new QSlider(Qt::Horizontal);
     sliderMvY1->setMinimum(-4000);
@@ -82,14 +93,17 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     auto sliderRtX1 = new QSlider(Qt::Horizontal);
     sliderRtX1->setMinimum(-4000);
     sliderRtX1->setMaximum(4000);
+    sliderRtX1->setValue(rs1.x * 1000);
     connect(sliderRtX1, &QSlider::valueChanged, this, GUIApplication::rotationChangeX1);
     auto sliderRtY1 = new QSlider(Qt::Horizontal);
     sliderRtY1->setMinimum(-4000);
     sliderRtY1->setMaximum(4000);
+    sliderRtY1->setValue(rs1.y * 1000);
     connect(sliderRtY1, &QSlider::valueChanged, this, GUIApplication::rotationChangeY1);
     auto sliderRtZ1 = new QSlider(Qt::Horizontal);
     sliderRtZ1->setMinimum(-4000);
     sliderRtZ1->setMaximum(4000);
+    sliderRtZ1->setValue(rs1.z * 1000);
     connect(sliderRtZ1, &QSlider::valueChanged, this, GUIApplication::rotationChangeZ1);
 
     auto sliderFX = new QSlider(Qt::Horizontal);
