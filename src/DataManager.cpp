@@ -71,7 +71,7 @@ int DataManager::maingui(int argc, char **argv)
             if(df.stats)
                 gui.updateStatistics(GUIData::getInstance()->getStats());
 
-            this_thread::sleep_for(std::chrono::milliseconds(30));    
+            this_thread::sleep_for(std::chrono::milliseconds(1000));    
         }
     });
 
