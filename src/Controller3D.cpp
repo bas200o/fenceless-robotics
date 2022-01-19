@@ -85,7 +85,7 @@ void Controller3D::DetectObjects(int pInfo)
     seg.setModelType(pcl::SACMODEL_PLANE);
     seg.setMethodType(pcl::SAC_RANSAC);
     seg.setMaxIterations(100);
-    seg.setDistanceThreshold(0.02);
+    seg.setDistanceThreshold(0.01);
 
     int nr_points = (int)cloud_filtered->size();
     while (cloud_filtered->size() > 1 * nr_points)
@@ -120,7 +120,7 @@ void Controller3D::DetectObjects(int pInfo)
 
     std::vector<pcl::PointIndices> cluster_indices;
     pcl::EuclideanClusterExtraction<pcl::PointXYZRGB> ec;
-    ec.setClusterTolerance(0.1); // 10cm
+    ec.setClusterTolerance(0.07); // 10cm
     ec.setMinClusterSize(25);
     ec.setMaxClusterSize(25000);
     ec.setSearchMethod(tree);
