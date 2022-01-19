@@ -119,7 +119,7 @@ vector<VisualObject> GUIData::getTable()
     cout << "Returning table: \n";
     for(VisualObject v: table)
     {
-        cout << v.direction.x << v.direction.y << v.direction.z << endl;
+        // cout << v.direction.x << v.direction.y << v.direction.z << endl;
     }
 
     table_newdata = false;

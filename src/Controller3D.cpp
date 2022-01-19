@@ -345,10 +345,12 @@ void Controller3D::configure(){
     }
 
     full = rotatePCL(cloud);
-    full = movePCL(full);
-    *full += *cloud2;
     full = rotatePCL(full, SettingSingleton::getInstance()->getRotate2());
+    full = movePCL(full);
+    // *full += *cloud2;
+    
     full = filterPCL(full);
+
     viewer->removeAllPointClouds();
     viewer->addPointCloud(full);
     viewer->spinOnce(5);
