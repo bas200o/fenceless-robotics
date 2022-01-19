@@ -364,11 +364,11 @@ void printXYZ(filterSettings fs) {
 void GUIApplication::setConfiguring(){
     std::cout << "Stopped Configure" << std::endl;
 
-    printXYZ(SettingSingleton::getInstance()->getMove());
-    printXYZ(SettingSingleton::getInstance()->getMove2());
-    printXYZ(SettingSingleton::getInstance()->getRotate());
-    printXYZ(SettingSingleton::getInstance()->getRotate2());
-    printXYZ(SettingSingleton::getInstance()->getFilter());
+    // printXYZ(SettingSingleton::getInstance()->getMove());
+    // printXYZ(SettingSingleton::getInstance()->getMove2());
+    // printXYZ(SettingSingleton::getInstance()->getRotate());
+    // printXYZ(SettingSingleton::getInstance()->getRotate2());
+    // printXYZ(SettingSingleton::getInstance()->getFilter());
 
 
     GUIData::getInstance()->configuring = false;

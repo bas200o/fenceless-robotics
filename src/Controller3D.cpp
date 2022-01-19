@@ -28,7 +28,6 @@ void Controller3D::CreateNewInformation()
     Information3D temp1;
     Information3D temp2;
     Information3D temp3;
-    printf("Creating first info \n");
     //make sure the first is the newest info
     temp2 = lastInfo[0];
     lastInfo[0] = Info3D;
@@ -45,15 +44,12 @@ void Controller3D::CreateNewInformation()
     CameraConnector *camCon = camCon->getInstance();
     lastInfo[0].AddPointClouds(camCon->retrievePointClouds());
     lastInfo[0].setTimeStamp(camCon->getLastTimeStamp());
-    printf("Created first info \n");
-
     return;
 }
 
 void Controller3D::DetectObjects(int pInfo)
 {
-    printf("Detecting \n");
-    cout<<lastInfo[pInfo].getPointCloud().points.size()<<endl;
+    cout<<"detecting in pointcloud of size: "<<lastInfo[pInfo].getPointCloud().points.size()<<endl;
     //lastInfo[pInfo].
 
     if (pInfo >= 5)
@@ -140,8 +136,8 @@ void Controller3D::DetectObjects(int pInfo)
         cloud_cluster->height = 1;
         cloud_cluster->is_dense = true;
         lastInfo[pInfo].InsertObject(*cloud_cluster);
-        std::cout << "another one"<< std::endl;
-       
+
+        //TEMPORARY CODE TO DISPLAY POINTCLOUD -> ENDS AT <END TEMPORARY> COMMENT
     for (size_t i = 0; i < cloud_cluster->points.size(); i++)
     {
         switch (j)
@@ -171,7 +167,11 @@ void Controller3D::DetectObjects(int pInfo)
         viewer->addPointCloud(cloud_cluster, "hey" + j);
         j++;
     }
+
+    
+    std::cout << "number of found objects: "<< j <<std::endl;
     viewer->spinOnce(100, true);
+    //END TEMPORARY
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     return;
 }
