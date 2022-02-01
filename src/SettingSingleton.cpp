@@ -1,70 +1,93 @@
 #include "../include/SettingSingleton.hpp"
 
-rotationSettings rs;
-rotationSettings rs2;
-filterSettings fs;
-moveSettings ms;
-moveSettings ms2;
+std::vector<rotationSettings> rs_cloud;
+std::vector<rotationSettings> rs2_cloud;
+std::vector<filterSettings> fs_cloud;
+std::vector<moveSettings> ms_cloud;
+std::vector<moveSettings> ms2_cloud;
+
+
 SettingSingleton *SettingSingleton::instance;
 
 SettingSingleton::SettingSingleton()
 {
-    rs = {0.701, 0.165, -0.065};
-    // rs = {0.0, 0.0, 0.0};
-    fs = {0.165, 1.216, 0.021, 10.0, -1.216, 1.402};
-    ms = {0.0, 1.113, 0.0};
-    // ms = {0.0, 0.0, 0.0};
-    rs2 = {0.0, 0.515, -0.062};
-    ms2 = {0.0, 0.0, 0.0};
+    rs_cloud.push_back({0.0, 0.0, 0.0});
+    rs2_cloud.push_back({0.0, 0.0, 0.0});
+    ms_cloud.push_back({0.0, 0.0, 0.0});
+    ms2_cloud.push_back({0.0, 0.0, 0.0});
+    fs_cloud.push_back({0.165, 1.216, 0.021, 10.0, -1.216, 1.402});
+    rs_cloud.push_back({0.0, 0.0, 0.0});
+    rs2_cloud.push_back({0.0, 0.0, 0.0});
+    ms_cloud.push_back({0.0, 0.0, 0.0});
+    ms2_cloud.push_back({0.0, 0.0, 0.0});
+    fs_cloud.push_back({0.165, 1.216, 0.021, 10.0, -1.216, 1.402});
+
+    rs_cloud.at(0) = {0.701, 0.165, -0.065};
+    rs2_cloud.at(0) = {0.0, 0.515, -0.062};
+    ms_cloud.at(0)= {0.0, 1.113, 0.0};
+    ms2_cloud.at(0) = {0.0, 0.0, 0.0};
+    fs_cloud.at(0) = {0.165, 1.216, 0.021, 10.0, -1.216, 1.402};
+
+    rs_cloud.at(1) = {0.0, 0.0, 0.0};
+    rs2_cloud.at(1) = {0.0, 0.0, 0.0};
+    ms_cloud.at(1) = {0.0, 0.0, 0.0};
+    ms2_cloud.at(1) = {0.0, 0.0, 0.0};
+    fs_cloud.at(1) = {0.165, 1.216, 0.021, 10.0, -1.216, 1.402};
 }
 
 SettingSingleton::~SettingSingleton()
 {
 }
 
-rotationSettings SettingSingleton::getRotate()
+rotationSettings SettingSingleton::getRotate(int id)
 {
-    return rs;
-}
-void SettingSingleton::setRotate(rotationSettings ndata)
-{
-    rs = ndata;
+    return rs_cloud[id];
 }
 
-filterSettings SettingSingleton::getFilter()
+void SettingSingleton::setRotate(int id, rotationSettings ndata)
 {
-    return fs;
-}
-void SettingSingleton::setFilter(filterSettings ndata)
-{
-    fs = ndata;
+    rs_cloud[id] = ndata;
 }
 
-moveSettings SettingSingleton::getMove()
+filterSettings SettingSingleton::getFilter(int id)
 {
-    return ms;
+    return fs_cloud[id];
 }
-void SettingSingleton::setMove(moveSettings ndata)
+
+void SettingSingleton::setFilter(int id, filterSettings ndata)
 {
-    ms = ndata;
+    fs_cloud[id] = ndata;
+}
+
+moveSettings SettingSingleton::getMove(int id)
+{
+    return ms_cloud[id];
+}
+
+void SettingSingleton::setMove(int id, moveSettings ndata)
+{
+    ms_cloud[id] = ndata;
 }
 
 
-rotationSettings SettingSingleton::getRotate2()
+rotationSettings SettingSingleton::getRotate2(int id)
 {
-    return rs2;
+    return rs2_cloud[id];
 }
-void SettingSingleton::setRotate2(rotationSettings ndata)
+
+void SettingSingleton::setRotate2(int id, rotationSettings ndata)
 {
-    rs2 = ndata;
+    rs2_cloud[id] = ndata;
 }
-moveSettings SettingSingleton::getMove2()
+
+moveSettings SettingSingleton::getMove2(int id)
 {
-    return ms2;
+    return ms2_cloud[id];
 }
-void SettingSingleton::setMove2(moveSettings ndata)
+
+void SettingSingleton::setMove2(int id, moveSettings ndata)
 {
-    ms2 = ndata;
+    ms2_cloud[id] = ndata;
 }
 
 SettingSingleton *SettingSingleton::getInstance()

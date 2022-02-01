@@ -2,6 +2,8 @@
 */
 #pragma once
 
+#include <vector>
+
 using namespace std;
 
 struct rotationSettings
@@ -31,16 +33,18 @@ public:
 
     static SettingSingleton *getInstance();
 
-    rotationSettings getRotate();
-    void setRotate(rotationSettings data);
-    moveSettings getMove();
-    void setMove(moveSettings data);
+    rotationSettings getRotate(int id);
+    void setRotate(int id, rotationSettings data);
+    moveSettings getMove(int id);
+    void setMove(int id, moveSettings data);
 
-    rotationSettings getRotate2();
-    void setRotate2(rotationSettings data);
-    moveSettings getMove2();
-    void setMove2(moveSettings data);
+    rotationSettings getRotate2(int id);
+    void setRotate2(int id, rotationSettings data);
+    moveSettings getMove2(int id);
+    void setMove2(int id, moveSettings data);
 
-    filterSettings getFilter();
-    void setFilter(filterSettings data);
+    filterSettings getFilter(int id);
+    void setFilter(int id, filterSettings data);
+
+
 };

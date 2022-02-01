@@ -12,6 +12,7 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QCheckBox>
 #include "../include/GUIData.hpp"
 
 class GUIApplication : public QWidget
@@ -23,7 +24,30 @@ class GUIApplication : public QWidget
         QWidget *pan_statistics;
         QTableWidget *pan_table;
 
-    QGridLayout *layout;
+        vector<QSlider>moveXSliders;
+        vector<QSlider>moveYSliders;
+        vector<QSlider>moveZSliders;
+
+        vector<QSlider>rotateXSliders;
+        vector<QSlider>rotateYSliders;
+        vector<QSlider>rotateZSliders;
+        vector<QSlider>rotate2XSliders;
+        vector<QSlider>rotate2YSliders;
+        vector<QSlider>rotate2ZSliders;
+
+        vector<QSlider>filterXSliders;
+        vector<QSlider>filterYSliders;
+        vector<QSlider>filterZSliders;
+        vector<QSlider>filter2XSliders;
+        vector<QSlider>filter2YSliders;
+        vector<QSlider>filter2ZSliders;
+
+        vector <QCheckBox>checkBoxes;
+
+        void addPclWindow(int id);
+        QSlider* getDefaultSlider(int val= 0, int min = -4000, int max = 4000);
+
+        QGridLayout *layout;
 
         QStringList tableHeaders = { 
             "ID", 
@@ -39,6 +63,7 @@ class GUIApplication : public QWidget
         virtual ~GUIApplication() {};
         
         static void ValueChange(int v);
+
         static void rotationChangeX(int X);
         static void rotationChangeY(int Y);
         static void rotationChangeZ(int Z);

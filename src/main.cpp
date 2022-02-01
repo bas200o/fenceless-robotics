@@ -50,9 +50,9 @@ int testmain()
 {
   SettingSingleton *ds = ds->getInstance();
   struct rotationSettings rs = {0.0, 0.0, 1.0};
-  ds->setRotate(rs);
+  ds->setRotate(0, rs);
   struct moveSettings ms = {0.0, 0.0, 0.0};
-  ds->setMove(ms);
+  ds->setMove(0, ms);
   // struct filterSettings fs = {-10.0, 10.0, -10.0, 10.0, -10.0, 10.0};
   // ds->setFilter(fs);
 
@@ -101,7 +101,7 @@ int testmain()
     full = Controller3D::rotatePCL(cloud);
     full = Controller3D::movePCL(full);
     *full += *cloud2;
-    full = Controller3D::rotatePCL(full, SettingSingleton::getInstance()->getRotate2());
+    full = Controller3D::rotatePCL(full, SettingSingleton::getInstance()->getRotate2(0));
     full = Controller3D::filterPCL(full);
 
 
@@ -122,9 +122,11 @@ int main(int argc, char *argv[])
 {
   CameraConnector *camCon = CameraConnector::getInstance();
   camCon->connectCameras(0, 1);
-  // camCon->connectCameras(1, 1);
+  camCon->connectCameras(1, 1);
   std::this_thread::sleep_for(std::chrono::seconds(2));
   // het();
+
+  
   
   DataManager dm;
 

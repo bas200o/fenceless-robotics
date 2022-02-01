@@ -10,7 +10,7 @@
 
 Controller3D::Controller3D(/* args */)
 {
-     pcl::visualization::PCLVisualizer::Ptr viewerTemp(new pcl::visualization::PCLVisualizer("3D Viewer"));
+    pcl::visualization::PCLVisualizer::Ptr viewerTemp(new pcl::visualization::PCLVisualizer("3D Viewer"));
     viewer = viewerTemp;
     viewer->setBackgroundColor(0, 0, 0);
     viewer->initCameraParameters();
@@ -184,7 +184,7 @@ void Controller3D::ProccesPointcloud()
 
     auto clouds = lastInfo[0].getPointClouds();
     *cloud = clouds.at(0);
-    // *cloud2 = clouds.at(1);
+    *cloud2 = clouds.at(1);
 
     for (size_t i = 0; i < cloud->points.size(); i++)
     {
@@ -192,11 +192,11 @@ void Controller3D::ProccesPointcloud()
       cloud->points[i].b = 0;
     }
 
-    full = rotatePCL(cloud);
-    full = rotatePCL(full, SettingSingleton::getInstance()->getRotate2());
+    full = rotatePCL(cloud, SettingSingleton::getInstance()->getRotate2(0));
+    full = rotatePCL(full, SettingSingleton::getInstance()->getRotate2(1));
     full = movePCL(full);
     
-    // *full += *cloud2;
+    *full += *cloud2;
     full = filterPCL(full);
     lastInfo[0].AddFullPointCloud(*full);
 
@@ -265,7 +265,7 @@ void Controller3D::CalculateSpeed()
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct rotationSettings rs = ds->getRotate();
+    struct rotationSettings rs = ds->getRotate(0);
     return Controller3D::rotatePCL(OGCloud, rs.x, rs.y, rs.z);
 }
 
@@ -294,7 +294,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::rotatePCL(pcl::PointCloud<p
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct moveSettings ms = ds->getMove();
+    struct moveSettings ms = ds->getMove(0);
     return Controller3D::movePCL(OGcloud, ms.x, ms.y, ms.z);
 }
 
@@ -321,7 +321,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::movePCL(pcl::PointCloud<pcl
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct filterSettings rs = ds->getFilter();
+    struct filterSettings rs = ds->getFilter(0);
     
     return Controller3D::filterPCL(OGCloud, rs.x, rs.x1, rs.y, rs.y1, rs.z, rs.z1);
 }
@@ -376,7 +376,7 @@ void Controller3D::configure(){
 
     auto clouds = lastInfo[0].getPointClouds();
     *cloud = clouds.at(0);
-    // *cloud2 = clouds.at(1);
+    *cloud2 = clouds.at(1);
 
     for (size_t i = 0; i < cloud->points.size(); i++)
     {
@@ -385,11 +385,11 @@ void Controller3D::configure(){
     }
 
     full = rotatePCL(cloud);
-    full = rotatePCL(full, SettingSingleton::getInstance()->getRotate2());
+    full = rotatePCL(full, SettingSingleton::getInstance()->getRotate2(0));
     full = movePCL(full);
-    // *full += *cloud2;
+    *full += *cloud2;
     
-    full = filterPCL(full);
+    // full = filterPCL(full);
 
     viewer->removeAllPointClouds();
     viewer->addPointCloud(full);
