@@ -28,7 +28,6 @@ void Controller3D::CreateNewInformation()
     Information3D temp1;
     Information3D temp2;
     Information3D temp3;
-    printf("Creating first info \n");
     //make sure the first is the newest info
     temp2 = lastInfo[0];
     lastInfo[0] = Info3D;
@@ -45,14 +44,12 @@ void Controller3D::CreateNewInformation()
     CameraConnector *camCon = camCon->getInstance();
     lastInfo[0].AddPointClouds(camCon->retrievePointClouds());
     lastInfo[0].setTimeStamp(camCon->getLastTimeStamp());
-    printf("Created first info \n");
     return;
 }
 
 void Controller3D::DetectObjects(int pInfo)
 {
-    printf("Detecting \n");
-    cout<<lastInfo[pInfo].getPointCloud().points.size()<<endl;
+    cout<<"detecting in pointcloud of size: "<<lastInfo[pInfo].getPointCloud().points.size()<<endl;
     //lastInfo[pInfo].
 
     if (pInfo >= 5)
@@ -84,10 +81,10 @@ void Controller3D::DetectObjects(int pInfo)
     seg.setModelType(pcl::SACMODEL_PLANE);
     seg.setMethodType(pcl::SAC_RANSAC);
     seg.setMaxIterations(100);
-    seg.setDistanceThreshold(0.02);
+    seg.setDistanceThreshold(0.01);
 
     int nr_points = (int)cloud_filtered->size();
-    while (cloud_filtered->size() > 0.3 * nr_points)
+    while (cloud_filtered->size() > 1 * nr_points)
     {
         // Segment the largest planar component from the remaining cloud
         seg.setInputCloud(cloud_filtered);
@@ -119,13 +116,16 @@ void Controller3D::DetectObjects(int pInfo)
 
     std::vector<pcl::PointIndices> cluster_indices;
     pcl::EuclideanClusterExtraction<pcl::PointXYZRGB> ec;
-    ec.setClusterTolerance(0.02); // 2cm
-    ec.setMinClusterSize(100);
+    ec.setClusterTolerance(0.07); // 10cm
+    ec.setMinClusterSize(25);
     ec.setMaxClusterSize(25000);
     ec.setSearchMethod(tree);
     ec.setInputCloud(cloud_filtered);
     ec.extract(cluster_indices);
 
+
+    // pcl::PointCloud<pcl::PointXYZRGB>::Ptr full(new pcl::PointCloud<pcl::PointXYZRGB>());
+    viewer->removeAllPointClouds();
     int j = 0;
     for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin(); it != cluster_indices.end(); ++it)
     {
@@ -136,8 +136,43 @@ void Controller3D::DetectObjects(int pInfo)
         cloud_cluster->height = 1;
         cloud_cluster->is_dense = true;
         lastInfo[pInfo].InsertObject(*cloud_cluster);
-        std::cout << "another one"<< std::endl;
+
+        //TEMPORARY CODE TO DISPLAY POINTCLOUD -> ENDS AT <END TEMPORARY> COMMENT
+    for (size_t i = 0; i < cloud_cluster->points.size(); i++)
+    {
+        switch (j)
+        {
+        case 0:
+            cloud_cluster->points[i].r = 0;
+            cloud_cluster->points[i].g = 255;
+            cloud_cluster->points[i].b = 0; 
+            break;
+        case 1:
+            cloud_cluster->points[i].r = 255;
+            cloud_cluster->points[i].g = 0;
+            cloud_cluster->points[i].b = 0; 
+            break;
+        case 2:
+            cloud_cluster->points[i].g = 0;
+            cloud_cluster->points[i].r = 0;
+            cloud_cluster->points[i].b = 255;
+            break;
+        default:
+            break;
+        }
+      
+      
     }
+
+        viewer->addPointCloud(cloud_cluster, "hey" + j);
+        j++;
+    }
+
+    
+    std::cout << "number of found objects: "<< j <<std::endl;
+    viewer->spinOnce(100, true);
+    //END TEMPORARY
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     return;
 }
 
@@ -149,7 +184,7 @@ void Controller3D::ProccesPointcloud()
 
     auto clouds = lastInfo[0].getPointClouds();
     *cloud = clouds.at(0);
-    *cloud2 = clouds.at(1);
+    // *cloud2 = clouds.at(1);
 
     for (size_t i = 0; i < cloud->points.size(); i++)
     {
@@ -158,16 +193,14 @@ void Controller3D::ProccesPointcloud()
     }
 
     full = rotatePCL(cloud);
-    full = movePCL(full);
-    *full += *cloud2;
     full = rotatePCL(full, SettingSingleton::getInstance()->getRotate2());
+    full = movePCL(full);
+    
+    // *full += *cloud2;
     full = filterPCL(full);
     lastInfo[0].AddFullPointCloud(*full);
+
     
-    //debugging
-    // viewer->removeAllPointClouds();
-    // viewer->addPointCloud(full);
-    // viewer->spinOnce(5);
     return;
 }
 
@@ -210,16 +243,20 @@ void Controller3D::CalculateSpeed()
         for (FoundObject oldObject : previous.getObjects())
         {
             dist = euclideanDistance(object.getLocation(), oldObject.getLocation());
-            if (object.getSize() * -0.10 < object.getSize() - oldObject.getSize() < object.getSize() * 0.10 && dist < shortestDist && dist < previous.getPointCloud().width)
+            if (object.getSize() * -0.30 < object.getSize() - oldObject.getSize() < object.getSize() * 0.30 && dist < shortestDist && dist < previous.getPointCloud().width)
             {
                 shortestDist = dist;
                 movedObject = oldObject;
             }
         }
         double speed = 0;
+        if(shortestDist != FLT_MAX){
         //calculate speed
         //dist/time
         speed = shortestDist / (lastInfo[0].getTimeStamp() - previous.getTimeStamp());
+        }
+        else speed = -1;
+        //cout<<speed<<endl;
         lastInfo[0].objects[i].setSpeed(speed);
     }
 }
@@ -332,5 +369,31 @@ void Controller3D::pushUIData(){
     GUIData::getInstance()->setObjects(lastInfo[0]);
 }
 
+void Controller3D::configure(){
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr full(new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud2(new pcl::PointCloud<pcl::PointXYZRGB>);
+
+    auto clouds = lastInfo[0].getPointClouds();
+    *cloud = clouds.at(0);
+    // *cloud2 = clouds.at(1);
+
+    for (size_t i = 0; i < cloud->points.size(); i++)
+    {
+      cloud->points[i].g = 0;
+      cloud->points[i].b = 0;
+    }
+
+    full = rotatePCL(cloud);
+    full = rotatePCL(full, SettingSingleton::getInstance()->getRotate2());
+    full = movePCL(full);
+    // *full += *cloud2;
+    
+    full = filterPCL(full);
+
+    viewer->removeAllPointClouds();
+    viewer->addPointCloud(full);
+    viewer->spinOnce(5);
+}
 
 //

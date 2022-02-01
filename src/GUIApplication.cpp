@@ -41,56 +41,70 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     }
 
     #pragma region PCL Sliders
+    moveSettings ms =  SettingSingleton::getInstance()->getMove();
+    moveSettings ms1 = SettingSingleton::getInstance()->getMove2();
+    rotationSettings rs =  SettingSingleton::getInstance()->getRotate();
+    rotationSettings rs1 =  SettingSingleton::getInstance()->getRotate2();
     auto sliderMvX = new QSlider(Qt::Horizontal);
     sliderMvX->setMinimum(-4000);
     sliderMvX->setMaximum(4000);
+    sliderMvX->setValue(ms.x * 1000);
     connect(sliderMvX, &QSlider::valueChanged, this, GUIApplication::positionChangeX);
     auto sliderMvY = new QSlider(Qt::Horizontal);
     sliderMvY->setMinimum(-4000);
     sliderMvY->setMaximum(4000);
+    sliderMvY->setValue(ms.y * 1000);
     connect(sliderMvY, &QSlider::valueChanged, this, GUIApplication::positionChangeY);
     auto sliderMvZ = new QSlider(Qt::Horizontal);
     sliderMvZ->setMinimum(-4000);
     sliderMvZ->setMaximum(4000);
+    sliderMvZ->setValue(ms.z * 1000);
     connect(sliderMvZ, &QSlider::valueChanged, this, GUIApplication::positionChangeZ);
     auto sliderRtX = new QSlider(Qt::Horizontal);
     sliderRtX->setMinimum(-4000);
     sliderRtX->setMaximum(4000);
+    sliderRtX->setValue(rs.x * 1000);
     connect(sliderRtX, &QSlider::valueChanged, this, GUIApplication::rotationChangeX);
     auto sliderRtY = new QSlider(Qt::Horizontal);
     sliderRtY->setMinimum(-4000);
     sliderRtY->setMaximum(4000);
+    sliderRtY->setValue(rs.y * 1000);
     connect(sliderRtY, &QSlider::valueChanged, this, GUIApplication::rotationChangeY);
     auto sliderRtZ = new QSlider(Qt::Horizontal);
     sliderRtZ->setMinimum(-4000);
     sliderRtZ->setMaximum(4000);
+    sliderRtZ->setValue(rs.z * 1000);
     connect(sliderRtZ, &QSlider::valueChanged, this, GUIApplication::rotationChangeZ);
 
     // Yannick
     auto sliderMvX1 = new QSlider(Qt::Horizontal);
     sliderMvX1->setMinimum(-4000);
     sliderMvX1->setMaximum(4000);
-    connect(sliderMvX1, &QSlider::valueChanged, this, GUIApplication::positionChangeX);
+    sliderMvX1->setValue(ms1.x * 1000);
+    connect(sliderMvX1, &QSlider::valueChanged, this, GUIApplication::positionChangeX1);
     auto sliderMvY1 = new QSlider(Qt::Horizontal);
     sliderMvY1->setMinimum(-4000);
     sliderMvY1->setMaximum(4000);
-    connect(sliderMvY1, &QSlider::valueChanged, this, GUIApplication::positionChangeY);
+    connect(sliderMvY1, &QSlider::valueChanged, this, GUIApplication::positionChangeY1);
     auto sliderMvZ1 = new QSlider(Qt::Horizontal);
     sliderMvZ1->setMinimum(-4000);
     sliderMvZ1->setMaximum(4000);
-    connect(sliderMvZ1, &QSlider::valueChanged, this, GUIApplication::positionChangeZ);
+    connect(sliderMvZ1, &QSlider::valueChanged, this, GUIApplication::positionChangeZ1);
     auto sliderRtX1 = new QSlider(Qt::Horizontal);
     sliderRtX1->setMinimum(-4000);
     sliderRtX1->setMaximum(4000);
-    connect(sliderRtX1, &QSlider::valueChanged, this, GUIApplication::rotationChangeX);
+    sliderRtX1->setValue(rs1.x * 1000);
+    connect(sliderRtX1, &QSlider::valueChanged, this, GUIApplication::rotationChangeX1);
     auto sliderRtY1 = new QSlider(Qt::Horizontal);
     sliderRtY1->setMinimum(-4000);
     sliderRtY1->setMaximum(4000);
-    connect(sliderRtY1, &QSlider::valueChanged, this, GUIApplication::rotationChangeY);
+    sliderRtY1->setValue(rs1.y * 1000);
+    connect(sliderRtY1, &QSlider::valueChanged, this, GUIApplication::rotationChangeY1);
     auto sliderRtZ1 = new QSlider(Qt::Horizontal);
     sliderRtZ1->setMinimum(-4000);
     sliderRtZ1->setMaximum(4000);
-    connect(sliderRtZ1, &QSlider::valueChanged, this, GUIApplication::rotationChangeZ);
+    sliderRtZ1->setValue(rs1.z * 1000);
+    connect(sliderRtZ1, &QSlider::valueChanged, this, GUIApplication::rotationChangeZ1);
 
     auto sliderFX = new QSlider(Qt::Horizontal);
     sliderFX->setMinimum(-4000);
@@ -116,6 +130,8 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     sliderFZ1->setMinimum(-4000);
     sliderFZ1->setMaximum(4000);
     connect(sliderFZ1, &QSlider::valueChanged, this, GUIApplication::filterChangez1);
+    auto pancake = new QPushButton("Stop configuring");
+    connect(pancake, &QPushButton::released, this, GUIApplication::setConfiguring);
 
     auto mx = new QLabel("move x");
     auto my = new QLabel("move y");
@@ -132,7 +148,7 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     // Combining layout
     layout = new QGridLayout(this);
     layout->addWidget(pan_view2d, 0, 0);
-    layout->addWidget(pan_view3d, 0, 1);
+    layout->addWidget(pancake, 0, 1);
     layout->addWidget(pan_statistics, 0, 2);
     layout->addWidget(pan_table, 1, 0, 1, 3);
 
@@ -173,7 +189,7 @@ void GUIApplication::updateTable(vector<VisualObject> objects)
     pan_table->setRowCount(objects.size());
     int row = 0;
 
-    cout << "New ontents of table:\n";
+    // cout << "New ontents of table:\n";
 
     for(VisualObject obj : objects)
     {
@@ -186,14 +202,14 @@ void GUIApplication::updateTable(vector<VisualObject> objects)
             .arg(obj.direction.y)
             .arg(obj.direction.z);
 
-        cout // brrrr
-            << row << " | "
-            << pos.toStdString() << " | "
-            << obj.size << " | "
-            << dir.toStdString() << " | "
-            << obj.speed << " | "
-            << obj.acceleration 
-        << endl;
+        // cout // brrrr
+        //     << row << " | "
+        //     << pos.toStdString() << " | "
+        //     << obj.size << " | "
+        //     << dir.toStdString() << " | "
+        //     << obj.speed << " | "
+        //     << obj.acceleration 
+        // << endl;
 
         // pan_table->setItem(row, 0, new QTableWidgetItem("-"));                                  // ID -> Removed for now
         pan_table->setItem(row, 1, new QTableWidgetItem(QString("%1").arg(obj.showTime)));      // Tijd in beeld
@@ -342,3 +358,34 @@ void GUIApplication::filterChangez1(int v)
     fs.z1 = (float)(v / 1000.0);
     ds->setFilter(fs);
 }
+
+void printXYZ(moveSettings ms) {
+    std::cout << "Move box : \n";
+    std::cout << "x = " << ms.x << ", y = " << ms.y << ", z = " << ms.z << "\n";
+}
+void printXYZ(rotationSettings rs) {
+    std::cout << "Rotation box : \n";
+    std::cout << "x = " << rs.x << ", y = " << rs.y << ", z = " << rs.z << "\n";
+}
+
+void printXYZ(filterSettings fs) {
+    std::cout << "Filter box : \n";
+    std::cout << "x = " << fs.x << ", x1 = " << fs.x1 << "\n";
+    std::cout << "y = " << fs.y << ", y1 = " << fs.y1 << "\n";
+    std::cout << "z = " << fs.z << ", z1 = " << fs.z1 << std::endl;
+}
+
+void GUIApplication::setConfiguring(){
+    std::cout << "Stopped Configure" << std::endl;
+
+    // printXYZ(SettingSingleton::getInstance()->getMove());
+    // printXYZ(SettingSingleton::getInstance()->getMove2());
+    // printXYZ(SettingSingleton::getInstance()->getRotate());
+    // printXYZ(SettingSingleton::getInstance()->getRotate2());
+    // printXYZ(SettingSingleton::getInstance()->getFilter());
+
+
+    GUIData::getInstance()->configuring = false;
+    return;
+}
+

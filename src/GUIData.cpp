@@ -75,7 +75,16 @@ int GUIData::setObjects(Information3D data)
     for(FoundObject obj : data.getObjects()){
         std::tuple<float, float, float> center = obj.getCenterMass();
         vec3 vec = {(int)(get<0>(center)*1000), (int)(get<1>(center)*1000), (int)(get<2>(center)*1000)};
-        VisualObject vs = {-1, vec, obj.getSize(), -1, (int)obj.getSpeed()*1000, -1};
+        double fSpeed;
+        if(obj.getSpeed() > 0.00001){
+        fSpeed = obj.getSpeed();
+        }
+        else{
+            fSpeed = 0;
+        }
+
+        VisualObject vs = {-1, vec, obj.getSize(), -1,-1,-1, fSpeed, -1};
+        //std::cout << (int)obj.getSpeed()*10000000000.0f << std::endl;
         vos.push_back(vs);
     // int showTime;
     // vec3 position;
@@ -115,10 +124,10 @@ vector<VisualObject> GUIData::getTable()
     if(table_busy)
         return vector<VisualObject>(); // Empty vector indicates bad result
     
-    cout << "Returning table: \n";
+    //cout << "Returning table: \n";
     for(VisualObject v: table)
     {
-        cout << v.direction.x << v.direction.y << v.direction.z << endl;
+        // cout << v.direction.x << v.direction.y << v.direction.z << endl;
     }
 
     table_newdata = false;

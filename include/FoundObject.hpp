@@ -14,7 +14,7 @@ private:
     pcl::PointXYZRGB location;
     //The longest size of an object
     float size = 0;
-    double speed = 1;
+    double speed = -1;
     //The centermass of the object
     std::tuple<float, float, float> centerMass;
     //The pointcloud of the object
