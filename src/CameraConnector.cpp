@@ -10,6 +10,10 @@ CameraConnector::~CameraConnector()
 
 CameraConnector *CameraConnector::pSingleton = NULL;
 
+/**
+ * Gets the instance for the singleton object.
+ * @return Get the singleton object
+ */
 CameraConnector *CameraConnector::getInstance()
 {
     if (pSingleton == NULL)
@@ -24,6 +28,12 @@ void threadFunc(RSCameraHandler *handler)
     handler->runThread();
 }
 
+/**
+ * Method connects the camera's to the application.
+ * @param number The camera in the array
+ * @param type Type of camera that gets connected: 1 for realsense, 2 for zed(//TODO)
+ * @return void
+ */
 void CameraConnector::connectCameras(int number, int type)
 {
     switch (type)
@@ -32,10 +42,9 @@ void CameraConnector::connectCameras(int number, int type)
     {
         RSCameraHandler* newCamera = new RSCameraHandler();
         if (newCamera->getPipeRunning()) {
-            std::thread thing(threadFunc, newCamera);
-            thing.detach();
+            std::thread camThread(threadFunc, newCamera);
+            camThread.detach();
             connectedCams.insert(connectedCams.begin() + number, newCamera);
-            // connectedCams.push_back(newCamera);
         } else {
             std::cout << "RS camera handler failed to init" << std::endl;
         }
@@ -75,6 +84,10 @@ void CameraConnector::remConnectedRSCamera(std::string id)
     }
 }
 
+/**
+ * Method retrieves rgb image from connected camerera's
+ * @return std vector with opencv rgb image not depth
+ */
 std::vector<cv::Mat> CameraConnector::retrieveImages()
 {
     int s = sizeof(connectedCams);
@@ -86,6 +99,10 @@ std::vector<cv::Mat> CameraConnector::retrieveImages()
     return images;
 }
 
+/**
+ * Method returns a vector of pointclouds from connected camera's
+ * @return std vector with rgb pointclouds
+ */
 std::vector<pcl::PointCloud<pcl::PointXYZRGB>> CameraConnector::retrievePointClouds()
 {
     float s = connectedCams.size();

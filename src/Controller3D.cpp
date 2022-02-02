@@ -22,6 +22,10 @@ Controller3D::~Controller3D()
 {
 }
 
+/**
+ * Creates an array of information3d objects
+ * @return void saves to lastinfo array
+ */
 void Controller3D::CreateNewInformation()
 {
     Information3D Info3D;
@@ -44,9 +48,12 @@ void Controller3D::CreateNewInformation()
     CameraConnector *camCon = camCon->getInstance();
     lastInfo[0].AddPointClouds(camCon->retrievePointClouds());
     lastInfo[0].setTimeStamp(camCon->getLastTimeStamp());
-    return;
 }
 
+/**
+ * Detects objects and stores information in Information3d object
+ * @param pInfo The information3d object to retrieve and store data.
+ */
 void Controller3D::DetectObjects(int pInfo)
 {
     cout<<"detecting in pointcloud of size: "<<lastInfo[pInfo].getPointCloud().points.size()<<endl;
@@ -137,45 +144,41 @@ void Controller3D::DetectObjects(int pInfo)
         cloud_cluster->is_dense = true;
         lastInfo[pInfo].InsertObject(*cloud_cluster);
 
-        //TEMPORARY CODE TO DISPLAY POINTCLOUD -> ENDS AT <END TEMPORARY> COMMENT
-    for (size_t i = 0; i < cloud_cluster->points.size(); i++)
-    {
-        switch (j)
+            //TEMPORARY CODE TO DISPLAY POINTCLOUD -> ENDS AT <END TEMPORARY> COMMENT
+        for (size_t i = 0; i < cloud_cluster->points.size(); i++)
         {
-        case 0:
-            cloud_cluster->points[i].r = 0;
-            cloud_cluster->points[i].g = 255;
-            cloud_cluster->points[i].b = 0; 
-            break;
-        case 1:
-            cloud_cluster->points[i].r = 255;
-            cloud_cluster->points[i].g = 0;
-            cloud_cluster->points[i].b = 0; 
-            break;
-        case 2:
-            cloud_cluster->points[i].g = 0;
-            cloud_cluster->points[i].r = 0;
-            cloud_cluster->points[i].b = 255;
-            break;
-        default:
-            break;
+            switch (j)
+            {
+            case 0:
+                cloud_cluster->points[i].r = 0;
+                cloud_cluster->points[i].g = 255;
+                cloud_cluster->points[i].b = 0; 
+                break;
+            case 1:
+                cloud_cluster->points[i].r = 255;
+                cloud_cluster->points[i].g = 0;
+                cloud_cluster->points[i].b = 0; 
+                break;
+            case 2:
+                cloud_cluster->points[i].g = 0;
+                cloud_cluster->points[i].r = 0;
+                cloud_cluster->points[i].b = 255;
+                break;
+            default:
+                break;
+            }
         }
-      
-      
-    }
-
         viewer->addPointCloud(cloud_cluster, "hey" + j);
         j++;
     }
-
-    
     std::cout << "number of found objects: "<< j <<std::endl;
     viewer->spinOnce(100, true);
-    //END TEMPORARY
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    return;
 }
 
+/**
+ * Method processes pointclouds to rotate move combine and filter.
+ * @return void data stored in information3d object
+ */
 void Controller3D::ProccesPointcloud()
 {
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr full(new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -199,11 +202,13 @@ void Controller3D::ProccesPointcloud()
     // *full += *cloud2;
     full = filterPCL(full);
     lastInfo[0].AddFullPointCloud(*full);
-
-    
-    return;
 }
 
+/**
+ * Combines pointclouds from a information 3d object
+ * @param pInfo Information3d object to combine pointclouds of.
+ * @return Combined pointclouds
+ */
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::CombinePointClouds(int pInfo)
 {
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr full;
@@ -211,10 +216,13 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::CombinePointClouds(int pInf
     {
         *full += pointcloud;
     }
-    // lastInfo[pInfo].AddFullPointCloud(*full);
     return full;
 }
 
+/**
+ * Calculates speed of objects in pointcloud
+ * @return void method saves speed in the information3d object
+ */
 void Controller3D::CalculateSpeed()
 {
     Information3D previous;
@@ -261,7 +269,11 @@ void Controller3D::CalculateSpeed()
     }
 }
 
-// Gets xyz from singleton
+/**
+ * rotates the pointcloud on xyz axis from SettingSingleton
+ * @param OGCloud The original pointcloud
+ * @return The rotated pointcloud
+ */
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud)
 {
     SettingSingleton *ds = ds->getInstance();
@@ -269,12 +281,25 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::rotatePCL(pcl::PointCloud<p
     return Controller3D::rotatePCL(OGCloud, rs.x, rs.y, rs.z);
 }
 
-// Gets xyz from singleton
+/**
+ * Rotates the pointcloud with a rotationSettings struct
+ * @param OGCloud The original pointcloud
+ * @param rs The rotationsSettings struct
+ * @return The rotated pointcloud
+ */
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, rotationSettings rs)
 {
     return Controller3D::rotatePCL(OGCloud, rs.x, rs.y, rs.z);
 }
 
+/**
+ * Rotates the pointcloud around the XYZ axis
+ * @param OGCloud The original pointcloud
+ * @param x Rotate on x axis
+ * @param y Rotate on y axis
+ * @param z Rotate on z axis
+ * @return The rotated pointcloud
+ */
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, float x, float y, float z)
 {
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr transCloud(new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -290,20 +315,36 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::rotatePCL(pcl::PointCloud<p
     return transCloud;
 }
 
-// Gets xyz from singleton
+/**
+ * Moves the pointcloud with settings from the SettingSingleton
+ * @param OGcloud The original pointcloud
+ * @return The moved pointcloud
+ */
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud)
 {
     SettingSingleton *ds = ds->getInstance();
     struct moveSettings ms = ds->getMove();
-    return Controller3D::movePCL(OGcloud, ms.x, ms.y, ms.z);
+    return Controller3D::movePCL(OGcloud, ms);
 }
 
-// Gets xyz from singleton
+/**
+ * Moves the Pointcloud with the settings from the moveSettings struct
+ * @param OGCloud the original pointlcoud
+ * @param ms The move settings for the pointcloud
+ * @return The moved pointcloud
+ */
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud, moveSettings ms)
 {
     return Controller3D::movePCL(OGcloud, ms.x, ms.y, ms.z);
 }
 
+/**
+ * @param OGCloud The original pointcloud
+ * @param x move the x pos
+ * @param y move the y pos
+ * @oaram z move the z pos
+ * @return The moved pointcloud
+ */
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud, float x, float y, float z)
 {
 
@@ -317,7 +358,11 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::movePCL(pcl::PointCloud<pcl
     return transCloud;
 }
 
-// Gets xyz from singleton
+/**
+ * Filters point cloud on basis of SettingSingleton
+ * @param OGCloud The unfilterd pointcloud RGB
+ * @return The filterd pointcloud RGB
+ */
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud)
 {
     SettingSingleton *ds = ds->getInstance();
@@ -326,16 +371,20 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<p
     return Controller3D::filterPCL(OGCloud, rs.x, rs.x1, rs.y, rs.y1, rs.z, rs.z1);
 }
 
+/**
+ * Filters pointcloud to cut out points that exceed the xyz values
+ * @param OGCloud the original pointcloud
+ * @param x X keep start
+ * @param x1 X keep end
+ * @param y Y keep start
+ * @param y1 Y keep end
+ * @param z Z keep start
+ * @param z1 Z keep end
+ * @return pointcloud xyzrgb filterd
+ */
 pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
                                                                float x, float x1, float y, float y1, float z, float z1)
-{
-
-    auto start = std::chrono::system_clock::now();
-    // std::cout << "Filter box : \n";
-    // std::cout << "x = " << x << ", x1 = " << x1 << "\n";
-    // std::cout << "y = " << y << ", y1 = " << y1 << "\n";
-    // std::cout << "z = " << z << ", z1 = " << z1 << std::endl;
-    
+{   
     pcl::PointCloud<pcl::PointXYZRGB> filteredCloud;
     filteredCloud.reserve(OGCloud->points.size());
     
@@ -352,16 +401,6 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<p
     }
 
     *OGCloud = std::move(filteredCloud);
-
-    auto end = std::chrono::system_clock::now();
-
-    std::chrono::duration<double> elapsed_seconds = end - start;
-    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-
-    // std::cout << "finished computation at " << std::ctime(&end_time)
-    //           << "elapsed time: " << elapsed_seconds.count() << "s" << std::endl;
-    // std::cout << "Displaying " << OGCloud->points.size() << " points" << std::endl; 
-
     return OGCloud;
 }
 

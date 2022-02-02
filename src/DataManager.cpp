@@ -11,13 +11,12 @@
 #include "tbb/parallel_for.h"
 #include "tbb/task_arena.h"
 
+/**
+ * Main methode for pcl application
+ * @return stopcode
+ */
 int DataManager::dataMain()
 {
-        
-
-
-    //GUIApplication gui;
-    
     Controller3D cont3;
     // float longest = 0, shortest = 99;
     bool first = true;
@@ -36,39 +35,33 @@ int DataManager::dataMain()
         cont3.CalculateSpeed();
         cont3.pushUIData();
 
-    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+        duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 
-    // if(duration < shortest && !first){
-    //     shortest = duration;
-    // }
-    // if(duration > longest && !first){
-    //     longest = duration;
-    // }
-    first = false;
-    std::cout<<"duration of inference with intake and delays: "<< duration << std::endl;
-    // std::cout<<"longest of inference with intake and delays: "<< longest << std::endl;
-    // std::cout<<"shortest of inference with intake and delays: "<< shortest << std::endl;
-
+        first = false;
+        std::cout<<"duration of inference with intake and delays: "<< duration << std::endl;
     }
-    //Controller2D cont2;
-    //while(true)
-
-    //Do 3DVision
     cout << "ended application" << endl;
     return 1;
 }
 
+/**
+ * Starts Program in new thread
+ * @return stopcode
+ */
 int DataManager::startThreads(int argc, char **argv) 
 {
     arena.enqueue( [&] 
     {
         dataMain();
     });
-    return 0;
+    return 1;
 }
 
-
-
+/**
+ * Starts the gui
+ * @param Arguments from main
+ * @return stopcode
+ */
 int DataManager::maingui(int argc, char **argv)
 {
     QApplication app(argc, argv);

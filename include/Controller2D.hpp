@@ -1,5 +1,8 @@
-/*Class used for all 2D vision and makes objects with information
-/*Currently not used since no 2D vision is used in the application
+/**
+ * 
+ * Class used for all 2D vision and makes objects with information
+ * Currently not used since no 2D vision is used in the application
+ * 
 */
 
 #pragma once

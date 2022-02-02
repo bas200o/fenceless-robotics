@@ -21,29 +21,40 @@ public:
    
    //retrieves the last timestamp
    double getLastTimeStamp();
+
    //Get the existing instance of camera connector
    static CameraConnector *getInstance();
+
    //Connects a camera of a type at position number
    void connectCameras(int number, int type);
+
    //Retrieves the last images from all camera handlers
    std::vector<cv::Mat> retrieveImages();
+
    //Retrieves the last pointclouds from all camera handlers
    std::vector<pcl::PointCloud<pcl::PointXYZRGB>> retrievePointClouds();
+
    //Lists as a quick fix so RSCamerHandler is working
    std::vector<std::string> getConnectedRSCameras();
+
    void addConnectedRSCamera(std::string id);
+
    void remConnectedRSCamera(std::string id);
 
 private:
+
    //Is the last retrieved timestamp
    double lastTimeStamp;
+
    //CameraConnector instance
    static CameraConnector *pSingleton;
+
    //Lists as a quick fix so RSCamerHandler is working
    std::vector<std::string> rsCameraIds;
 
    //Connector
    CameraConnector();
+
    //Destructor
    ~CameraConnector();
 };

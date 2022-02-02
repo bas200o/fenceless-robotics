@@ -25,38 +25,54 @@ private:
 public:
     //Constructor
     Controller3D();
+    
     //Destructor
     ~Controller3D();
+    
     //Does object detection/segmentation on the information passed
     void DetectObjects(int pCloud);
+    
     //Procceses the new point cloud  only works with 2 cams
     void ProccesPointcloud();
+    
     //Creates information from by receiving the pointclouds from CameraConnector
     void CreateNewInformation();
+    
     //Combines the pointclouds from pointcloudinfo lastinfo[pcloud]
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr CombinePointClouds(int pCloud);
+    
     //Calculates the speed of object by comparing them to either the previous pointcloud or the one before
     void CalculateSpeed();
+    
     //
     void pushUIData();
+    
     //
     void configure();
+    
     //Rotates a pointcloud based on the settings in SettingSingleton
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud);
+    
     //Rotates a pointcloud based on the settings provided
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, rotationSettings rs);
+    
     //Rotates a pointcloud based on passed variables
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
                                                             float x, float y, float z);
+    
     //Moves a pointcloud based on the settings in SettingSingleton
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud);
+    
     //Moves a pointcloud based on the settings in SettingSingleton
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud, moveSettings ms);
+    
     //Moves a pointcloud based on passed variables
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr movePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGcloud,
                                                             float x, float y, float z);
-//Filters a pointcloud based on the settings in SettingSingleton
+    
+    //Filters a pointcloud based on the settings in SettingSingleton
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud);
+    
     //Filters a pointcloud based on passed variables
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
                                                             float x, float x1, float y, float y1, float z, float z1);

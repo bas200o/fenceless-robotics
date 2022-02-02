@@ -20,8 +20,11 @@ class DataManager{
         tbb::task_arena arena;
     public:
         int dataMain();
+
         int buildUI(int argc, char **argv);
+
         int maingui(int argc, char **argv);
+
         int startThreads(int argc, char **argv);
 
 };

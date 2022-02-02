@@ -2,6 +2,12 @@
 #include "../include/SettingSingleton.hpp"
 #include <iostream>
 
+/**
+ * Gui Main class
+ * All GUI code is started from here
+ * @param parent the qwidget window.
+ * @return Guiapplication keeps running on thread stop code is returned when stopped.
+ */
 GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 {
     setFixedSize(1240, 950);

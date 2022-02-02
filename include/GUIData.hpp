@@ -46,12 +46,15 @@ class GUIData
 
         int setObjects(vector<VisualObject> objects);
         int setObjects(Information3D newData);
+        
         int setStatistics(StatisticsObject stats);  // Not sure how to implement
 
         bool configuring = true;
 
         vector<Object2D> getView2D();
+
         vector<VisualObject> getTable();
+        
         StatisticsObject getStats();
 
         DataFlags getDataFlags();
@@ -62,8 +65,10 @@ class GUIData
 
         vector<Object2D> view2d;
         bool view2d_busy, view2d_newdata;
+        
         vector<VisualObject> table;
         bool table_busy, table_newdata;
+        
         StatisticsObject stats;
         bool stats_busy, stats_newdata;
 

@@ -1,6 +1,6 @@
 #include "../include/Information3D.hpp"
 
-Information3D::Information3D(/* args */)
+Information3D::Information3D()
 {
 }
 
@@ -18,8 +18,8 @@ void Information3D::AddFullPointCloud(pcl::PointCloud<pcl::PointXYZRGB> pointClo
     fullPointCloud = pointCloud;
 }
 
-void Information3D::FindObjects(){
-    
+void Information3D::FindObjects()
+{    
 }
 
 pcl::PointCloud<pcl::PointXYZRGB> Information3D::getPointCloud(){
