@@ -67,60 +67,58 @@ void GUIApplication::addPclWindow(int id) {
     rotationSettings rs1 =  SettingSingleton::getInstance()->getRotate2(id);
     filterSettings fs = SettingSingleton::getInstance()->getFilter(id);
 
-    static int privInt = id;
-
     QSlider* sliderMvX = getDefaultSlider(ms.x * 1000);
     GUIApplication::moveXSliders.push_back(sliderMvX);
-    connect(sliderMvX, &QSlider::valueChanged, this, [this]{ GUIApplication::positionChangeX(privInt); });
+    connect(sliderMvX, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::positionChangeX(lambdaID); });
     QSlider* sliderMvY = getDefaultSlider(ms.y * 1000);
     GUIApplication::moveYSliders.push_back(sliderMvY);
-    connect(sliderMvY, &QSlider::valueChanged, this, [this]{ GUIApplication::positionChangeY(privInt); });
+    connect(sliderMvY, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::positionChangeY(lambdaID); });
     QSlider* sliderMvZ = getDefaultSlider(ms.z * 1000);
     GUIApplication::moveZSliders.push_back(sliderMvZ);
-    connect(sliderMvZ, &QSlider::valueChanged, this, [this]{ GUIApplication::positionChangeZ(privInt); });
+    connect(sliderMvZ, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::positionChangeZ(lambdaID); });
 
     QSlider* sliderRtX = getDefaultSlider(rs.x * 1000);
     GUIApplication::rotateXSliders.push_back(sliderRtX);
-    connect(sliderRtX, &QSlider::valueChanged, this, [this]{ GUIApplication::rotationChangeX(privInt); });
+    connect(sliderRtX, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::rotationChangeX(lambdaID); });
     QSlider* sliderRtY = getDefaultSlider(rs.y * 1000);
     GUIApplication::rotateYSliders.push_back(sliderRtY);
-    connect(sliderRtY, &QSlider::valueChanged, this, [this]{ GUIApplication::rotationChangeY(privInt); });
+    connect(sliderRtY, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::rotationChangeY(lambdaID); });
     QSlider* sliderRtZ = getDefaultSlider(rs.z * 1000);
     GUIApplication::rotateZSliders.push_back(sliderRtZ);
-    connect(sliderRtZ, &QSlider::valueChanged, this, [this]{ GUIApplication::rotationChangeZ(privInt); });
+    connect(sliderRtZ, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::rotationChangeZ(lambdaID); });
     QSlider* sliderRtX1 = getDefaultSlider(rs1.x * 1000);
     GUIApplication::rotate1XSliders.push_back(sliderRtX1);
-    connect(sliderRtX1, &QSlider::valueChanged, this, [this]{ GUIApplication::rotationChangeX1(privInt); });
+    connect(sliderRtX1, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::rotationChangeX1(lambdaID); });
     QSlider* sliderRtY1 = getDefaultSlider(rs1.y * 1000);
     GUIApplication::rotate1YSliders.push_back(sliderRtY1);
-    connect(sliderRtY1, &QSlider::valueChanged, this, [this]{ GUIApplication::rotationChangeY1(privInt); });
+    connect(sliderRtY1, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::rotationChangeY1(lambdaID); });
     QSlider* sliderRtZ1 = getDefaultSlider(rs1.z * 1000);
     GUIApplication::rotate1ZSliders.push_back(sliderRtZ1);
-    connect(sliderRtZ1, &QSlider::valueChanged, this, [this]{ GUIApplication::rotationChangeZ1(privInt); });
+    connect(sliderRtZ1, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::rotationChangeZ1(lambdaID); });
 
     QSlider* sliderFX = getDefaultSlider(fs.x * 1000);
     GUIApplication::filterXSliders.push_back(sliderFX);
-    connect(sliderFX, &QSlider::valueChanged, this, [this]{ GUIApplication::filterChangex(privInt); });
+    connect(sliderFX, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::filterChangex(lambdaID); });
     QSlider* sliderFX1 = getDefaultSlider(fs.x1);
     GUIApplication::filter1XSliders.push_back(sliderFX1);
-    connect(sliderFX1, &QSlider::valueChanged, this, [this]{ GUIApplication::filterChangex1(privInt); });
+    connect(sliderFX1, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::filterChangex1(lambdaID); });
     QSlider* sliderFY = getDefaultSlider(fs.y * 1000);
     GUIApplication::filterYSliders.push_back(sliderFY);
-    connect(sliderFY, &QSlider::valueChanged, this, [this]{ GUIApplication::filterChangey(privInt); });
+    connect(sliderFY, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::filterChangey(lambdaID); });
     QSlider* sliderFY1 = getDefaultSlider(fs.y1 * 1000);
     GUIApplication::filter1YSliders.push_back(sliderFY1);
-    connect(sliderFY1, &QSlider::valueChanged, this, [this]{ GUIApplication::filterChangey1(privInt); });
+    connect(sliderFY1, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::filterChangey1(lambdaID); });
     QSlider* sliderFZ = getDefaultSlider(fs.z * 1000);
     GUIApplication::filterZSliders.push_back(sliderFZ);
-    connect(sliderFZ, &QSlider::valueChanged, this, [this]{ GUIApplication::filterChangez(privInt); });
+    connect(sliderFZ, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::filterChangez(lambdaID); });
     QSlider* sliderFZ1 = getDefaultSlider(fs.z1 * 1000);
     GUIApplication::filter1ZSliders.push_back(sliderFZ1);
-    connect(sliderFZ1, &QSlider::valueChanged, this, [this]{ GUIApplication::filterChangez1(privInt); });
+    connect(sliderFZ1, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::filterChangez1(lambdaID); });
 
     QCheckBox* visable = new QCheckBox();
     visable->setChecked(SettingSingleton::getInstance()->getVisable(id));
     GUIApplication::checkBoxes.push_back(visable);
-    connect(visable, &QCheckBox::stateChanged, this, [this]{ GUIApplication::checkBoxClicked(privInt); });
+    connect(visable, &QCheckBox::stateChanged, this, [this, lambdaID = id]{ GUIApplication::checkBoxClicked(lambdaID); });
 
     stringstream ss;
     ss << "Point cloud " << id+1;
@@ -231,7 +229,7 @@ void GUIApplication::rotationChangeX(int id)
 {
     SettingSingleton *ds = ds->getInstance();
     struct rotationSettings rs = ds->getRotate(id);
-    rs.x = (float)(GUIApplication::rotateXSliders.at(id)->value() / 1000.0);
+    rs.x = (float)(rotateXSliders.at(id)->value() / 1000.0);
     ds->setRotate(id, rs);
 }
 
