@@ -72,7 +72,7 @@ public:
     
     //Filters a pointcloud based on the settings in SettingSingleton
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud);
-    
+    static pcl::PointCloud<pcl::PointXYZRGB>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud, filterSettings fs);
     //Filters a pointcloud based on passed variables
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr filterPCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud,
                                                             float x, float x1, float y, float y1, float z, float z1);
