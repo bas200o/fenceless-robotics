@@ -66,6 +66,7 @@ void GUIApplication::addPclWindow(int id) {
     rotationSettings rs =  SettingSingleton::getInstance()->getRotate(id);
     rotationSettings rs1 =  SettingSingleton::getInstance()->getRotate2(id);
     filterSettings fs = SettingSingleton::getInstance()->getFilter(id);
+    rgbSettings rgbs = SettingSingleton::getInstance()->getRgb(id);
 
     QSlider* sliderMvX = getDefaultSlider(ms.x * 1000);
     GUIApplication::moveXSliders.push_back(sliderMvX);
@@ -120,6 +121,17 @@ void GUIApplication::addPclWindow(int id) {
     GUIApplication::checkBoxes.push_back(visable);
     connect(visable, &QCheckBox::stateChanged, this, [this, lambdaID = id]{ GUIApplication::checkBoxClicked(lambdaID); });
 
+    QSlider* sliderRgbR = getDefaultSlider(rgbs.r, 0, 255);
+    GUIApplication::rgbRSliders.push_back(sliderRgbR);
+    connect(sliderRgbR, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::rgbRChange(lambdaID); });
+    QSlider* sliderRgbG = getDefaultSlider(rgbs.g, 0, 255);
+    GUIApplication::rgbGSliders.push_back(sliderRgbG);
+    connect(sliderRgbG, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::rgbGChange(lambdaID); });
+    QSlider* sliderRgbB = getDefaultSlider(rgbs.b, 0, 255);
+    GUIApplication::rgbBSliders.push_back(sliderRgbB);
+    connect(sliderRgbB, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::rgbBChange(lambdaID); });
+
+
     stringstream ss;
     ss << "Point cloud " << id+1;
 
@@ -134,6 +146,7 @@ void GUIApplication::addPclWindow(int id) {
     QLabel* fx = new QLabel("filter x");
     QLabel* fy = new QLabel("filter y");
     QLabel* fz = new QLabel("filter z");
+    QLabel* rgb = new QLabel("Color RGB");
  
     window_layout->addWidget(title, 1, 0);
     window_layout->addWidget(vis, 1, 1);
@@ -171,6 +184,11 @@ void GUIApplication::addPclWindow(int id) {
     window_layout->addWidget(fz, 11, 0, 1, 1);
     window_layout->addWidget(sliderFZ, 11, 1, 1, 1);
     window_layout->addWidget(sliderFZ1, 11, 2, 1, 1);
+
+    window_layout->addWidget(rgb, 12, 1, 1, 1);
+    window_layout->addWidget(sliderRgbR, 13, 0, 1, 1);
+    window_layout->addWidget(sliderRgbG, 13, 1, 1, 1);
+    window_layout->addWidget(sliderRgbB, 13, 2, 1, 1);
     
     window->show();
 } 
@@ -302,7 +320,7 @@ void GUIApplication::filterChangex1(int id)
 {
     SettingSingleton *ds = ds->getInstance();
     struct filterSettings fs = ds->getFilter(id);
-    fs.x1 = (float)(GUIApplication::filterYSliders.at(id)->value() / 1000.0);
+    fs.x1 = (float)(GUIApplication::filter1XSliders.at(id)->value() / 1000.0);
     ds->setFilter(id, fs);
 }
 void GUIApplication::filterChangey(int id)
@@ -336,6 +354,27 @@ void GUIApplication::filterChangez1(int id)
 
 void GUIApplication::checkBoxClicked(int id) {
     SettingSingleton::getInstance()->setVisable(id, GUIApplication::checkBoxes.at(id)->isChecked());
+}
+
+void GUIApplication::rgbRChange(int id) {
+    SettingSingleton *ds = ds->getInstance();
+    auto rgbs = ds->getRgb(id);
+    rgbs.r = (float)(GUIApplication::rgbRSliders.at(id)->value());
+    ds->setRgb(id, rgbs);
+}
+
+void GUIApplication::rgbGChange(int id) {
+    SettingSingleton *ds = ds->getInstance();
+    auto rgbs = ds->getRgb(id);
+    rgbs.g = (float)(GUIApplication::rgbGSliders.at(id)->value());
+    ds->setRgb(id, rgbs);
+}
+
+void GUIApplication::rgbBChange(int id) {
+    SettingSingleton *ds = ds->getInstance();
+    auto rgbs = ds->getRgb(id);
+    rgbs.b = (float)(GUIApplication::rgbBSliders.at(id)->value());
+    ds->setRgb(id, rgbs);
 }
 
 void printXYZ(moveSettings ms) {

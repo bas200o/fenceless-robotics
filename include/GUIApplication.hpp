@@ -45,6 +45,10 @@ class GUIApplication : public QWidget
 
         vector <QCheckBox*>checkBoxes;
 
+        vector<QSlider*>rgbRSliders;
+        vector<QSlider*>rgbGSliders;
+        vector<QSlider*>rgbBSliders;
+
         void rotationChangeX(int id);
         void rotationChangeY(int id);
         void rotationChangeZ(int id);
@@ -67,6 +71,10 @@ class GUIApplication : public QWidget
         void filterChangez1(int id);
 
         void checkBoxClicked(int id);
+
+        void rgbRChange(int id);
+        void rgbGChange(int id);
+        void rgbBChange(int id);
 
         void addPclWindow(int id);
         QSlider* getDefaultSlider(int val= 0, int min = -4000, int max = 4000);

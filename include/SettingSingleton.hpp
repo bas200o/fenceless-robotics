@@ -11,6 +11,11 @@ struct rotationSettings
     float x, y, z;
 };
 
+struct rgbSettings
+{
+    int r, g, b;
+};
+
 struct moveSettings
 {
     float x, y, z;
@@ -48,4 +53,7 @@ public:
 
     bool getVisable(int id);
     void setVisable(int id, bool visable);
+
+    rgbSettings getRgb(int id);
+    void setRgb(int id, rgbSettings data);
 };

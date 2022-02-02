@@ -386,6 +386,12 @@ void Controller3D::configure(){
     for (size_t i = 0; i < clouds.size(); i++) {
         if (settings->getVisable(i)) {
             *cloud = clouds.at(i);
+            for (size_t y = 0; y < cloud->points.size(); y++)
+            {
+                cloud->points[y].r = settings->getRgb(i).r;
+                cloud->points[y].g = settings->getRgb(i).g;
+                cloud->points[y].b = settings->getRgb(i).b;
+            }
             cloud = rotatePCL(cloud, settings->getRotate(i));
             cloud = rotatePCL(cloud, settings->getRotate2(i));
             cloud = movePCL(cloud, settings->getMove(i));
@@ -395,11 +401,7 @@ void Controller3D::configure(){
         
     }
 
-    // for (size_t i = 0; i < cloud->points.size(); i++)
-    // {
-    //   cloud->points[i].g = 0;
-    //   cloud->points[i].b = 0;
-    // }
+
 
     viewer->removeAllPointClouds();
     viewer->addPointCloud(full);

@@ -6,15 +6,16 @@ std::vector<filterSettings> fs_cloud;
 std::vector<moveSettings> ms_cloud;
 std::vector<moveSettings> ms2_cloud;
 std::vector<bool> vs_cloud;
+std::vector<rgbSettings> rgbs_cloud;
 
 
 SettingSingleton *SettingSingleton::instance;
 
 SettingSingleton::SettingSingleton()
 {
-    rs_cloud.push_back({0.0, 0.0, 0.0});
-    rs2_cloud.push_back({0.0, 0.0, 0.0});
-    ms_cloud.push_back({0.0, 0.0, 0.0});
+    rs_cloud.push_back({0.701, 0.165, -0.065});
+    rs2_cloud.push_back( {0.0, 0.515, -0.062});
+    ms_cloud.push_back({0.0, 1.113, 0.0});
     ms2_cloud.push_back({0.0, 0.0, 0.0});
     fs_cloud.push_back({0.165, 1.216, 0.021, 10.0, -1.216, 1.402});
     rs_cloud.push_back({0.0, 0.0, 0.0});
@@ -23,21 +24,11 @@ SettingSingleton::SettingSingleton()
     ms2_cloud.push_back({0.0, 0.0, 0.0});
     fs_cloud.push_back({0.165, 1.216, 0.021, 10.0, -1.216, 1.402});
 
-    rs_cloud.at(0) = {0.701, 0.165, -0.065};
-    rs2_cloud.at(0) = {0.0, 0.515, -0.062};
-    ms_cloud.at(0)= {0.0, 1.113, 0.0};
-    ms2_cloud.at(0) = {0.0, 0.0, 0.0};
-    fs_cloud.at(0) = {0.165, 1.216, 0.021, 10.0, -1.216, 1.402};
+    vs_cloud.push_back(true);
+    vs_cloud.push_back(true);
 
-    rs_cloud.at(1) = {0.0, 0.0, 0.0};
-    rs2_cloud.at(1) = {0.0, 0.0, 0.0};
-    ms_cloud.at(1) = {0.0, 0.0, 0.0};
-    ms2_cloud.at(1) = {0.0, 0.0, 0.0};
-    fs_cloud.at(1) = {0.165, 1.216, 0.021, 10.0, -1.216, 1.402};
-
-    vs_cloud.push_back(true);
-    vs_cloud.push_back(true);
-    vs_cloud.push_back(true);
+    rgbs_cloud.push_back({255, 255, 255});
+    rgbs_cloud.push_back({255, 255, 255});
 }
 
 SettingSingleton::~SettingSingleton()
@@ -101,6 +92,14 @@ bool SettingSingleton::getVisable(int id) {
 
 void SettingSingleton::setVisable(int id, bool visable) {
     vs_cloud[id] = visable;
+}
+
+rgbSettings SettingSingleton::getRgb(int id) {
+    return rgbs_cloud[id];
+}
+
+void SettingSingleton::setRgb(int id, rgbSettings data) {
+    rgbs_cloud[id] = data;
 }
 
 SettingSingleton *SettingSingleton::getInstance()
