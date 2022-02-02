@@ -39,10 +39,7 @@ centerMass = std::tuple<float, float, float> {cx, cy, cz};
     for (int i = 0; i < numPoints; i++)
     {
         float tempsize = euclideanDistance(objectCloud.points[i], objectCloud.points[0]);
-        if (tempsize < 0)
-        {
-            tempsize = tempsize * -1;
-        }
+        tempsize = abs(tempsize);
         if (tempsize > maxsize)
         {
             maxsize = tempsize;
@@ -76,3 +73,12 @@ return;
     std::tuple<float, float, float> FoundObject::getCenterMass(){
         return FoundObject::centerMass;
     };
+
+
+    void FoundObject::setIdentificationNumber(int number){
+        FoundObject::identificationNumber = number;
+    }
+
+    int FoundObject::getIdentificationNumber(){
+        return(FoundObject::identificationNumber);
+    }

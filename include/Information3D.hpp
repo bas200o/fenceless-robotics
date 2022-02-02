@@ -18,6 +18,7 @@ private:
     pcl::PointCloud<pcl::PointXYZRGB> fullPointCloud;
     //TimeStamp
     double timeStamp = 0;
+
     
 public:
 

@@ -210,8 +210,8 @@ void GUIApplication::updateTable(vector<VisualObject> objects)
         //     << obj.speed << " | "
         //     << obj.acceleration 
         // << endl;
-
-        // pan_table->setItem(row, 0, new QTableWidgetItem("-"));                                  // ID -> Removed for now
+        cout << "speed UI: "<<obj.speed << endl;
+        pan_table->setItem(row, 0, new QTableWidgetItem(QString("%1").arg(obj.id)));                                  // ID -> Removed for now
         pan_table->setItem(row, 1, new QTableWidgetItem(QString("%1").arg(obj.showTime)));      // Tijd in beeld
         pan_table->setItem(row, 2, new QTableWidgetItem(pos));                                  // Positie
         pan_table->setItem(row, 3, new QTableWidgetItem(QString("%1").arg(obj.size)));          // Diameter

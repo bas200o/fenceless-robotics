@@ -160,8 +160,6 @@ void Controller3D::DetectObjects(int pInfo)
         default:
             break;
         }
-      
-      
     }
 
         viewer->addPointCloud(cloud_cluster, "hey" + j);
@@ -170,9 +168,9 @@ void Controller3D::DetectObjects(int pInfo)
 
     
     std::cout << "number of found objects: "<< j <<std::endl;
-    viewer->spinOnce(100, true);
+    //viewer->spinOnce(100, true);
     //END TEMPORARY
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    //std::this_thread::sleep_for(std::chrono::milliseconds(100));
     return;
 }
 
@@ -200,7 +198,6 @@ void Controller3D::ProccesPointcloud()
     full = filterPCL(full);
     lastInfo[0].AddFullPointCloud(*full);
 
-    
     return;
 }
 
@@ -215,49 +212,109 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::CombinePointClouds(int pInf
     return full;
 }
 
-void Controller3D::CalculateSpeed()
-{
-    Information3D previous;
-    if (lastInfo[2].getObjects().size() > 0)
-    {
-        previous = lastInfo[2];
-    }
-    else if (lastInfo[1].getObjects().size() > 0)
-    {
-        previous = lastInfo[1];
-    }
-    else
-    {
-        for (int i = 0 ; i < lastInfo[0].objects.size() ; i++ )
-        {
-        lastInfo[0].objects[i].setSpeed(0);
+void Controller3D::CalculateSpeed(){
+    Information3D previous = lastInfo[3];
+    for(int i = 0; i < lastInfo[0].objects.size(); i++){
+        double speed = -1;
+        float dist;
+        for(int j = 0; j < previous.objects.size() ; j++){
+                if(previous.objects[j].getIdentificationNumber() == lastInfo[0].objects[i].getIdentificationNumber()){
+                    dist = euclideanDistance(lastInfo[0].objects[i].getLocation(), previous.objects[j].getLocation());
+                    cout << " dis " << dist << endl;
+                    cout << " time " << (lastInfo[0].getTimeStamp() - previous.getTimeStamp())/1000 << endl;
+                    speed = dist / ((lastInfo[0].getTimeStamp() - previous.getTimeStamp())/1000);
+                }    
         }
-        return;
+        lastInfo[0].objects[i].setSpeed(speed);
+        cout << "speed set: " << speed << endl;
     }
-    FoundObject movedObject;
-    float shortestDist = FLT_MAX;
-    float dist;
-    for (int i = 0 ; i < lastInfo[0].objects.size() ; i++ )
-    {
+}
+
+// void Controller3D::CalculateSpeed()
+// {
+//     Information3D previous;
+//     if (lastInfo[2].getObjects().size() > 0)
+//     {
+//         previous = lastInfo[2];
+//     }
+//     else if (lastInfo[1].getObjects().size() > 0)
+//     {
+//         previous = lastInfo[1];
+//     }
+//     else
+//     {
+//         for (int i = 0 ; i < lastInfo[0].objects.size() ; i++ )
+//         {
+//         lastInfo[0].objects[i].setSpeed(0);
+//         }
+//         return;
+//     }
+//     FoundObject movedObject;
+//     float shortestDist = FLT_MAX;
+//     float dist;
+//     for (int i = 0 ; i < lastInfo[0].objects.size() ; i++ )
+//     {
+//         FoundObject object = lastInfo[0].objects[i];
+//         for (FoundObject oldObject : previous.getObjects())
+//         {
+//             dist = euclideanDistance(object.getLocation(), oldObject.getLocation());
+//             if (object.getSize() * -0.30 < object.getSize() - oldObject.getSize() < object.getSize() * 0.30 && dist < shortestDist && dist < previous.getPointCloud().width)
+//             {
+//                 shortestDist = dist;
+//                 movedObject = oldObject;
+//             }
+//         }
+//         double speed = 0;
+//         if(shortestDist != FLT_MAX){
+//         //calculate speed
+//         //dist/time
+//         speed = shortestDist / (lastInfo[0].getTimeStamp() - previous.getTimeStamp());
+//         }
+//         else speed = -1;
+//         //cout<<speed<<endl;
+//         lastInfo[0].objects[i].setSpeed(speed);
+//     }
+// }
+
+void Controller3D::assignIdentification(){
+    Information3D previous;
+    Information3D current;
+    previous = lastInfo[1];
+    current = lastInfo[0];
+    
+    for(int i = 0; i < current.objects.size(); i++){
+        float dist;
+        float closestSize = FLT_MAX;
+        float shortestDist = FLT_MAX;
+        FoundObject closestSimilarObject;
         FoundObject object = lastInfo[0].objects[i];
-        for (FoundObject oldObject : previous.getObjects())
-        {
-            dist = euclideanDistance(object.getLocation(), oldObject.getLocation());
-            if (object.getSize() * -0.30 < object.getSize() - oldObject.getSize() < object.getSize() * 0.30 && dist < shortestDist && dist < previous.getPointCloud().width)
+        std::vector<FoundObject> potentialObjects;
+        FoundObject movedObject;
+
+        for(FoundObject oldObj: previous.getObjects()){
+            dist = euclideanDistance(object.getLocation(), oldObj.getLocation());
+            if (dist < shortestDist && dist < 0.30)
             {
-                shortestDist = dist;
-                movedObject = oldObject;
+                potentialObjects.push_back(oldObj);
             }
         }
-        double speed = 0;
-        if(shortestDist != FLT_MAX){
-        //calculate speed
-        //dist/time
-        speed = shortestDist / (lastInfo[0].getTimeStamp() - previous.getTimeStamp());
+        
+        for(FoundObject potObj: potentialObjects){
+            float tempSize = abs(potObj.getSize() - object.getSize());
+            if(closestSize > tempSize){
+                closestSize = tempSize;
+                closestSimilarObject = potObj;
+            }
         }
-        else speed = -1;
-        //cout<<speed<<endl;
-        lastInfo[0].objects[i].setSpeed(speed);
+
+        if(closestSimilarObject.getSize() != 0){
+            lastInfo[0].objects[i].setIdentificationNumber(closestSimilarObject.getIdentificationNumber());
+        }
+
+        else{
+            lastInfo[0].objects[i].setIdentificationNumber(identificationNumber);
+            identificationNumber++;
+        }
     }
 }
 

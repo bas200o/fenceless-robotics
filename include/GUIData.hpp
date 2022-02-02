@@ -22,6 +22,7 @@ struct Object2D {
 };
 
 struct VisualObject {
+    int id;
     int showTime;
     vec3 position;
     double size;

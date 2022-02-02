@@ -6,6 +6,7 @@
 #include <pcl/point_types.h>
 #include <pcl/visualization/cloud_viewer.h>
 #include <pcl/common/distances.h>
+#include <cmath>
 
 class FoundObject
 {
@@ -21,7 +22,8 @@ private:
     pcl::PointCloud<pcl::PointXYZRGB> objectCloud;
     //Calculates the size and location of the object
     void CalculateValues();
-
+    //
+    int identificationNumber;
 
 public:
     //Constructor
@@ -35,5 +37,6 @@ public:
     pcl::PointXYZRGB getLocation();
     std::tuple<float, float, float> getCenterMass();
     float getSize();
-
+    void setIdentificationNumber(int number);
+    int getIdentificationNumber();
 };
