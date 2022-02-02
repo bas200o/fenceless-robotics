@@ -35,6 +35,7 @@ int DataManager::dataMain()
         cont3.DetectObjects(0);
         cont3.assignIdentification();
         cont3.CalculateSpeed();
+        cont3.calculateDirection();
         cont3.pushUIData();
 
     duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;

@@ -24,6 +24,8 @@ private:
     void CalculateValues();
     //
     int identificationNumber;
+    //
+    float directionX, directionY, direction;
 
 public:
     //Constructor
@@ -39,4 +41,9 @@ public:
     float getSize();
     void setIdentificationNumber(int number);
     int getIdentificationNumber();
+    float getDirectionY();
+    float getDirectionX();
+    void setDirection(double x, double y);
+    void setDirection(double idk);
+
 };

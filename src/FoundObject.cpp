@@ -82,3 +82,20 @@ return;
     int FoundObject::getIdentificationNumber(){
         return(FoundObject::identificationNumber);
     }
+
+    float FoundObject::getDirectionY(){
+        return FoundObject::directionY;
+    }
+
+    float FoundObject::getDirectionX(){
+        return FoundObject::directionX;
+    }
+
+    void FoundObject::setDirection(double x, double y){
+        FoundObject::directionY = y;
+        FoundObject::directionX = x;
+    }
+
+    void FoundObject::setDirection(double idk){
+        FoundObject::direction = idk;
+    }

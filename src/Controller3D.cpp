@@ -220,61 +220,35 @@ void Controller3D::CalculateSpeed(){
         for(int j = 0; j < previous.objects.size() ; j++){
                 if(previous.objects[j].getIdentificationNumber() == lastInfo[0].objects[i].getIdentificationNumber()){
                     dist = euclideanDistance(lastInfo[0].objects[i].getLocation(), previous.objects[j].getLocation());
-                    cout << " dis " << dist << endl;
-                    cout << " time " << (lastInfo[0].getTimeStamp() - previous.getTimeStamp())/1000 << endl;
+                    //cout << " dis " << dist << endl;
+                    //cout << " time " << (lastInfo[0].getTimeStamp() - previous.getTimeStamp())/1000 << endl;
                     speed = dist / ((lastInfo[0].getTimeStamp() - previous.getTimeStamp())/1000);
                 }    
         }
+        speed = speed < 0.1 ? 0 : speed;
         lastInfo[0].objects[i].setSpeed(speed);
-        cout << "speed set: " << speed << endl;
+        //cout << "speed set: " << speed << endl;
     }
 }
 
-// void Controller3D::CalculateSpeed()
-// {
-//     Information3D previous;
-//     if (lastInfo[2].getObjects().size() > 0)
-//     {
-//         previous = lastInfo[2];
-//     }
-//     else if (lastInfo[1].getObjects().size() > 0)
-//     {
-//         previous = lastInfo[1];
-//     }
-//     else
-//     {
-//         for (int i = 0 ; i < lastInfo[0].objects.size() ; i++ )
-//         {
-//         lastInfo[0].objects[i].setSpeed(0);
-//         }
-//         return;
-//     }
-//     FoundObject movedObject;
-//     float shortestDist = FLT_MAX;
-//     float dist;
-//     for (int i = 0 ; i < lastInfo[0].objects.size() ; i++ )
-//     {
-//         FoundObject object = lastInfo[0].objects[i];
-//         for (FoundObject oldObject : previous.getObjects())
-//         {
-//             dist = euclideanDistance(object.getLocation(), oldObject.getLocation());
-//             if (object.getSize() * -0.30 < object.getSize() - oldObject.getSize() < object.getSize() * 0.30 && dist < shortestDist && dist < previous.getPointCloud().width)
-//             {
-//                 shortestDist = dist;
-//                 movedObject = oldObject;
-//             }
-//         }
-//         double speed = 0;
-//         if(shortestDist != FLT_MAX){
-//         //calculate speed
-//         //dist/time
-//         speed = shortestDist / (lastInfo[0].getTimeStamp() - previous.getTimeStamp());
-//         }
-//         else speed = -1;
-//         //cout<<speed<<endl;
-//         lastInfo[0].objects[i].setSpeed(speed);
-//     }
-// }
+void Controller3D::calculateDirection(){
+    Information3D previous = lastInfo[3];
+    for(int i = 0; i < lastInfo[0].objects.size(); i++){
+        double angle = -1;
+        float dist;
+        for(int j = 0; j < previous.objects.size() ; j++){
+                if(previous.objects[j].getIdentificationNumber() == lastInfo[0].objects[i].getIdentificationNumber()){
+                    Eigen::Vector3f e_v3f_pt = lastInfo[0].objects[i].getLocation().getVector3fMap();
+                    Eigen::Vector3f e_v3f_pt2 = previous.objects[j].getLocation().getVector3fMap();
+                    angle = pcl::getAngle3D(e_v3f_pt2, e_v3f_pt, false);
+                }    
+        }
+        lastInfo[0].objects[i].setDirection(angle);
+
+        cout << "angle set: " << angle << endl;
+
+    }
+}
 
 void Controller3D::assignIdentification(){
     Information3D previous;

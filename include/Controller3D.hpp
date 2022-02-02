@@ -12,6 +12,7 @@
 #include <pcl/search/kdtree.h>
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/segmentation/extract_clusters.h>
+#include <pcl/common/angles.h>
 #include "../include/SettingSingleton.hpp"
 #include "../include/GUIData.hpp"
 
@@ -38,6 +39,8 @@ public:
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr CombinePointClouds(int pCloud);
     //Calculates the speed of object by comparing them to either the previous pointcloud or the one before
     void CalculateSpeed();
+    //
+    void calculateDirection();
     //
     void pushUIData();
     //
