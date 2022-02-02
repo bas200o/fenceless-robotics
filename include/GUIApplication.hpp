@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Information3D.hpp"
+#include "CameraConnector.hpp"
 #include <QApplication>
 #include <QPushButton>
 #include <QGridLayout>
@@ -24,25 +25,48 @@ class GUIApplication : public QWidget
         QWidget *pan_statistics;
         QTableWidget *pan_table;
 
-        vector<QSlider>moveXSliders;
-        vector<QSlider>moveYSliders;
-        vector<QSlider>moveZSliders;
+        vector<QSlider*>moveXSliders;
+        vector<QSlider*>moveYSliders;
+        vector<QSlider*>moveZSliders;
 
-        vector<QSlider>rotateXSliders;
-        vector<QSlider>rotateYSliders;
-        vector<QSlider>rotateZSliders;
-        vector<QSlider>rotate2XSliders;
-        vector<QSlider>rotate2YSliders;
-        vector<QSlider>rotate2ZSliders;
+        vector<QSlider*>rotateXSliders;
+        vector<QSlider*>rotateYSliders;
+        vector<QSlider*>rotateZSliders;
+        vector<QSlider*>rotate1XSliders;
+        vector<QSlider*>rotate1YSliders;
+        vector<QSlider*>rotate1ZSliders;
 
-        vector<QSlider>filterXSliders;
-        vector<QSlider>filterYSliders;
-        vector<QSlider>filterZSliders;
-        vector<QSlider>filter2XSliders;
-        vector<QSlider>filter2YSliders;
-        vector<QSlider>filter2ZSliders;
+        vector<QSlider*>filterXSliders;
+        vector<QSlider*>filterYSliders;
+        vector<QSlider*>filterZSliders;
+        vector<QSlider*>filter1XSliders;
+        vector<QSlider*>filter1YSliders;
+        vector<QSlider*>filter1ZSliders;
 
-        vector <QCheckBox>checkBoxes;
+        vector <QCheckBox*>checkBoxes;
+
+        void rotationChangeX(int id);
+        void rotationChangeY(int id);
+        void rotationChangeZ(int id);
+        void positionChangeX(int id);
+        void positionChangeY(int id);
+        void positionChangeZ(int id);
+
+        void rotationChangeX1(int id);
+        void rotationChangeY1(int id);
+        void rotationChangeZ1(int id);
+        void positionChangeX1(int id);
+        void positionChangeY1(int id);
+        void positionChangeZ1(int id);
+
+        void filterChangex(int id);
+        void filterChangex1(int id);
+        void filterChangey(int id);
+        void filterChangey1(int id);
+        void filterChangez(int id);
+        void filterChangez1(int id);
+
+        void checkBoxClicked(int id);
 
         void addPclWindow(int id);
         QSlider* getDefaultSlider(int val= 0, int min = -4000, int max = 4000);
@@ -63,27 +87,6 @@ class GUIApplication : public QWidget
         virtual ~GUIApplication() {};
         
         static void ValueChange(int v);
-
-        static void rotationChangeX(int X);
-        static void rotationChangeY(int Y);
-        static void rotationChangeZ(int Z);
-        static void positionChangeX(int X);
-        static void positionChangeY(int Y);
-        static void positionChangeZ(int Z);
-
-        static void rotationChangeX1(int X);
-        static void rotationChangeY1(int Y);
-        static void rotationChangeZ1(int Z);
-        static void positionChangeX1(int X);
-        static void positionChangeY1(int Y);
-        static void positionChangeZ1(int Z);
-
-        static void filterChangex(int v);
-        static void filterChangex1(int v);
-        static void filterChangey(int v);
-        static void filterChangey1(int v);
-        static void filterChangez(int v);
-        static void filterChangez1(int v);
         static void setConfiguring();
 
         void update2d(vector<Object2D> objects);

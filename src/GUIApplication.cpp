@@ -7,10 +7,6 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     setFixedSize(1240, 950);
     setWindowTitle("Fenceless Robotics");
 
-    // auto thing = new QLabel("This is a test window");
-    // // thing->setWindowFlag(Qt::Window);
-    // thing->show();
-
     // Panel 2D View
     QGraphicsScene scene;
     QGraphicsRectItem *rect = scene.addRect(QRectF(0, 0, 100, 100));
@@ -55,14 +51,15 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     layout->addWidget(pan_statistics, 0, 2);
     layout->addWidget(pan_table, 1, 0, 1, 3);
 
-    addPclWindow(0);
-    addPclWindow(1);
-
-
+    for (size_t i = 0; i < CameraConnector::getInstance()->getConnectedRSCameras().size(); i++)
+    {
+        addPclWindow(i);
+    }
 }
 
 void GUIApplication::addPclWindow(int id) {
     QWidget* window = new QWidget;
+    window->setMinimumWidth(500);
     QGridLayout *window_layout = new QGridLayout(window);
 
     moveSettings ms =  SettingSingleton::getInstance()->getMove(id);    
@@ -70,40 +67,60 @@ void GUIApplication::addPclWindow(int id) {
     rotationSettings rs1 =  SettingSingleton::getInstance()->getRotate2(id);
     filterSettings fs = SettingSingleton::getInstance()->getFilter(id);
 
+    static int privInt = id;
+
     QSlider* sliderMvX = getDefaultSlider(ms.x * 1000);
-    connect(sliderMvX, &QSlider::valueChanged, this, GUIApplication::positionChangeX);
+    GUIApplication::moveXSliders.push_back(sliderMvX);
+    connect(sliderMvX, &QSlider::valueChanged, this, [this]{ GUIApplication::positionChangeX(privInt); });
     QSlider* sliderMvY = getDefaultSlider(ms.y * 1000);
-    connect(sliderMvY, &QSlider::valueChanged, this, GUIApplication::positionChangeY);
+    GUIApplication::moveYSliders.push_back(sliderMvY);
+    connect(sliderMvY, &QSlider::valueChanged, this, [this]{ GUIApplication::positionChangeY(privInt); });
     QSlider* sliderMvZ = getDefaultSlider(ms.z * 1000);
-    connect(sliderMvZ, &QSlider::valueChanged, this, GUIApplication::positionChangeZ);
+    GUIApplication::moveZSliders.push_back(sliderMvZ);
+    connect(sliderMvZ, &QSlider::valueChanged, this, [this]{ GUIApplication::positionChangeZ(privInt); });
 
     QSlider* sliderRtX = getDefaultSlider(rs.x * 1000);
-    connect(sliderRtX, &QSlider::valueChanged, this, GUIApplication::rotationChangeX);
+    GUIApplication::rotateXSliders.push_back(sliderRtX);
+    connect(sliderRtX, &QSlider::valueChanged, this, [this]{ GUIApplication::rotationChangeX(privInt); });
     QSlider* sliderRtY = getDefaultSlider(rs.y * 1000);
-    connect(sliderRtY, &QSlider::valueChanged, this, GUIApplication::rotationChangeY);
+    GUIApplication::rotateYSliders.push_back(sliderRtY);
+    connect(sliderRtY, &QSlider::valueChanged, this, [this]{ GUIApplication::rotationChangeY(privInt); });
     QSlider* sliderRtZ = getDefaultSlider(rs.z * 1000);
-    connect(sliderRtZ, &QSlider::valueChanged, this, GUIApplication::rotationChangeZ);
+    GUIApplication::rotateZSliders.push_back(sliderRtZ);
+    connect(sliderRtZ, &QSlider::valueChanged, this, [this]{ GUIApplication::rotationChangeZ(privInt); });
     QSlider* sliderRtX1 = getDefaultSlider(rs1.x * 1000);
-    connect(sliderRtX1, &QSlider::valueChanged, this, GUIApplication::rotationChangeX1);
+    GUIApplication::rotate1XSliders.push_back(sliderRtX1);
+    connect(sliderRtX1, &QSlider::valueChanged, this, [this]{ GUIApplication::rotationChangeX1(privInt); });
     QSlider* sliderRtY1 = getDefaultSlider(rs1.y * 1000);
-    connect(sliderRtY1, &QSlider::valueChanged, this, GUIApplication::rotationChangeY1);
+    GUIApplication::rotate1YSliders.push_back(sliderRtY1);
+    connect(sliderRtY1, &QSlider::valueChanged, this, [this]{ GUIApplication::rotationChangeY1(privInt); });
     QSlider* sliderRtZ1 = getDefaultSlider(rs1.z * 1000);
-    connect(sliderRtZ1, &QSlider::valueChanged, this, GUIApplication::rotationChangeZ1);
+    GUIApplication::rotate1ZSliders.push_back(sliderRtZ1);
+    connect(sliderRtZ1, &QSlider::valueChanged, this, [this]{ GUIApplication::rotationChangeZ1(privInt); });
 
     QSlider* sliderFX = getDefaultSlider(fs.x * 1000);
-    connect(sliderFX, &QSlider::valueChanged, this, GUIApplication::filterChangex);
+    GUIApplication::filterXSliders.push_back(sliderFX);
+    connect(sliderFX, &QSlider::valueChanged, this, [this]{ GUIApplication::filterChangex(privInt); });
     QSlider* sliderFX1 = getDefaultSlider(fs.x1);
-    connect(sliderFX1, &QSlider::valueChanged, this, GUIApplication::filterChangex1);
+    GUIApplication::filter1XSliders.push_back(sliderFX1);
+    connect(sliderFX1, &QSlider::valueChanged, this, [this]{ GUIApplication::filterChangex1(privInt); });
     QSlider* sliderFY = getDefaultSlider(fs.y * 1000);
-    connect(sliderFY, &QSlider::valueChanged, this, GUIApplication::filterChangey);
+    GUIApplication::filterYSliders.push_back(sliderFY);
+    connect(sliderFY, &QSlider::valueChanged, this, [this]{ GUIApplication::filterChangey(privInt); });
     QSlider* sliderFY1 = getDefaultSlider(fs.y1 * 1000);
-    connect(sliderFY1, &QSlider::valueChanged, this, GUIApplication::filterChangey1);
+    GUIApplication::filter1YSliders.push_back(sliderFY1);
+    connect(sliderFY1, &QSlider::valueChanged, this, [this]{ GUIApplication::filterChangey1(privInt); });
     QSlider* sliderFZ = getDefaultSlider(fs.z * 1000);
-    connect(sliderFZ, &QSlider::valueChanged, this, GUIApplication::filterChangez);
+    GUIApplication::filterZSliders.push_back(sliderFZ);
+    connect(sliderFZ, &QSlider::valueChanged, this, [this]{ GUIApplication::filterChangez(privInt); });
     QSlider* sliderFZ1 = getDefaultSlider(fs.z1 * 1000);
-    connect(sliderFZ1, &QSlider::valueChanged, this, GUIApplication::filterChangez1);
+    GUIApplication::filter1ZSliders.push_back(sliderFZ1);
+    connect(sliderFZ1, &QSlider::valueChanged, this, [this]{ GUIApplication::filterChangez1(privInt); });
 
     QCheckBox* visable = new QCheckBox();
+    visable->setChecked(SettingSingleton::getInstance()->getVisable(id));
+    GUIApplication::checkBoxes.push_back(visable);
+    connect(visable, &QCheckBox::stateChanged, this, [this]{ GUIApplication::checkBoxClicked(privInt); });
 
     stringstream ss;
     ss << "Point cloud " << id+1;
@@ -210,138 +227,117 @@ void GUIApplication::updateTable(vector<VisualObject> objects)
 void GUIApplication::update2d(vector<Object2D> objects){}
 void GUIApplication:: updateStatistics(StatisticsObject obj){}
 
-void GUIApplication::rotationChangeX(int x)
+void GUIApplication::rotationChangeX(int id)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct rotationSettings rs = ds->getRotate(0);
-    rs.x = (float)(x / 1000.0);
-    ds->setRotate(0, rs);
+    struct rotationSettings rs = ds->getRotate(id);
+    rs.x = (float)(GUIApplication::rotateXSliders.at(id)->value() / 1000.0);
+    ds->setRotate(id, rs);
 }
 
-void GUIApplication::rotationChangeY(int y)
+void GUIApplication::rotationChangeY(int id)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct rotationSettings rs = ds->getRotate(0);
-    rs.y = (float)(y / 1000.0);
-    ds->setRotate(0, rs);
+    struct rotationSettings rs = ds->getRotate(id);
+    rs.y = (float)(GUIApplication::rotateYSliders.at(id)->value() / 1000.0);
+    ds->setRotate(id, rs);
 }
-void GUIApplication::rotationChangeZ(int z)
+void GUIApplication::rotationChangeZ(int id)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct rotationSettings rs = ds->getRotate(0);
-    rs.z = (float)(z / 1000.0);
-    ds->setRotate(0, rs);
+    struct rotationSettings rs = ds->getRotate(id);
+    rs.z = (float)(GUIApplication::rotateZSliders.at(id)->value() / 1000.0);
+    ds->setRotate(id, rs);
 }
-void GUIApplication::positionChangeX(int x)
+void GUIApplication::positionChangeX(int id)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct moveSettings rs = ds->getMove(0);
-    rs.x = (float)(x / 1000.0);
-    ds->setMove(0, rs);
+    struct moveSettings rs = ds->getMove(id);
+    rs.x = (float)(GUIApplication::moveXSliders.at(id)->value() / 1000.0);
+    ds->setMove(id, rs);
 }
-void GUIApplication::positionChangeY(int y)
+void GUIApplication::positionChangeY(int id)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct moveSettings rs = ds->getMove(0);
-    rs.y = (float)(y / 1000.0);
-    ds->setMove(0, rs);
+    struct moveSettings rs = ds->getMove(id);
+    rs.y = (float)(GUIApplication::moveYSliders.at(id)->value() / 1000.0);
+    ds->setMove(id, rs);
 }
-void GUIApplication::positionChangeZ(int z)
+void GUIApplication::positionChangeZ(int id)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct moveSettings rs = ds->getMove(0);
-    rs.z = (float)(z / 1000.0);
-    ds->setMove(0, rs);
-}
-
-//////////
-
-void GUIApplication::rotationChangeX1(int x)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct rotationSettings rs = ds->getRotate2(0);
-    rs.x = (float)(x / 1000.0);
-    ds->setRotate2(0, rs);
-}
-void GUIApplication::rotationChangeY1(int y)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct rotationSettings rs = ds->getRotate2(0);
-    rs.y = (float)(y / 1000.0);
-    ds->setRotate2(0, rs);
-}
-void GUIApplication::rotationChangeZ1(int z)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct rotationSettings rs = ds->getRotate2(0);
-    rs.z = (float)(z / 1000.0);
-    ds->setRotate2(0, rs);
-}
-void GUIApplication::positionChangeX1(int x)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct moveSettings rs = ds->getMove2(0);
-    rs.x = (float)(x / 1000.0);
-    ds->setMove2(0, rs);
-}
-void GUIApplication::positionChangeY1(int y)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct moveSettings rs = ds->getMove2(0);
-    rs.y = (float)(y / 1000.0);
-    ds->setMove2(0, rs);
-}
-void GUIApplication::positionChangeZ1(int z)
-{
-    SettingSingleton *ds = ds->getInstance();
-    struct moveSettings rs = ds->getMove2(0);
-    rs.z = (float)(z / 1000.0);
-    ds->setMove2(0, rs);
+    struct moveSettings rs = ds->getMove(id);
+    rs.z = (float)(GUIApplication::moveZSliders.at(id)->value() / 1000.0);
+    ds->setMove(id, rs);
 }
 
-////////////
+void GUIApplication::rotationChangeX1(int id)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct rotationSettings rs = ds->getRotate2(id);
+    rs.x = (float)(GUIApplication::rotate1XSliders.at(id)->value() / 1000.0);
+    ds->setRotate2(id, rs);
+}
+void GUIApplication::rotationChangeY1(int id)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct rotationSettings rs = ds->getRotate2(id);
+    rs.y = (float)(GUIApplication::rotate1YSliders.at(id)->value() / 1000.0);
+    ds->setRotate2(id, rs);
+}
+void GUIApplication::rotationChangeZ1(int id)
+{
+    SettingSingleton *ds = ds->getInstance();
+    struct rotationSettings rs = ds->getRotate2(id);
+    rs.z = (float)(GUIApplication::rotate1ZSliders.at(id)->value() / 1000.0);
+    ds->setRotate2(id, rs);
+}
 
-void GUIApplication::filterChangex(int v)
+void GUIApplication::filterChangex(int id)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct filterSettings fs = ds->getFilter(0);
-    fs.x = (float)(v / 1000.0);
-    ds->setFilter(0, fs);
+    struct filterSettings fs = ds->getFilter(id);
+    fs.x = (float)(GUIApplication::filterXSliders.at(id)->value() / 1000.0);
+    ds->setFilter(id, fs);
 }
-void GUIApplication::filterChangex1(int v)
+void GUIApplication::filterChangex1(int id)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct filterSettings fs = ds->getFilter(0);
-    fs.x1 = (float)(v / 1000.0);
-    ds->setFilter(0, fs);
+    struct filterSettings fs = ds->getFilter(id);
+    fs.x1 = (float)(GUIApplication::filterYSliders.at(id)->value() / 1000.0);
+    ds->setFilter(id, fs);
 }
-void GUIApplication::filterChangey(int v)
+void GUIApplication::filterChangey(int id)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct filterSettings fs = ds->getFilter(0);
-    fs.y = (float)(v / 1000.0);
-    ds->setFilter(0, fs);
+    struct filterSettings fs = ds->getFilter(id);
+    fs.y = (float)(GUIApplication::filterZSliders.at(id)->value() / 1000.0);
+    ds->setFilter(id, fs);
 }
-void GUIApplication::filterChangey1(int v)
+void GUIApplication::filterChangey1(int id)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct filterSettings fs = ds->getFilter(0);
-    fs.y1 = (float)(v / 1000.0);
-    ds->setFilter(0, fs);
+    struct filterSettings fs = ds->getFilter(id);
+    fs.y1 = (float)(GUIApplication::filter1YSliders.at(id)->value() / 1000.0);
+    ds->setFilter(id, fs);
 }
-void GUIApplication::filterChangez(int v)
+void GUIApplication::filterChangez(int id)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct filterSettings fs = ds->getFilter(0);
-    fs.z = (float)(v / 1000.0);
-    ds->setFilter(0, fs);
+    struct filterSettings fs = ds->getFilter(id);
+    fs.z = (float)(GUIApplication::filterZSliders.at(id)->value() / 1000.0);
+    ds->setFilter(id, fs);
 }
-void GUIApplication::filterChangez1(int v)
+void GUIApplication::filterChangez1(int id)
 {
     SettingSingleton *ds = ds->getInstance();
-    struct filterSettings fs = ds->getFilter(0);
-    fs.z1 = (float)(v / 1000.0);
-    ds->setFilter(0, fs);
+    struct filterSettings fs = ds->getFilter(id);
+    fs.z1 = (float)(GUIApplication::filter1ZSliders.at(id)->value() / 1000.0);
+    ds->setFilter(id, fs);
+}
+
+void GUIApplication::checkBoxClicked(int id) {
+    SettingSingleton::getInstance()->setVisable(id, GUIApplication::checkBoxes.at(id)->isChecked());
 }
 
 void printXYZ(moveSettings ms) {
@@ -373,4 +369,3 @@ void GUIApplication::setConfiguring(){
     GUIData::getInstance()->configuring = false;
     return;
 }
-

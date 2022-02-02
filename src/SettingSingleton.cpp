@@ -5,6 +5,7 @@ std::vector<rotationSettings> rs2_cloud;
 std::vector<filterSettings> fs_cloud;
 std::vector<moveSettings> ms_cloud;
 std::vector<moveSettings> ms2_cloud;
+std::vector<bool> vs_cloud;
 
 
 SettingSingleton *SettingSingleton::instance;
@@ -33,6 +34,10 @@ SettingSingleton::SettingSingleton()
     ms_cloud.at(1) = {0.0, 0.0, 0.0};
     ms2_cloud.at(1) = {0.0, 0.0, 0.0};
     fs_cloud.at(1) = {0.165, 1.216, 0.021, 10.0, -1.216, 1.402};
+
+    vs_cloud.push_back(true);
+    vs_cloud.push_back(true);
+    vs_cloud.push_back(true);
 }
 
 SettingSingleton::~SettingSingleton()
@@ -88,6 +93,14 @@ moveSettings SettingSingleton::getMove2(int id)
 void SettingSingleton::setMove2(int id, moveSettings ndata)
 {
     ms2_cloud[id] = ndata;
+}
+
+bool SettingSingleton::getVisable(int id) {
+    return vs_cloud[id];
+}
+
+void SettingSingleton::setVisable(int id, bool visable) {
+    vs_cloud[id] = visable;
 }
 
 SettingSingleton *SettingSingleton::getInstance()

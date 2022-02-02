@@ -46,5 +46,6 @@ public:
     filterSettings getFilter(int id);
     void setFilter(int id, filterSettings data);
 
-
+    bool getVisable(int id);
+    void setVisable(int id, bool visable);
 };
