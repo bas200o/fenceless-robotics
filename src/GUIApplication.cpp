@@ -197,10 +197,10 @@ void GUIApplication::updateTable(vector<VisualObject> objects)
             .arg(obj.position.x)
             .arg(obj.position.y)
             .arg(obj.position.z);
-        QString dir = QString("[%1, %2, %3]")
-            .arg(obj.direction.x)
-            .arg(obj.direction.y)
-            .arg(obj.direction.z);
+        QString dir = QString("[%1, %2]") //,%3]")
+            .arg(obj.directionHor)
+            .arg(obj.directionVer);
+            //.arg(obj.direction.z);
 
         // cout // brrrr
         //     << row << " | "
@@ -210,7 +210,6 @@ void GUIApplication::updateTable(vector<VisualObject> objects)
         //     << obj.speed << " | "
         //     << obj.acceleration 
         // << endl;
-        cout << "speed UI: "<<obj.speed << endl;
         pan_table->setItem(row, 0, new QTableWidgetItem(QString("%1").arg(obj.id)));                                  // ID -> Removed for now
         pan_table->setItem(row, 1, new QTableWidgetItem(QString("%1").arg(obj.showTime)));      // Tijd in beeld
         pan_table->setItem(row, 2, new QTableWidgetItem(pos));                                  // Positie

@@ -83,17 +83,22 @@ return;
         return(FoundObject::identificationNumber);
     }
 
-    float FoundObject::getDirectionY(){
-        return FoundObject::directionY;
+    float FoundObject::getDirectionVer(){
+        return FoundObject::directionVer;
     }
 
-    float FoundObject::getDirectionX(){
-        return FoundObject::directionX;
+    float FoundObject::getDirectionHor(){
+        return FoundObject::directionHor;
     }
 
-    void FoundObject::setDirection(double x, double y){
-        FoundObject::directionY = y;
-        FoundObject::directionX = x;
+    void FoundObject::setDirectionHor(float x){
+        
+        FoundObject::directionHor = x;
+    }
+
+    void FoundObject::setDirectionVer(float y){
+        
+        FoundObject::directionVer = y;
     }
 
     void FoundObject::setDirection(double idk){

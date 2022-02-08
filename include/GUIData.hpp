@@ -26,7 +26,8 @@ struct VisualObject {
     int showTime;
     vec3 position;
     double size;
-    vec3 direction;
+    float directionHor;
+    float directionVer;
     double speed;
     double acceleration;
 };

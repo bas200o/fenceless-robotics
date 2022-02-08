@@ -168,7 +168,7 @@ void Controller3D::DetectObjects(int pInfo)
 
     
     std::cout << "number of found objects: "<< j <<std::endl;
-    //viewer->spinOnce(100, true);
+    viewer->spinOnce(100, true);
     //END TEMPORARY
     //std::this_thread::sleep_for(std::chrono::milliseconds(100));
     return;
@@ -238,14 +238,50 @@ void Controller3D::calculateDirection(){
         float dist;
         for(int j = 0; j < previous.objects.size() ; j++){
                 if(previous.objects[j].getIdentificationNumber() == lastInfo[0].objects[i].getIdentificationNumber()){
-                    Eigen::Vector3f e_v3f_pt = lastInfo[0].objects[i].getLocation().getVector3fMap();
-                    Eigen::Vector3f e_v3f_pt2 = previous.objects[j].getLocation().getVector3fMap();
-                    angle = pcl::getAngle3D(e_v3f_pt2, e_v3f_pt, false);
+                    std::tuple<float, float, float> pCent = previous.objects[j].getCenterMass();
+                    std::tuple<float, float, float> lCent =lastInfo[0].objects[i].getCenterMass();
+                    float p1z = get<2>(pCent);
+                    float p2z = get<2>(lCent);
+                    float p1y = get<1>(pCent);
+                    float p2y = get<1>(lCent);
+                    float p1x = get<0>(pCent);
+                    float p2x = get<0>(lCent);
+                    float deltaZ = p2z - p1z;
+                    float deltaY = p2y - p1y;
+                    float deltaX = p2x - p1x; //Vector 2 is now relative to origin, the angle is the same, we have just transformed it to use the origin.
+
+                    float vertAngleInDegrees;
+                    float horAngleInDegrees;
+
+                    if(-0.01 > deltaX < 0.01 && -0.01 > deltaZ < 0.01){
+                        horAngleInDegrees = 0;
+                        cout << "wtf" << endl;
+                    }
+                    else{
+                    horAngleInDegrees = atan2(deltaX, deltaZ) * 180 / 3.141;
+                    }
+
+                    float deltaXZ = sqrt((deltaX * deltaX) + (deltaZ*deltaZ));
+                    if(-0.01 > deltaX < 0.01 && -0.01 >deltaY < 0.01){
+                        vertAngleInDegrees = 0;
+                    }
+                    else{
+                        vertAngleInDegrees = atan2(deltaY, deltaXZ) * 180 / 3.141;
+                    }
+
+                    cout << "angle set hor: " << deltaX << endl;
+                    cout << "angle set ver: " << deltaZ << endl;
+
+                    lastInfo[0].objects[i].setDirectionHor(horAngleInDegrees);
+                    lastInfo[0].objects[i].setDirectionVer(vertAngleInDegrees);
+                    //vertAngleInDegrees *= -1; // Y axis is inverted in computer windows, Y goes down, so invert the angle.
+                    //Eigen::Vector3f e_v3f_pt = lastInfo[0].objects[i].getLocation().getVector3fMap();
+                    //Eigen::Vector3f e_v3f_pt2 = previous.objects[j].getLocation().getVector3fMap();
+                    //angle = pcl::getAngle3D(e_v3f_pt2, e_v3f_pt, false);
                 }    
         }
-        lastInfo[0].objects[i].setDirection(angle);
 
-        cout << "angle set: " << angle << endl;
+        //cout << "angle set: " << horAngleInDegrees << endl;
 
     }
 }
