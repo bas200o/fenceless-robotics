@@ -13,16 +13,20 @@ SettingSingleton *SettingSingleton::instance;
 
 SettingSingleton::SettingSingleton()
 {
-    rs_cloud.push_back({0.701, 0.165, -0.065});
-    rs2_cloud.push_back( {0.0, 0.515, -0.062});
-    ms_cloud.push_back({0.0, 1.113, 0.0});
-    ms2_cloud.push_back({0.0, 0.0, 0.0});
-    fs_cloud.push_back({0.165, 1.216, 0.021, 10.0, -1.216, 1.402});
-    rs_cloud.push_back({0.0, 0.0, 0.0});
-    rs2_cloud.push_back({0.0, 0.0, 0.0});
-    ms_cloud.push_back({0.0, 0.0, 0.0});
-    ms2_cloud.push_back({0.0, 0.0, 0.0});
-    fs_cloud.push_back({0.165, 1.216, 0.021, 10.0, -1.216, 1.402});
+
+    rs_cloud.push_back({0.701, 0.165, -0.028});
+    rs2_cloud.push_back( {0, 0.629, -0.062});
+    ms_cloud.push_back({-0.212, 1.113, -0.079});
+    ms2_cloud.push_back({0.0, 0.0, 0.0});//unnececary
+    fs_cloud.push_back({0.028, 1.086, 0.028, 3.714, -0.142, 1.429});
+
+    rs_cloud.push_back({0.879, 0.936, -0.709});
+    rs2_cloud.push_back( {0.057, -1.086, -0.057});
+    ms_cloud.push_back({0.848, 1.192, -0.371});
+    ms2_cloud.push_back({0.0, 0.0, 0.0});//unnececary
+    fs_cloud.push_back({0.085, 1.086, 0.028, 10.0, -4, 1.143});
+    
+
 
     vs_cloud.push_back(true);
     vs_cloud.push_back(true);

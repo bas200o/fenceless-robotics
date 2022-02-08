@@ -333,7 +333,7 @@ void GUIApplication::filterChangey(int id)
 {
     SettingSingleton *ds = ds->getInstance();
     struct filterSettings fs = ds->getFilter(id);
-    fs.y = (float)(GUIApplication::filterZSliders.at(id)->value() / 1000.0);
+    fs.y = (float)(GUIApplication::filterYSliders.at(id)->value() / 1000.0);
     ds->setFilter(id, fs);
 }
 void GUIApplication::filterChangey1(int id)
@@ -401,12 +401,18 @@ void printXYZ(filterSettings fs) {
 
 void GUIApplication::setConfiguring(){
     std::cout << "Stopped Configure" << std::endl;
-
-    // printXYZ(SettingSingleton::getInstance()->getMove());
-    // printXYZ(SettingSingleton::getInstance()->getMove2());
-    // printXYZ(SettingSingleton::getInstance()->getRotate());
-    // printXYZ(SettingSingleton::getInstance()->getRotate2());
-    // printXYZ(SettingSingleton::getInstance()->getFilter());
+    // std::cout << "PCL 1" << std::endl;
+    // printXYZ(SettingSingleton::getInstance()->getMove(0));
+    // // printXYZ(SettingSingleton::getInstance()->getMove2());
+    // printXYZ(SettingSingleton::getInstance()->getRotate(0));
+    // printXYZ(SettingSingleton::getInstance()->getRotate2(0));
+    // printXYZ(SettingSingleton::getInstance()->getFilter(0));
+    // std::cout << "PCL 2" << std::endl;
+    //     printXYZ(SettingSingleton::getInstance()->getMove(1));
+    // // printXYZ(SettingSingleton::getInstance()->getMove2());
+    // printXYZ(SettingSingleton::getInstance()->getRotate(1));
+    // printXYZ(SettingSingleton::getInstance()->getRotate2(1));
+    // printXYZ(SettingSingleton::getInstance()->getFilter(1));
 
 
     GUIData::getInstance()->configuring = false;
