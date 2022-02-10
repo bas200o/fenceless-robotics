@@ -7,6 +7,7 @@
 #include <iostream>
 #include <chrono>
 #include <ctime>
+#include <math.h>
 
 Controller3D::Controller3D(/* args */)
 {
@@ -284,7 +285,14 @@ void Controller3D::calculateDirection(){
 
                     cout << "angle set hor: " << deltaX << endl;
                     cout << "angle set ver: " << deltaZ << endl;
-
+                    if(180 > horAngleInDegrees || horAngleInDegrees < -180){
+                        horAngleInDegrees = 0;
+                    }
+                    if(180 > vertAngleInDegrees || vertAngleInDegrees < -180){
+                        vertAngleInDegrees = 0;
+                    }
+                    vertAngleInDegrees = (round(vertAngleInDegrees * 100.0)) / 100.0;
+                    horAngleInDegrees = (round(horAngleInDegrees * 100.0)) / 100.0;
                     lastInfo[0].objects[i].setDirectionHor(horAngleInDegrees);
                     lastInfo[0].objects[i].setDirectionVer(vertAngleInDegrees);
                     //vertAngleInDegrees *= -1; // Y axis is inverted in computer windows, Y goes down, so invert the angle.
