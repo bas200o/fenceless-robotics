@@ -138,31 +138,18 @@ void Controller3D::DetectObjects(int pInfo)
         lastInfo[pInfo].InsertObject(*cloud_cluster);
 
         //TEMPORARY CODE TO DISPLAY POINTCLOUD -> ENDS AT <END TEMPORARY> COMMENT
-    for (size_t i = 0; i < cloud_cluster->points.size(); i++)
-    {
-        switch (j)
+        for (size_t i = 0; i < cloud_cluster->points.size(); i++)
         {
-        case 0:
-            cloud_cluster->points[i].r = 0;
-            cloud_cluster->points[i].g = 255;
-            cloud_cluster->points[i].b = 0; 
-            break;
-        case 1:
-            cloud_cluster->points[i].r = 255;
-            cloud_cluster->points[i].g = 0;
-            cloud_cluster->points[i].b = 0; 
-            break;
-        case 2:
-            cloud_cluster->points[i].g = 0;
-            cloud_cluster->points[i].r = 0;
-            cloud_cluster->points[i].b = 255;
-            break;
-        default:
-            break;
+            if(j == 0)
+            {
+                cloud_cluster->points[i].r = 255, cloud_cluster->points[i].g = 255, cloud_cluster->points[i].b = 255;
+            } else
+            {
+            cloud_cluster->points[i].r = ((0b001) & j)      ? 255 : 0;  
+            cloud_cluster->points[i].g = ((0b010) & j) >> 1 ? 255 : 0;  
+            cloud_cluster->points[i].b = ((0b100) & j) >> 2 ? 255 : 0;  
+            }
         }
-      
-      
-    }
 
         viewer->addPointCloud(cloud_cluster, "hey" + j);
         j++;

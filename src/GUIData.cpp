@@ -1,4 +1,5 @@
 #include "../include/GUIData.hpp"
+#include <math.h>
 
 GUIData::GUIData()
 {
@@ -75,24 +76,28 @@ int GUIData::setObjects(Information3D data)
     for(FoundObject obj : data.getObjects()){
         std::tuple<float, float, float> center = obj.getCenterMass();
         vec3 vec = {(int)(get<0>(center)*1000), (int)(get<1>(center)*1000), (int)(get<2>(center)*1000)};
-        double fSpeed;
-        if(obj.getSpeed() > 0.00001){
-        fSpeed = obj.getSpeed();
-        }
-        else{
-            fSpeed = 0;
-        }
-
-        VisualObject vs = {-1, vec, obj.getSize(), -1,-1,-1, fSpeed, -1};
-        //std::cout << (int)obj.getSpeed()*10000000000.0f << std::endl;
+        VisualObject vs = {-1, vec, obj.getSize(), -1, (int)obj.getSpeed()*1000, -1};
         vos.push_back(vs);
-    // int showTime;
-    // vec3 position;
-    // double size;
-    // vec3 direction;
-    // double speed;
-    // double acceleration;
+
+        cout << " dist pre sort " << sqrt(pow(vs.position.x,2)+ pow(vs.position.y,2)+ pow(vs.position.z,2)) << "\n";
+
+        // int showTime;
+        // vec3 position;
+        // double size;
+        // vec3 direction;
+        // double speed;
+        // double acceleration;
     }
+
+    sort(vos.begin(), vos.end(), [] (VisualObject o1, VisualObject o2) {
+        vec3 zero; zero.x = 0; zero.y = 0; zero.z = 0;
+        return sqrt(pow(o1.position.x,2)+ pow(o1.position.y,2)+ pow(o1.position.z,2)) < 
+                sqrt(pow(o2.position.x,2)+ pow(o2.position.y,2)+ pow(o2.position.z,2));
+    });
+
+    for(VisualObject vs : vos)
+        cout << " dist post sort " << sqrt(pow(vs.position.x,2)+ pow(vs.position.y,2)+ pow(vs.position.z,2)) << "\n";
+
 
     return setObjects(vos);
 };
@@ -124,10 +129,10 @@ vector<VisualObject> GUIData::getTable()
     if(table_busy)
         return vector<VisualObject>(); // Empty vector indicates bad result
     
-    //cout << "Returning table: \n";
+    cout << "Returning table: \n";
     for(VisualObject v: table)
     {
-        // cout << v.direction.x << v.direction.y << v.direction.z << endl;
+        cout << v.direction.x << v.direction.y << v.direction.z << endl;
     }
 
     table_newdata = false;
