@@ -10,7 +10,7 @@
  */
 GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 {
-    setFixedSize(1240, 950);
+    setFixedSize(1000, 400);
     setWindowTitle("Fenceless Robotics");
 
     // Panel 2D View
@@ -18,17 +18,6 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
     QGraphicsRectItem *rect = scene.addRect(QRectF(0, 0, 100, 100));
 
     QGraphicsItem *item = scene.itemAt(50, 50, QTransform());
-
-    pan_view2d = new QGraphicsView(&scene);
-    pan_view2d->setFixedSize(400, 400);
-
-    // Panel 3D View
-    pan_view3d = new QPushButton(" 3D View ");
-    pan_view3d->setFixedSize(400, 400);
-
-    // Panel Statistics
-    pan_statistics = new QPushButton(" Stats ");
-    pan_statistics->setFixedSize(400, 400);
 
     // Pannel Cancel config button
     auto pancake = new QPushButton("Stop configuring");
@@ -52,9 +41,7 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 
     layout = new QGridLayout(this);
 
-    layout->addWidget(pan_view2d, 0, 0);
     layout->addWidget(pancake, 0, 1);
-    layout->addWidget(pan_statistics, 0, 2);
     layout->addWidget(pan_table, 1, 0, 1, 3);
 
     for (size_t i = 0; i < CameraConnector::getInstance()->getConnectedRSCameras().size(); i++)
