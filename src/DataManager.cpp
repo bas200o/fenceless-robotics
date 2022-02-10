@@ -98,19 +98,6 @@ int DataManager::maingui(int argc, char **argv)
         }
     });
 
-#ifndef __DEBUG_UI
-    arena.enqueue( [&] { // Filling UI with values
-
-        this_thread::sleep_for(std::chrono::seconds(5));        
-        GUIData::getInstance()->setObjects(vector<VisualObject> {
-            { 1, {10, 20, 30}, 0.0f, {100, 200, 300}, 123, 567 },
-            { 2, {12, 22, 32}, 0.0f, {102, 202, 302}, 123, 567 }, 
-            { 3, {13, 23, 33}, 0.3f, {103, 203, 303}, 123, 456 }
-        });
-    });
-#endif
-    
-
     gui.show();
     return app.exec();
 }
