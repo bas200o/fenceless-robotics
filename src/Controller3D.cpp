@@ -126,7 +126,7 @@ void Controller3D::DetectObjects(int pInfo)
 
     // pcl::PointCloud<pcl::PointXYZRGB>::Ptr full(new pcl::PointCloud<pcl::PointXYZRGB>());
     viewer->removeAllPointClouds();
-    int j = 0;
+    int objectCount = 0;
     for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin(); it != cluster_indices.end(); ++it)
     {
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_cluster(new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -137,28 +137,11 @@ void Controller3D::DetectObjects(int pInfo)
         cloud_cluster->is_dense = true;
         lastInfo[pInfo].InsertObject(*cloud_cluster);
 
-        //TEMPORARY CODE TO DISPLAY POINTCLOUD -> ENDS AT <END TEMPORARY> COMMENT
-        for (size_t i = 0; i < cloud_cluster->points.size(); i++)
-        {
-            if(j == 0)
-            {
-                cloud_cluster->points[i].r = 255, cloud_cluster->points[i].g = 255, cloud_cluster->points[i].b = 255;
-            } else
-            {
-            cloud_cluster->points[i].r = ((0b001) & j)      ? 255 : 0;  
-            cloud_cluster->points[i].g = ((0b010) & j) >> 1 ? 255 : 0;  
-            cloud_cluster->points[i].b = ((0b100) & j) >> 2 ? 255 : 0;  
-            }
-        }
-
-        // viewer->addPointCloud(cloud_cluster, "hey" + j);
-        j++;
+        objectCount++;
     }
 
     
-    std::cout << "number of found objects: "<< j <<std::endl;
-    // viewer->spinOnce(100, true);
-    //END TEMPORARY
+    std::cout << "number of found objects: "<< objectCount <<std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     return;
 }
