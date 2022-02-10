@@ -269,7 +269,7 @@ void Controller3D::calculateDirection(){
 
                     if(-0.01 > deltaX < 0.01 && -0.01 > deltaZ < 0.01){
                         horAngleInDegrees = 0;
-                        cout << "wtf" << endl;
+                        // cout << "wtf" << endl;
                     }
                     else{
                     horAngleInDegrees = atan2(deltaX, deltaZ) * 180 / 3.141;
@@ -283,16 +283,17 @@ void Controller3D::calculateDirection(){
                         vertAngleInDegrees = atan2(deltaY, deltaXZ) * 180 / 3.141;
                     }
 
-                    cout << "angle set hor: " << deltaX << endl;
-                    cout << "angle set ver: " << deltaZ << endl;
-                    if(180 > horAngleInDegrees || horAngleInDegrees < -180){
-                        horAngleInDegrees = 0;
-                    }
-                    if(180 > vertAngleInDegrees || vertAngleInDegrees < -180){
-                        vertAngleInDegrees = 0;
-                    }
+                    // cout << "angle set hor: " << horAngleInDegrees << endl;
+                    // cout << "angle set ver: " << vertAngleInDegrees << endl;
                     vertAngleInDegrees = (round(vertAngleInDegrees * 100.0)) / 100.0;
                     horAngleInDegrees = (round(horAngleInDegrees * 100.0)) / 100.0;
+                    if(180 < horAngleInDegrees || horAngleInDegrees < -180){
+                        horAngleInDegrees = 0;
+                    }
+                    if(180 < vertAngleInDegrees || vertAngleInDegrees < -180){
+                        vertAngleInDegrees = 0;
+                    }
+                    cout << "yo buddy angle is:"<< horAngleInDegrees << endl;
                     lastInfo[0].objects[i].setDirectionHor(horAngleInDegrees);
                     lastInfo[0].objects[i].setDirectionVer(vertAngleInDegrees);
                     //vertAngleInDegrees *= -1; // Y axis is inverted in computer windows, Y goes down, so invert the angle.
