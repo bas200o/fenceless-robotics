@@ -10,7 +10,7 @@
  */
 GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 {
-    setFixedSize(1000, 400);
+    setBaseSize(1000, 400);
     setWindowTitle("Fenceless Robotics");
 
     // Panel 2D View
@@ -52,6 +52,8 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 
 void GUIApplication::addPclWindow(int id) {
     QWidget* window = new QWidget;
+
+    GUIData::getInstance()->configWindows.push_back(window);
     window->setMinimumWidth(500);
     QGridLayout *window_layout = new QGridLayout(window);
 
@@ -402,5 +404,13 @@ void GUIApplication::setConfiguring(){
 
 
     GUIData::getInstance()->configuring = false;
+
+    vector<QWidget*> cws = GUIData::getInstance()->configWindows;
+    for (QWidget* cw : cws)
+    {
+        cw->close();
+    }
+    
+
     return;
 }

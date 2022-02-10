@@ -61,6 +61,8 @@ class GUIData
 
         DataFlags getDataFlags();
 
+        vector<QWidget*> configWindows;
+
     private:
         GUIData();
         static GUIData* instance;
