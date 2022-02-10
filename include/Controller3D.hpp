@@ -12,6 +12,7 @@
 #include <pcl/search/kdtree.h>
 #include <pcl/segmentation/sac_segmentation.h>
 #include <pcl/segmentation/extract_clusters.h>
+#include <pcl/common/angles.h>
 #include "../include/SettingSingleton.hpp"
 #include "../include/GUIData.hpp"
 
@@ -21,6 +22,7 @@ private:
     //Array with the last 5 info of progressed pointclouds
     Information3D lastInfo[5];
     pcl::visualization::PCLVisualizer::Ptr viewer;
+    int identificationNumber = 0;
 
 public:
     //Constructor
@@ -45,11 +47,14 @@ public:
     void CalculateSpeed();
     
     //
+    void calculateDirection();
+    //
     void pushUIData();
     
     //
     void configure();
-    
+    //
+    void assignIdentification();
     //Rotates a pointcloud based on the settings in SettingSingleton
     static pcl::PointCloud<pcl::PointXYZRGB>::Ptr rotatePCL(pcl::PointCloud<pcl::PointXYZRGB>::Ptr OGCloud);
     

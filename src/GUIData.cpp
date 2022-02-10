@@ -46,8 +46,8 @@ int GUIData::setObjects(vector<VisualObject> objects)
         obj.position.x = vo.position.x;
         obj.position.y = vo.position.y;
 
-        obj.direction.x = vo.direction.x;
-        obj.direction.y = vo.direction.y;
+        //obj.direction.x = vo.direction.x;
+        //obj.direction.y = vo.direction.y;
 
         objs.push_back(obj);
     }
@@ -75,6 +75,7 @@ int GUIData::setObjects(Information3D data)
     for(FoundObject obj : data.getObjects()){
         std::tuple<float, float, float> center = obj.getCenterMass();
         vec3 vec = {(int)(get<0>(center)*1000), (int)(get<1>(center)*1000), (int)(get<2>(center)*1000)};
+        int id = obj.getIdentificationNumber();
         double fSpeed;
         if(obj.getSpeed() > 0.00001){
         fSpeed = obj.getSpeed();
@@ -83,7 +84,7 @@ int GUIData::setObjects(Information3D data)
             fSpeed = 0;
         }
 
-        VisualObject vs = {-1, vec, obj.getSize(), -1,-1,-1, fSpeed, -1};
+        VisualObject vs = {id, -1, vec, obj.getSize(), obj.getDirectionHor(), obj.getDirectionVer(), obj.getSpeed(), -1};
         //std::cout << (int)obj.getSpeed()*10000000000.0f << std::endl;
         vos.push_back(vs);
     // int showTime;

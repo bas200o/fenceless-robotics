@@ -42,10 +42,7 @@ void FoundObject::CalculateValues()
     for (int i = 0; i < numPoints; i++)
     {
         float tempsize = euclideanDistance(objectCloud.points[i], objectCloud.points[0]);
-        if (tempsize < 0)
-        {
-            tempsize = tempsize * -1;
-        }
+        tempsize = abs(tempsize);
         if (tempsize > maxsize)
         {
             maxsize = tempsize;
@@ -84,3 +81,34 @@ std::tuple<float, float, float> FoundObject::getCenterMass()
 {
     return FoundObject::centerMass;
 };
+
+
+    void FoundObject::setIdentificationNumber(int number){
+        FoundObject::identificationNumber = number;
+    }
+
+    int FoundObject::getIdentificationNumber(){
+        return(FoundObject::identificationNumber);
+    }
+
+    float FoundObject::getDirectionVer(){
+        return FoundObject::directionVer;
+    }
+
+    float FoundObject::getDirectionHor(){
+        return FoundObject::directionHor;
+    }
+
+    void FoundObject::setDirectionHor(float x){
+        
+        FoundObject::directionHor = x;
+    }
+
+    void FoundObject::setDirectionVer(float y){
+        
+        FoundObject::directionVer = y;
+    }
+
+    void FoundObject::setDirection(double idk){
+        FoundObject::direction = idk;
+    }

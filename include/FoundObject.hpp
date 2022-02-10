@@ -6,6 +6,7 @@
 #include <pcl/point_types.h>
 #include <pcl/visualization/cloud_viewer.h>
 #include <pcl/common/distances.h>
+#include <cmath>
 
 class FoundObject
 {
@@ -27,6 +28,10 @@ private:
     
     //Calculates the size and location of the object
     void CalculateValues();
+    //
+    int identificationNumber;
+    //
+    float directionHor, directionVer, direction;
 
 public:
     //Constructor
@@ -46,4 +51,12 @@ public:
     std::tuple<float, float, float> getCenterMass();
 
     float getSize();
+    void setIdentificationNumber(int number);
+    int getIdentificationNumber();
+    float getDirectionVer();
+    float getDirectionHor();
+    void setDirectionHor(float x);
+    void setDirectionVer(float y);
+    void setDirection(double idk);
+
 };
