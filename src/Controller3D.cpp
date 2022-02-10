@@ -157,34 +157,6 @@ void Controller3D::RepaintVisualizer()
         pcl::PointCloud<pcl::PointXYZRGB> drawCloud(fo.getObjectCloud());
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudPTR(new pcl::PointCloud<pcl::PointXYZRGB>);
 
-        if(foIter == 0) cout << " Found nr 0, giving white" << endl;
-        if(foIter > 0 ) cout << " Found nr 1+, giving color" << endl;
-/*
-        for(pcl::PointXYZRGB point : drawCloud.points)
-        {
-            if(foIter == 0)
-            {
-                // First one alone because 000 = black
-                point.r = 255, point.g = 255, point.b = 255;
-                drawCloud.points[0].g = 255;
-                cout << " Literally just after setting: " 
-                    << (int)point.r << "|" 
-                    << (int)point.g << "|" 
-                    << (int)point.b << "\n";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-            } else
-            {
-                // I'm sure there are better ways to set color but I can't think of any
-                point.b = ((0b001) & foIter)      ? 255 : 0;  
-                point.g = ((0b010) & foIter) >> 1 ? 255 : 0;  
-                point.r = ((0b100) & foIter) >> 2 ? 255 : 0;  // Swapped R and B for testing
-            }
-
-            cout << " at the end of the for loop: " 
-                << (int)point.r << "|" 
-                << (int)point.g << "|" 
-                << (int)point.b << "\n";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-        }
-*/
         for (int i = 0; i < drawCloud.points.size(); i++)
         {
             if(foIter == 0)
@@ -204,23 +176,9 @@ void Controller3D::RepaintVisualizer()
 
         }
         
-        
-
-        cout << " In the cloud: " 
-            << (int)drawCloud.points[0].r << "|" 
-            << (int)drawCloud.points[0].g << "|" 
-            << (int)drawCloud.points[0].b << "\n";
-
         *cloudPTR += drawCloud;
 
-        cout << " after copying to ptr idk how to read the cloudptr: " 
-            << (int)drawCloud.points[0].r << "|"
-            << (int)drawCloud.points[0].g << "|" 
-            << (int)drawCloud.points[0].b ;
-
-
         viewer->addPointCloud<pcl::PointXYZRGB>(cloudPTR, "obj"+foIter);
-        cout << endl << endl << " foIter " << foIter++ << endl << endl;
     }
     
     viewer->spinOnce(100, true);
