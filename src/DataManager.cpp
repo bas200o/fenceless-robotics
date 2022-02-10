@@ -33,6 +33,7 @@ int DataManager::dataMain()
         }
         cont3.ProccesPointcloud();
         cont3.DetectObjects(0);
+        cont3.RepaintVisualizer();
         cont3.CalculateSpeed();
         cont3.pushUIData();
 
