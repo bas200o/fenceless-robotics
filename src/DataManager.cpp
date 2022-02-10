@@ -13,11 +13,6 @@
 
 int DataManager::dataMain()
 {
-        
-
-
-    //GUIApplication gui;
-    
     Controller3D cont3;
     // float longest = 0, shortest = 99;
     bool first = true;
@@ -31,30 +26,28 @@ int DataManager::dataMain()
         while(GUIData::getInstance()->configuring){
             cont3.configure();
         }
+
         cont3.ProccesPointcloud();
         cont3.DetectObjects(0);
         cont3.RepaintVisualizer();
         cont3.CalculateSpeed();
         cont3.pushUIData();
 
-    duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
+        duration = ( std::clock() - start ) / (double) CLOCKS_PER_SEC;
 
-    // if(duration < shortest && !first){
-    //     shortest = duration;
-    // }
-    // if(duration > longest && !first){
-    //     longest = duration;
-    // }
-    first = false;
-    std::cout<<"duration of inference with intake and delays: "<< duration << std::endl;
-    // std::cout<<"longest of inference with intake and delays: "<< longest << std::endl;
-    // std::cout<<"shortest of inference with intake and delays: "<< shortest << std::endl;
+        // if(duration < shortest && !first){
+        //     shortest = duration;
+        // }
+        // if(duration > longest && !first){
+        //     longest = duration;
+        // }
+        first = false;
+        std::cout<<"duration of inference with intake and delays: "<< duration << std::endl;
+        // std::cout<<"longest of inference with intake and delays: "<< longest << std::endl;
+        // std::cout<<"shortest of inference with intake and delays: "<< shortest << std::endl;
 
     }
-    //Controller2D cont2;
-    //while(true)
 
-    //Do 3DVision
     cout << "ended application" << endl;
     return 1;
 }
