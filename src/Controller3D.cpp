@@ -142,7 +142,6 @@ void Controller3D::DetectObjects(int pInfo)
 
     
     std::cout << "number of found objects: "<< objectCount <<std::endl;
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     return;
 }
 
@@ -151,7 +150,17 @@ void Controller3D::RepaintVisualizer()
     viewer->removeAllPointClouds();
 
     int foIter = 0;
-    for(FoundObject fo : lastInfo[0].getObjects())
+
+    vector<FoundObject> objects = lastInfo[0].getObjects();
+
+    // sort
+    sort(objects.begin(), objects.end(), [] (FoundObject o1, FoundObject o2) {
+            vec3 zero; zero.x = 0; zero.y = 0; zero.z = 0;
+            return sqrt( pow(o1.getLocation().x, 2) + pow(o1.getLocation().y, 2) + pow(o1.getLocation().z, 2) ) <
+                    sqrt( pow(o2.getLocation().x, 2) + pow(o2.getLocation().y, 2) + pow(o2.getLocation().z, 2) );
+    });
+
+    for(FoundObject fo : objects)
     {
         // Select a color
         pcl::PointCloud<pcl::PointXYZRGB> drawCloud(fo.getObjectCloud());
@@ -177,11 +186,10 @@ void Controller3D::RepaintVisualizer()
         }
         
         *cloudPTR += drawCloud;
-
-        viewer->addPointCloud<pcl::PointXYZRGB>(cloudPTR, "obj"+foIter);
+        viewer->addPointCloud<pcl::PointXYZRGB>(cloudPTR, "obj"+(int)foIter++);
     }
-    
-    viewer->spinOnce(100, true);
+
+    viewer->spinOnce(30, true);
 }
 
 void Controller3D::ProccesPointcloud()
