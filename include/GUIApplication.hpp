@@ -87,8 +87,8 @@ class GUIApplication : public QWidget
             "Positie", 
             "Diameter", 
             "Richting", 
-            "Snelheid",
-            "Versnelling" };
+            "Snelheid" /*,
+            "Versnelling" */ };
 
     public:
         explicit GUIApplication(QWidget *parent = 0);
