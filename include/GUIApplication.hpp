@@ -83,7 +83,7 @@ class GUIApplication : public QWidget
 
         QStringList tableHeaders = { 
             "ID", 
-            "Tijd in beeld (s)", 
+            //"Tijd in beeld (s)", 
             "Positie vanaf oorsprong (m)", 
             "Diameter (m)", 
             "Richting (°)", 

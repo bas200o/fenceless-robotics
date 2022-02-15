@@ -223,12 +223,12 @@ void GUIApplication::updateTable(vector<VisualObject> objects)
         //     << obj.acceleration 
         // << endl;
         pan_table->setItem(row, 0, new QTableWidgetItem(QString("%1").arg(obj.id)));                                  // ID -> Removed for now
-        pan_table->setItem(row, 1, new QTableWidgetItem(QString("%1").arg(obj.showTime)));      // Tijd in beeld
-        pan_table->setItem(row, 2, new QTableWidgetItem(pos));                                  // Positie
-        pan_table->setItem(row, 3, new QTableWidgetItem(QString("%1").arg(obj.size)));          // Diameter
-        pan_table->setItem(row, 4, new QTableWidgetItem(dir));                                  // Richting
-        pan_table->setItem(row, 5, new QTableWidgetItem(QString("%1").arg(obj.speed)));         // Snelheid
-        pan_table->setItem(row, 6, new QTableWidgetItem(QString("%1").arg(obj.acceleration)));  // Versnelling
+        //pan_table->setItem(row, 1, new QTableWidgetItem(QString("%1").arg(obj.showTime)));      // Tijd in beeld
+        pan_table->setItem(row, 1, new QTableWidgetItem(pos));                                  // Positie
+        pan_table->setItem(row, 2, new QTableWidgetItem(QString("%1").arg(obj.size)));          // Diameter
+        pan_table->setItem(row, 3, new QTableWidgetItem(dir));                                  // Richting
+        pan_table->setItem(row, 4, new QTableWidgetItem(QString("%1").arg(obj.speed)));         // Snelheid
+        pan_table->setItem(row, 5, new QTableWidgetItem(QString("%1").arg(obj.acceleration)));  // Versnelling
 
         row++;
     }   
