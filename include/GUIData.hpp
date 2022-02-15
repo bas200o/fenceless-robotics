@@ -7,13 +7,13 @@
 using namespace std;
 
 struct vec3 {
-    int x;
-    int y;
-    int z;
+    float x;
+    float y;
+    float z;
 };
 struct vec2 {
-    int x;
-    int y;
+    float x;
+    float y;
 };
 
 struct Object2D {

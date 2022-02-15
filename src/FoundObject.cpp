@@ -37,10 +37,14 @@ void FoundObject::CalculateValues()
     location.x = cx;
     location.y = cy;
     location.z = cz;
-    centerMass = std::tuple<float, float, float>{cx, cy, cz};
 
+    centerMass = std::tuple<float, float, float>{cx, cy, cz};
+    cout<< std::get<0>(centerMass) << endl;
+    cout<< std::get<1>(centerMass) << endl;
+    cout<< std::get<2>(centerMass) << endl;
     for (int i = 0; i < numPoints; i++)
     {
+        //Can possibly result in inaccuracies, use location instead of objectCloud.points[0] for the right values
         float tempsize = euclideanDistance(objectCloud.points[i], objectCloud.points[0]);
         tempsize = abs(tempsize);
         if (tempsize > maxsize)
