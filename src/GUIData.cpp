@@ -79,8 +79,6 @@ int GUIData::setObjects(Information3D data)
         VisualObject vs = {-1, vec, obj.getSize(), -1, (int)obj.getSpeed()*1000, -1};
         vos.push_back(vs);
 
-        cout << " dist pre sort " << sqrt(pow(vs.position.x,2)+ pow(vs.position.y,2)+ pow(vs.position.z,2)) << "\n";
-
         // int showTime;
         // vec3 position;
         // double size;
@@ -94,10 +92,6 @@ int GUIData::setObjects(Information3D data)
         return sqrt(pow(o1.position.x,2)+ pow(o1.position.y,2)+ pow(o1.position.z,2)) < 
                 sqrt(pow(o2.position.x,2)+ pow(o2.position.y,2)+ pow(o2.position.z,2));
     });
-
-    for(VisualObject vs : vos)
-        cout << " dist post sort " << sqrt(pow(vs.position.x,2)+ pow(vs.position.y,2)+ pow(vs.position.z,2)) << "\n";
-
 
     return setObjects(vos);
 };
@@ -128,12 +122,6 @@ vector<VisualObject> GUIData::getTable()
 {
     if(table_busy)
         return vector<VisualObject>(); // Empty vector indicates bad result
-    
-    cout << "Returning table: \n";
-    for(VisualObject v: table)
-    {
-        cout << v.direction.x << v.direction.y << v.direction.z << endl;
-    }
 
     table_newdata = false;
     return table;
