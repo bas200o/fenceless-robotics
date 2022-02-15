@@ -31,7 +31,7 @@ private:
     //
     int identificationNumber;
     //
-    float directionHor, directionVer, direction;
+    float directionHor = 0, directionVer = 0, direction;
 
 public:
     //Constructor
