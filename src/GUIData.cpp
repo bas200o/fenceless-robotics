@@ -1,4 +1,5 @@
 #include "../include/GUIData.hpp"
+#include <math.h>
 
 GUIData::GUIData()
 {
@@ -87,13 +88,20 @@ int GUIData::setObjects(Information3D data)
         VisualObject vs = {id, -1, vec, obj.getSize(), obj.getDirectionHor(), obj.getDirectionVer(), obj.getSpeed(), -1};
         //std::cout << (int)obj.getSpeed()*10000000000.0f << std::endl;
         vos.push_back(vs);
-    // int showTime;
-    // vec3 position;
-    // double size;
-    // vec3 direction;
-    // double speed;
-    // double acceleration;
+
+        // int showTime;
+        // vec3 position;
+        // double size;
+        // vec3 direction;
+        // double speed;
+        // double acceleration;
     }
+
+    sort(vos.begin(), vos.end(), [] (VisualObject o1, VisualObject o2) {
+        vec3 zero; zero.x = 0; zero.y = 0; zero.z = 0;
+        return sqrt(pow(o1.position.x,2)+ pow(o1.position.y,2)+ pow(o1.position.z,2)) < 
+                sqrt(pow(o2.position.x,2)+ pow(o2.position.y,2)+ pow(o2.position.z,2));
+    });
 
     return setObjects(vos);
 };
@@ -124,12 +132,6 @@ vector<VisualObject> GUIData::getTable()
 {
     if(table_busy)
         return vector<VisualObject>(); // Empty vector indicates bad result
-    
-    //cout << "Returning table: \n";
-    for(VisualObject v: table)
-    {
-        // cout << v.direction.x << v.direction.y << v.direction.z << endl;
-    }
 
     table_newdata = false;
     return table;

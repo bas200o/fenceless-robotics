@@ -134,7 +134,7 @@ void Controller3D::DetectObjects(int pInfo)
 
     // pcl::PointCloud<pcl::PointXYZRGB>::Ptr full(new pcl::PointCloud<pcl::PointXYZRGB>());
     viewer->removeAllPointClouds();
-    int j = 0;
+    int objectCount = 0;
     for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin(); it != cluster_indices.end(); ++it)
     {
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_cluster(new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -145,35 +145,59 @@ void Controller3D::DetectObjects(int pInfo)
         cloud_cluster->is_dense = true;
         lastInfo[pInfo].InsertObject(*cloud_cluster);
 
-            //TEMPORARY CODE TO DISPLAY POINTCLOUD -> ENDS AT <END TEMPORARY> COMMENT
-        for (size_t i = 0; i < cloud_cluster->points.size(); i++)
-        {
-            switch (j)
-            {
-            case 0:
-                cloud_cluster->points[i].r = 0;
-                cloud_cluster->points[i].g = 255;
-                cloud_cluster->points[i].b = 0; 
-                break;
-            case 1:
-                cloud_cluster->points[i].r = 255;
-                cloud_cluster->points[i].g = 0;
-                cloud_cluster->points[i].b = 0; 
-                break;
-            case 2:
-                cloud_cluster->points[i].g = 0;
-                cloud_cluster->points[i].r = 0;
-                cloud_cluster->points[i].b = 255;
-                break;
-            default:
-                break;
-            }
-        }
-        viewer->addPointCloud(cloud_cluster, "hey" + j);
-        j++;
+        objectCount++;
     }
-    std::cout << "number of found objects: "<< j <<std::endl;
-    viewer->spinOnce(100, true);
+
+    
+    std::cout << "number of found objects: "<< objectCount <<std::endl;
+    return;
+}
+
+void Controller3D::RepaintVisualizer()
+{
+    viewer->removeAllPointClouds();
+
+    int foIter = 0;
+
+    vector<FoundObject> objects = lastInfo[0].getObjects();
+
+    // sort
+    sort(objects.begin(), objects.end(), [] (FoundObject o1, FoundObject o2) {
+            vec3 zero; zero.x = 0; zero.y = 0; zero.z = 0;
+            return sqrt( pow(o1.getLocation().x, 2) + pow(o1.getLocation().y, 2) + pow(o1.getLocation().z, 2) ) <
+                    sqrt( pow(o2.getLocation().x, 2) + pow(o2.getLocation().y, 2) + pow(o2.getLocation().z, 2) );
+    });
+
+    for(FoundObject fo : objects)
+    {
+        // Select a color
+        pcl::PointCloud<pcl::PointXYZRGB> drawCloud(fo.getObjectCloud());
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloudPTR(new pcl::PointCloud<pcl::PointXYZRGB>);
+
+        for (int i = 0; i < drawCloud.points.size(); i++)
+        {
+            if(foIter == 0)
+            {
+                // First object gets set colour (black is hard to read)
+                drawCloud.points[i].r = 255;
+                drawCloud.points[i].g = 255;
+                drawCloud.points[i].b = 255;
+            } else
+            {
+                // Assign object colour based on position
+                // 1-7 get colours, then one black, then it starts again
+                drawCloud.points[i].r = ((0b001) & foIter)      ? 255 : 0;  
+                drawCloud.points[i].g = ((0b010) & foIter) >> 1 ? 255 : 0;  
+                drawCloud.points[i].b = ((0b100) & foIter) >> 2 ? 255 : 0;
+            }
+
+        }
+        
+        *cloudPTR += drawCloud;
+        viewer->addPointCloud<pcl::PointXYZRGB>(cloudPTR, "obj"+(int)foIter++);
+    }
+
+    viewer->spinOnce(30, true);
 }
 
 /**

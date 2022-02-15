@@ -34,6 +34,9 @@ public:
     //Does object detection/segmentation on the information passed
     void DetectObjects(int pCloud);
     
+    // Draw the new objects in the PCLVisualizer
+    void RepaintVisualizer();
+    
     //Procceses the new point cloud  only works with 2 cams
     void ProccesPointcloud();
     
