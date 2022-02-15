@@ -25,12 +25,14 @@ GUIApplication::GUIApplication(QWidget *parent) : QWidget(parent)
 
     // Panel Table
     pan_table = new QTableWidget(this);
-    pan_table->setFixedSize(1220, 300);
+    pan_table->setFixedSize(700, 300);
 
     pan_table->setRowCount(1);
     pan_table->setColumnCount(tableHeaders.count());
-    pan_table->setColumnWidth(2, 200);
-    pan_table->setColumnWidth(4, 200);
+    pan_table->setColumnWidth(0, 50);
+    pan_table->setColumnWidth(1, 250);
+    pan_table->setColumnWidth(2, 120);
+    pan_table->setColumnWidth(4, 120);
     pan_table->setHorizontalHeaderLabels(tableHeaders);
 
     // Filling 1 row with zeroes as a starter
