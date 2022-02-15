@@ -83,12 +83,12 @@ class GUIApplication : public QWidget
 
         QStringList tableHeaders = { 
             "ID", 
-            "Tijd in beeld", 
-            "Positie", 
-            "Diameter", 
-            "Richting", 
-            "Snelheid" /*,
-            "Versnelling" */ };
+            "Tijd in beeld (s)", 
+            "Positie vanaf oorsprong (m)", 
+            "Diameter (m)", 
+            "Richting (°)", 
+            "Snelheid (m/s)"/*,
+            "Versnelling ()"*/};
 
     public:
         explicit GUIApplication(QWidget *parent = 0);
