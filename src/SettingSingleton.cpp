@@ -90,12 +90,12 @@ void SettingSingleton::setMove2(int id, moveSettings ndata)
     ms2_cloud[id] = ndata;
 }
 
-bool SettingSingleton::getVisable(int id) {
+bool SettingSingleton::getVisible(int id) {
     return vs_cloud[id];
 }
 
-void SettingSingleton::setVisable(int id, bool visable) {
-    vs_cloud[id] = visable;
+void SettingSingleton::setVisible(int id, bool visible) {
+    vs_cloud[id] = visible;
 }
 
 rgbSettings SettingSingleton::getRgb(int id) {

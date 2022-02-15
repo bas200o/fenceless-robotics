@@ -215,7 +215,7 @@ void Controller3D::ProccesPointcloud()
     SettingSingleton* settings = SettingSingleton::getInstance();
 
     for (size_t i = 0; i < clouds.size(); i++) {
-        if (settings->getVisable(i)) {
+        if (settings->getVisible(i)) {
             *cloud = clouds.at(i);
             cloud = rotatePCL(cloud, settings->getRotate(i));
             cloud = rotatePCL(cloud, settings->getRotate2(i));
@@ -529,7 +529,7 @@ void Controller3D::configure(){
     SettingSingleton* settings = SettingSingleton::getInstance();
 
     for (size_t i = 0; i < clouds.size(); i++) {
-        if (settings->getVisable(i)) {
+        if (settings->getVisible(i)) {
             *cloud = clouds.at(i);
             for (size_t y = 0; y < cloud->points.size(); y++)
             {

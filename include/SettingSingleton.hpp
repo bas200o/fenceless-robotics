@@ -51,8 +51,8 @@ public:
     filterSettings getFilter(int id);
     void setFilter(int id, filterSettings data);
 
-    bool getVisable(int id);
-    void setVisable(int id, bool visable);
+    bool getVisible(int id);
+    void setVisible(int id, bool visible);
 
     rgbSettings getRgb(int id);
     void setRgb(int id, rgbSettings data);

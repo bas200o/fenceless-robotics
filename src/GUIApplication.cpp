@@ -111,10 +111,10 @@ void GUIApplication::addPclWindow(int id) {
     GUIApplication::filter1ZSliders.push_back(sliderFZ1);
     connect(sliderFZ1, &QSlider::valueChanged, this, [this, lambdaID = id]{ GUIApplication::filterChangez1(lambdaID); });
 
-    QCheckBox* visable = new QCheckBox();
-    visable->setChecked(SettingSingleton::getInstance()->getVisable(id));
-    GUIApplication::checkBoxes.push_back(visable);
-    connect(visable, &QCheckBox::stateChanged, this, [this, lambdaID = id]{ GUIApplication::checkBoxClicked(lambdaID); });
+    QCheckBox* visible = new QCheckBox();
+    visible->setChecked(SettingSingleton::getInstance()->getVisible(id));
+    GUIApplication::checkBoxes.push_back(visible);
+    connect(visible, &QCheckBox::stateChanged, this, [this, lambdaID = id]{ GUIApplication::checkBoxClicked(lambdaID); });
 
     QSlider* sliderRgbR = getDefaultSlider(rgbs.r, 0, 255);
     GUIApplication::rgbRSliders.push_back(sliderRgbR);
@@ -131,7 +131,7 @@ void GUIApplication::addPclWindow(int id) {
     ss << "Point cloud " << id+1;
 
     QLabel* title = new QLabel(ss.str().c_str());
-    QLabel* vis = new QLabel("Visable: ");
+    QLabel* vis = new QLabel("Visible: ");
     QLabel* mx = new QLabel("move x");
     QLabel* my = new QLabel("move y");
     QLabel* mz = new QLabel("move z");
@@ -145,7 +145,7 @@ void GUIApplication::addPclWindow(int id) {
  
     window_layout->addWidget(title, 1, 0);
     window_layout->addWidget(vis, 1, 1);
-    window_layout->addWidget(visable, 1, 2);
+    window_layout->addWidget(visible, 1, 2);
 
     window_layout->addWidget(mx, 2, 0, 1, 1);
     window_layout->addWidget(sliderMvX, 2, 1, 1, 2);
@@ -347,7 +347,7 @@ void GUIApplication::filterChangez1(int id)
 }
 
 void GUIApplication::checkBoxClicked(int id) {
-    SettingSingleton::getInstance()->setVisable(id, GUIApplication::checkBoxes.at(id)->isChecked());
+    SettingSingleton::getInstance()->setVisible(id, GUIApplication::checkBoxes.at(id)->isChecked());
 }
 
 void GUIApplication::rgbRChange(int id) {
