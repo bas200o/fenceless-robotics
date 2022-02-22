@@ -9,7 +9,7 @@ Run the following commands
 
 `sudo apt-get install librealsense2-dkms librealsense2-utils libpcl-dev libopencv-dev python3-opencv build-essential qt5-default`  
 
-Continue to the next chapter
+Continue to the next chapter H3 Installing development enviroment
 
 # Updating the Manjaro system
 Even though we just installed Manjaro we need to update the OS and packages.  
