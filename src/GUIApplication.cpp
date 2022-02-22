@@ -203,8 +203,6 @@ void GUIApplication::updateTable(vector<VisualObject> objects)
     pan_table->setRowCount(objects.size());
     int row = 0;
 
-    // cout << "New ontents of table:\n";
-
     for(VisualObject obj : objects)
     {
         QString pos = QString("[%1, %2, %3]")
@@ -216,14 +214,6 @@ void GUIApplication::updateTable(vector<VisualObject> objects)
             .arg(obj.directionVer);
             //.arg(obj.direction.z);
 
-        // cout // brrrr
-        //     << row << " | "
-        //     << pos.toStdString() << " | "
-        //     << obj.size << " | "
-        //     << dir.toStdString() << " | "
-        //     << obj.speed << " | "
-        //     << obj.acceleration 
-        // << endl;
         pan_table->setItem(row, 0, new QTableWidgetItem(QString("%1").arg(obj.id)));                                  // ID -> Removed for now
         //pan_table->setItem(row, 1, new QTableWidgetItem(QString("%1").arg(obj.showTime)));      // Tijd in beeld
         pan_table->setItem(row, 1, new QTableWidgetItem(pos));                                  // Positie
@@ -390,20 +380,7 @@ void printXYZ(filterSettings fs) {
 }
 
 void GUIApplication::setConfiguring(){
-    std::cout << "Stopped Configure" << std::endl;
-    // std::cout << "PCL 1" << std::endl;
-    // printXYZ(SettingSingleton::getInstance()->getMove(0));
-    // // printXYZ(SettingSingleton::getInstance()->getMove2());
-    // printXYZ(SettingSingleton::getInstance()->getRotate(0));
-    // printXYZ(SettingSingleton::getInstance()->getRotate2(0));
-    // printXYZ(SettingSingleton::getInstance()->getFilter(0));
-    // std::cout << "PCL 2" << std::endl;
-    //     printXYZ(SettingSingleton::getInstance()->getMove(1));
-    // // printXYZ(SettingSingleton::getInstance()->getMove2());
-    // printXYZ(SettingSingleton::getInstance()->getRotate(1));
-    // printXYZ(SettingSingleton::getInstance()->getRotate2(1));
-    // printXYZ(SettingSingleton::getInstance()->getFilter(1));
-
+    std::cout << "Stopped Configuring" << std::endl;
 
     GUIData::getInstance()->configuring = false;
 
@@ -412,7 +389,6 @@ void GUIApplication::setConfiguring(){
     {
         cw->close();
     }
-    
 
     return;
 }

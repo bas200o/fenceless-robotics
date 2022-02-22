@@ -44,7 +44,7 @@ int DataManager::dataMain()
         first = false;
         std::cout<<"duration of inference with intake and delays: "<< duration << std::endl;
     }
-    cout << "ended application" << endl;
+    cout << "Exiting application..." << endl;
     return 1;
 }
 
@@ -71,8 +71,6 @@ int DataManager::maingui(int argc, char **argv)
     QApplication app(argc, argv);
     GUIData *guiData = guiData->getInstance();
     GUIApplication gui;
-
-    
 
     arena.enqueue( [&] // UI update worker
     {
