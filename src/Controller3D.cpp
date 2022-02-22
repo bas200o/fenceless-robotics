@@ -57,7 +57,7 @@ void Controller3D::CreateNewInformation()
  */
 void Controller3D::DetectObjects(int pInfo)
 {
-    cout<<"detecting in pointcloud of size: "<<lastInfo[pInfo].getPointCloud().points.size()<<endl;
+    cout << "Detecting in pointcloud of size: "<< lastInfo[pInfo].getPointCloud().points.size() << endl;
     //lastInfo[pInfo].
 
     if (pInfo >= 5)
@@ -149,7 +149,7 @@ void Controller3D::DetectObjects(int pInfo)
     }
 
     
-    std::cout << "number of found objects: "<< objectCount <<std::endl;
+    std::cout << "Number of found objects: "<< objectCount <<std::endl;
     return;
 }
 
