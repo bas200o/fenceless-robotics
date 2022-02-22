@@ -15,9 +15,11 @@
 
 #pragma once
 
-class DataManager{
+class DataManager
+{
     private: 
         tbb::task_arena arena;
+        
     public:
         int dataMain();
 

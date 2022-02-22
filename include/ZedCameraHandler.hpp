@@ -5,9 +5,9 @@
 #include "../include/CameraHandler.hpp"
 class ZedCameraHandler : public CameraHandler
 {
-public:
-    //Constructor
-    ZedCameraHandler();
-    //Destructor
-    ~ZedCameraHandler();
+    public:
+        //Constructor
+        ZedCameraHandler();
+        //Destructor
+        ~ZedCameraHandler();
 };

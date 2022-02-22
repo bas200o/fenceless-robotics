@@ -19,36 +19,36 @@ using namespace cv;
 
 class RSCameraHandler : public CameraHandler
 {
-private:
-    std::tuple<pcl::PointCloud<pcl::PointXYZRGB>, pcl::PointCloud<pcl::PointXYZ>> convertBothPCL();
-    pcl::PointCloud<pcl::PointXYZRGB> convertToRGBPCL(); 
-    pcl::PointCloud<pcl::PointXYZ> convertToPCL();
-    cv::Mat convertToMatrix();
+    private:
+        std::tuple<pcl::PointCloud<pcl::PointXYZRGB>, pcl::PointCloud<pcl::PointXYZ>> convertBothPCL();
+        pcl::PointCloud<pcl::PointXYZRGB> convertToRGBPCL(); 
+        pcl::PointCloud<pcl::PointXYZ> convertToPCL();
+        cv::Mat convertToMatrix();
 
-   
-    rs2::context ctx;
-    rs2::pipeline pipe;
-    rs2::frameset frames;
-    rs2::config config;
-
-    rs2::points points;
-
-    bool pipeRunning = false;
     
-public:
-    RSCameraHandler();
-    ~RSCameraHandler();
-    pcl::PointCloud<pcl::PointXYZ> getLatestPointCloud();
-    std::tuple<pcl::PointCloud<pcl::PointXYZRGB>, double> getLatestPointCloudRGB();
-    void runThread();
-    void threadRunner();
-    void grabImage();
-    void connectCamera();
-    void setLatestCloud(pcl::PointCloud<pcl::PointXYZ> pointCloud);
-    rs2::frame postProcess(rs2::frame toFilter);
+        rs2::context ctx;
+        rs2::pipeline pipe;
+        rs2::frameset frames;
+        rs2::config config;
 
-    void setLatestCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloud);
-    bool getPipeRunning();
+        rs2::points points;
+
+        bool pipeRunning = false;
+        
+    public:
+        RSCameraHandler();
+        ~RSCameraHandler();
+        pcl::PointCloud<pcl::PointXYZ> getLatestPointCloud();
+        std::tuple<pcl::PointCloud<pcl::PointXYZRGB>, double> getLatestPointCloudRGB();
+        void runThread();
+        void threadRunner();
+        void grabImage();
+        void connectCamera();
+        void setLatestCloud(pcl::PointCloud<pcl::PointXYZ> pointCloud);
+        rs2::frame postProcess(rs2::frame toFilter);
+
+        void setLatestCloud(pcl::PointCloud<pcl::PointXYZRGB> pointCloud);
+        bool getPipeRunning();
 };
 
 

@@ -18,7 +18,6 @@
 
 class GUIApplication : public QWidget
 {
-    
     private:
         QGraphicsView *pan_view2d;
         QWidget *pan_view3d;
