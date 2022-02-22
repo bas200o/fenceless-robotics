@@ -1,5 +1,9 @@
 Welcome to the fenceless-robotics wiki!
 
+### Manjaro warning
+At of time of writing Manjaro's AUR libs are not working with vtk we suggest you use ubuntu for this project.
+
+
 ### VM Warning
 Using a virtual machine with the realsense camera requires a USB 3.1 datarate passthrough. The VM might impact performance or the guest might require extra software for graphics accelleration.  
 Using a vm is possible although not recommended.   
