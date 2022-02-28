@@ -8,7 +8,6 @@ std::vector<moveSettings> ms2_cloud;
 std::vector<bool> vs_cloud;
 std::vector<rgbSettings> rgbs_cloud;
 
-
 SettingSingleton *SettingSingleton::instance;
 
 SettingSingleton::SettingSingleton()
@@ -25,8 +24,6 @@ SettingSingleton::SettingSingleton()
     ms_cloud.push_back({0.848, 1.192, -0.371});
     ms2_cloud.push_back({0.0, 0.0, 0.0});//unnececary
     fs_cloud.push_back({0.085, 1.086, 0.028, 10.0, -4, 1.143});
-    
-
 
     vs_cloud.push_back(true);
     vs_cloud.push_back(true);
@@ -68,7 +65,6 @@ void SettingSingleton::setMove(int id, moveSettings ndata)
 {
     ms_cloud[id] = ndata;
 }
-
 
 rotationSettings SettingSingleton::getRotate2(int id)
 {

@@ -36,7 +36,7 @@ void Controller3D::CreateNewInformation()
     //make sure the first is the newest info
     temp2 = lastInfo[0];
     lastInfo[0] = Info3D;
-    //cout << sizeof(lastInfo) / sizeof(lastInfo[0]) << endl;
+
     for (int i = 1; i < sizeof(lastInfo) / sizeof(lastInfo[0]); i++)
     {
         if (temp2.getPointCloud().size() > 0)
@@ -57,7 +57,7 @@ void Controller3D::CreateNewInformation()
  */
 void Controller3D::DetectObjects(int pInfo)
 {
-    cout<<"detecting in pointcloud of size: "<<lastInfo[pInfo].getPointCloud().points.size()<<endl;
+    cout << "Detecting in pointcloud of size: "<< lastInfo[pInfo].getPointCloud().points.size() << endl;
     //lastInfo[pInfo].
 
     if (pInfo >= 5)
@@ -149,7 +149,7 @@ void Controller3D::DetectObjects(int pInfo)
     }
 
     
-    std::cout << "number of found objects: "<< objectCount <<std::endl;
+    std::cout << "Number of found objects: "<< objectCount <<std::endl;
     return;
 }
 
@@ -190,7 +190,6 @@ void Controller3D::RepaintVisualizer()
                 drawCloud.points[i].g = ((0b010) & foIter) >> 1 ? 255 : 0;  
                 drawCloud.points[i].b = ((0b100) & foIter) >> 2 ? 255 : 0;
             }
-
         }
         
         *cloudPTR += drawCloud;
@@ -222,12 +221,11 @@ void Controller3D::ProccesPointcloud()
             cloud = movePCL(cloud, settings->getMove(i));
             cloud = filterPCL(cloud, settings->getFilter(i));
             *full += *cloud;
-        }
-        
+        } 
     }
+
     lastInfo[0].AddFullPointCloud(*full);
 
-    
     return;
 }
 
@@ -256,16 +254,14 @@ void Controller3D::CalculateSpeed(){
         double speed = -1;
         float dist;
         for(int j = 0; j < previous.objects.size() ; j++){
-                if(previous.objects[j].getIdentificationNumber() == lastInfo[0].objects[i].getIdentificationNumber()){
+                if(previous.objects[j].getIdentificationNumber() == lastInfo[0].objects[i].getIdentificationNumber())
+                {
                     dist = euclideanDistance(lastInfo[0].objects[i].getLocation(), previous.objects[j].getLocation());
-                    //cout << " dis " << dist << endl;
-                    //cout << " time " << (lastInfo[0].getTimeStamp() - previous.getTimeStamp())/1000 << endl;
                     speed = dist / ((lastInfo[0].getTimeStamp() - previous.getTimeStamp())/1000);
                 }    
         }
         speed = speed < 0.1 ? 0 : speed;
         lastInfo[0].objects[i].setSpeed(speed);
-        //cout << "speed set: " << speed << endl;
     }
 }
 
@@ -275,60 +271,53 @@ void Controller3D::calculateDirection(){
         double angle = -1;
         float dist;
         for(int j = 0; j < previous.objects.size() ; j++){
-                if(previous.objects[j].getIdentificationNumber() == lastInfo[0].objects[i].getIdentificationNumber()){
-                    std::tuple<float, float, float> pCent = previous.objects[j].getCenterMass();
-                    std::tuple<float, float, float> lCent =lastInfo[0].objects[i].getCenterMass();
-                    float p1z = get<2>(pCent);
-                    float p2z = get<2>(lCent);
-                    float p1y = get<1>(pCent);
-                    float p2y = get<1>(lCent);
-                    float p1x = get<0>(pCent);
-                    float p2x = get<0>(lCent);
-                    float deltaZ = p2z - p1z;
-                    float deltaY = p2y - p1y;
-                    float deltaX = p2x - p1x; //Vector 2 is now relative to origin, the angle is the same, we have just transformed it to use the origin.
+            if(previous.objects[j].getIdentificationNumber() == lastInfo[0].objects[i].getIdentificationNumber()){
+                std::tuple<float, float, float> pCent = previous.objects[j].getCenterMass();
+                std::tuple<float, float, float> lCent =lastInfo[0].objects[i].getCenterMass();
+                float p1z = get<2>(pCent);
+                float p2z = get<2>(lCent);
+                float p1y = get<1>(pCent);
+                float p2y = get<1>(lCent);
+                float p1x = get<0>(pCent);
+                float p2x = get<0>(lCent);
+                float deltaZ = p2z - p1z;
+                float deltaY = p2y - p1y;
+                float deltaX = p2x - p1x; //Vector 2 is now relative to origin, the angle is the same, we have just transformed it to use the origin.
 
-                    float vertAngleInDegrees;
-                    float horAngleInDegrees;
+                float vertAngleInDegrees;
+                float horAngleInDegrees;
 
-                    if(-0.01 > deltaX < 0.01 && -0.01 > deltaZ < 0.01){
-                        horAngleInDegrees = 0;
-                        // cout << "wtf" << endl;
-                    }
-                    else{
-                    horAngleInDegrees = atan2(deltaX, deltaZ) * 180 / 3.141;
-                    }
+                if(-0.01 > deltaX < 0.01 && -0.01 > deltaZ < 0.01){
+                    horAngleInDegrees = 0;
+                }
+                else{
+                horAngleInDegrees = atan2(deltaX, deltaZ) * 180 / 3.141;
+                }
 
-                    float deltaXZ = sqrt((deltaX * deltaX) + (deltaZ*deltaZ));
-                    if(-0.01 > deltaX < 0.01 && -0.01 >deltaY < 0.01){
-                        vertAngleInDegrees = 0;
-                    }
-                    else{
-                        vertAngleInDegrees = atan2(deltaY, deltaXZ) * 180 / 3.141;
-                    }
+                float deltaXZ = sqrt((deltaX * deltaX) + (deltaZ*deltaZ));
+                if(-0.01 > deltaX < 0.01 && -0.01 >deltaY < 0.01){
+                    vertAngleInDegrees = 0;
+                }
+                else{
+                    vertAngleInDegrees = atan2(deltaY, deltaXZ) * 180 / 3.141;
+                }
 
-                    // cout << "angle set hor: " << horAngleInDegrees << endl;
-                    // cout << "angle set ver: " << vertAngleInDegrees << endl;
-                    vertAngleInDegrees = (round(vertAngleInDegrees * 100.0)) / 100.0;
-                    horAngleInDegrees = (round(horAngleInDegrees * 100.0)) / 100.0;
-                    if(180 < horAngleInDegrees || horAngleInDegrees < -180){
-                        horAngleInDegrees = 0;
-                    }
-                    if(180 < vertAngleInDegrees || vertAngleInDegrees < -180){
-                        vertAngleInDegrees = 0;
-                    }
-                    cout << "yo buddy angle is:"<< horAngleInDegrees << endl;
-                    lastInfo[0].objects[i].setDirectionHor(horAngleInDegrees);
-                    lastInfo[0].objects[i].setDirectionVer(vertAngleInDegrees);
-                    //vertAngleInDegrees *= -1; // Y axis is inverted in computer windows, Y goes down, so invert the angle.
-                    //Eigen::Vector3f e_v3f_pt = lastInfo[0].objects[i].getLocation().getVector3fMap();
-                    //Eigen::Vector3f e_v3f_pt2 = previous.objects[j].getLocation().getVector3fMap();
-                    //angle = pcl::getAngle3D(e_v3f_pt2, e_v3f_pt, false);
-                }    
+                vertAngleInDegrees = (round(vertAngleInDegrees * 100.0)) / 100.0;
+                horAngleInDegrees = (round(horAngleInDegrees * 100.0)) / 100.0;
+                if(180 < horAngleInDegrees || horAngleInDegrees < -180){
+                    horAngleInDegrees = 0;
+                }
+                if(180 < vertAngleInDegrees || vertAngleInDegrees < -180){
+                    vertAngleInDegrees = 0;
+                }
+                lastInfo[0].objects[i].setDirectionHor(horAngleInDegrees);
+                lastInfo[0].objects[i].setDirectionVer(vertAngleInDegrees);
+                //vertAngleInDegrees *= -1; // Y axis is inverted in computer windows, Y goes down, so invert the angle.
+                //Eigen::Vector3f e_v3f_pt = lastInfo[0].objects[i].getLocation().getVector3fMap();
+                //Eigen::Vector3f e_v3f_pt2 = previous.objects[j].getLocation().getVector3fMap();
+                //angle = pcl::getAngle3D(e_v3f_pt2, e_v3f_pt, false);
+            }    
         }
-
-        //cout << "angle set: " << horAngleInDegrees << endl;
-
     }
 }
 
@@ -502,9 +491,9 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr Controller3D::filterPCL(pcl::PointCloud<p
     for (pcl::PointCloud<pcl::PointXYZRGB>::iterator it = OGCloud->begin(); it != OGCloud->end(); it++)
     {
         if (!(  
-                it->x < x || it->x > x1 ||
-                it->y < y || it->y > y1 ||
-                it->z < z || it->z > z1
+            it->x < x || it->x > x1 ||
+            it->y < y || it->y > y1 ||
+            it->z < z || it->z > z1
             ))
         {
             filteredCloud.push_back(*it);
@@ -543,7 +532,6 @@ void Controller3D::configure(){
             cloud = filterPCL(cloud, settings->getFilter(i));
             *full += *cloud;
         }
-        
     }
 
 

@@ -11,9 +11,9 @@
 
 class Controller2D
 {
-public:
-    //Constructor
-    Controller2D();
-    //Destructor
-    ~Controller2D();
+    public:
+        //Constructor
+        Controller2D();
+        //Destructor
+        ~Controller2D();
 };

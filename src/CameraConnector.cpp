@@ -46,7 +46,7 @@ void CameraConnector::connectCameras(int number, int type)
             camThread.detach();
             connectedCams.insert(connectedCams.begin() + number, newCamera);
         } else {
-            std::cout << "RS camera handler failed to init" << std::endl;
+            std::cout << "RS camera handler failed to initialize!" << std::endl;
         }
         break;
     }
